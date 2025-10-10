@@ -93,7 +93,7 @@
         }
 
         .hero-section {
-            background-image: url('/images/banner-inner-1.jpg');
+            background-image: url('https://images.unsplash.com/photo-1603523429969-95a2a893b8ef?q=80&w=1932&auto=format&fit=crop&ixlibrb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG9Tby1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
             background-size: cover;
             background-position: center;
             height: 400px;
@@ -586,8 +586,8 @@
             };
 
             const fetchDonutChartData = async () => {
-                const apiKey = '579b464db66ec23bdd00000133fb7135101845b740c2380f4cccd1d5';
-                const resourceId = '95b4bfc1-3802-4a47-9269-df1b9a242c74'; // Example: PMAGY data
+                const apiKey = '579b464db66ec23bdd0000133fb7135101845b740c2380f4cccd1d5';
+                const resourceId = '95b4bfc1-3802-4a47-9269-df1b9a242c74';
                 const apiUrl = `https://api.data.gov.in/resource/${resourceId}?api-key=${apiKey}&format=json&limit=10`;
                 
                 if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
@@ -600,7 +600,6 @@
                     if (!response.ok) throw new Error(`API Error: ${response.status}`);
                     const rawData = await response.json();
                     
-                    // Simple processing: Summing up financial progress for different components
                     const componentData = { 'Adarsh Gram': 0, 'Grants-in-Aid': 0, 'Hostels': 0, 'Admin & M&E': 0 };
                     rawData.records.forEach(rec => {
                         componentData['Adarsh Gram'] += parseFloat(rec.component_1_fin_cum) || 0;
@@ -609,13 +608,19 @@
                         componentData['Admin & M&E'] += parseFloat(rec.component_4_fin_cum) || 0;
                     });
 
+                    const total = Object.values(componentData).reduce((a, b) => a + b, 0);
+                    if (total === 0) {
+                        console.log("Donut Chart: Real data resulted in all zeros. Falling back to mock data.");
+                        return MOCK_DATA.donutChart;
+                    }
+
                     console.log("Donut Chart: Successfully fetched and processed real data.");
                     return {
                         labels: Object.keys(componentData),
                         data: Object.values(componentData)
                     };
                 } catch (error) {
-                    console.error("Donut Chart: Failed to fetch real data. Using mock data.", error);
+                    console.warn("Donut Chart: Could not fetch live data (this is common due to browser security policies). Falling back to mock data.", error.message);
                     return MOCK_DATA.donutChart;
                 }
             };
@@ -638,7 +643,7 @@
                 document.getElementById('modal-funds-stat').textContent = '...';
                 document.getElementById('modal-grievances-stat').textContent = '...';
                 
-                const geminiApiKey = "AIzaSyDzX6NrBh-02my-Sll8stjoUYffBkgVB4Y"; // IMPORTANT: Add your Gemini API Key here
+                const geminiApiKey = "AIzaSyBKIy8ScHv6JqVJAMuTibo7ikvBzMSfwXo"; 
                 if (!geminiApiKey) {
                     console.log("Gemini API key not provided. Using mock local data.");
                     updateLocalSnapshotWidget({ projectsUnderway: 15, fundsUtilized: "₹2.5 Cr", grievancesResolved: "89%" });
@@ -646,18 +651,34 @@
                 }
 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
-                const prompt = `Find publicly available data for the PM-AJAY scheme in ${district} district. Provide the number of projects underway, the total funds utilized in crores, and the grievance resolution percentage. Format the response as a simple JSON object with keys: "projectsUnderway", "fundsUtilized", and "grievancesResolved" (e.g., "₹2.5 Cr", "89%").`;
+                const userPrompt = `Find publicly available data for the PM-AJAY scheme in ${district} district. Provide the number of projects underway, the total funds utilized in crores, and the grievance resolution percentage. Format the response as a simple JSON object with keys: "projectsUnderway", "fundsUtilized", and "grievancesResolved" (e.g., "₹2.5 Cr", "89%").`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userPrompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "projectsUnderway": { "type": "NUMBER" },
+                                "fundsUtilized": { "type": "STRING" },
+                                "grievancesResolved": { "type": "STRING" }
+                            },
+                            required: ["projectsUnderway", "fundsUtilized", "grievancesResolved"]
+                        }
+                    }
+                };
 
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], tools: [{ "google_search": {} }] })
+                        body: JSON.stringify(payload)
                     });
                     if (!response.ok) throw new Error(`Gemini API call failed: ${response.status}`);
                     
                     const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text.replace(/```json|```/g, '').trim();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
                     if(text) {
                         const localData = JSON.parse(text);
                         updateLocalSnapshotWidget(localData);
