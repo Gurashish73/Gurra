@@ -13,28 +13,63 @@
             color: #333;
             transition: background-color 0.3s, color 0.3s;
         }
-        /* Dark mode styles */
+        
+        /* High Contrast Dark Mode Styles */
         .dark body {
-            background-color: #1a202c;
-            color: #e2e8f0;
+            background-color: #000000;
+            color: #ffffff;
         }
-        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white {
-             background-color: #2d3748;
-             box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white, .dark .bg-white {
+             background-color: #000000 !important;
+             box-shadow: 0 2px 4px rgba(255,255,255,0.1);
         }
-        .dark .text-gray-600 { color: #a0aec0; }
-        .dark .text-gray-500 { color: #cbd5e0; }
-        .dark .text-blue-700 { color: #63b3ed; }
-        .dark .main-nav-container { border-color: #63b3ed; }
-        .dark .main-nav-link { color: #63b3ed; }
-        .dark .main-nav-link.active, .dark .main-nav-link:hover { background-color: #63b3ed; color: #1a202c; }
-        .dark .bg-white { background-color: #2d3748; }
-        .dark .text-gray-800 { color: #f7fafc; }
-        .dark .border-blue-600 { border-color: #63b3ed; }
-        .dark .text-blue-600 { color: #63b3ed; }
-        .dark .hover\:bg-blue-50:hover { background-color: rgba(99, 179, 237, 0.1); }
-        .dark .section-title { color: #63b3ed; }
-        .dark .section-title::after { background-color: #63b3ed; }
+        .dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-700 { color: #ffffff; }
+        .dark .text-blue-700, .dark .text-blue-600, .dark a, .dark .text-blue-700, .dark .transparency-tools a { color: #FCFF00; }
+        .dark .main-nav-container { border-color: #FCFF00; }
+        .dark .main-nav-link { color: #FCFF00; }
+        .dark .main-nav-link.active, .dark .main-nav-link:hover { background-color: #FCFF00; color: #000000; }
+        .dark .text-gray-800 { color: #ffffff; }
+        .dark .border-blue-600 { border-color: #FCFF00; }
+        .dark .section-title { color: #FCFF00; }
+        .dark .section-title::after { background-color: #FCFF00; }
+        .dark .hero-section { filter: grayscale(100%); }
+        .dark .hero-section::before {
+             background-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0));
+        }
+        .dark .search-bar-container {
+            background-color: #000;
+            border: 2px solid #FCFF00;
+        }
+        .dark .search-bar-container input::placeholder { color: #ccc; }
+        .dark .search-bar-container input, .dark .search-bar-container button {
+             color: #ffffff;
+             background-color: transparent;
+        }
+        .dark .search-bar-container i { color: #FCFF00; }
+        .dark .bg-gray-100 {
+            background-color: #111;
+            border: 1px solid #444;
+        }
+        .dark .transparency-tools li {
+             background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24" fill="none" stroke="%23FCFF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>');
+        }
+        .dark #mid-section-btn {
+            background-color: #FCFF00 !important;
+            color: #000 !important;
+            border-color: #FCFF00 !important;
+        }
+        .dark a.bg-blue-600, .dark button.bg-blue-600 {
+             background-color: #FCFF00 !important;
+             color: #000 !important;
+        }
+        .dark #lang-dropdown, .dark #social-dropdown {
+            background-color: #111;
+            border: 1px solid #444;
+        }
+        .dark #lang-dropdown a:hover, .dark #social-dropdown a:hover {
+            background-color: #333;
+        }
+
 
         .main-nav-container {
             border: 2px solid #0d6efd;
@@ -77,9 +112,6 @@
             right: 0;
             height: 150px;
             background-image: linear-gradient(to bottom, white, rgba(255, 255, 255, 0));
-        }
-        .dark .hero-section::before {
-             background-image: linear-gradient(to bottom, #2d3748, rgba(45, 55, 72, 0));
         }
         
         .search-bar-container {
@@ -205,7 +237,7 @@
     </section>
 
     <!-- Mid-Section Button --><div class="container mx-auto text-center px-4 relative z-10 -mt-7">
-        <button class="bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-50 transition w-full sm:w-auto shadow-md">
+        <button id="mid-section-btn" class="bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-50 transition w-full sm:w-auto shadow-md">
             VIEW NATIONAL PROJECT MAP <i class="fas fa-map-marked-alt ml-2"></i>
         </button>
     </div>
@@ -216,30 +248,30 @@
             <div class="md:col-span-2">
                 <h2 class="text-2xl section-title">NATIONAL LIVE STATUS</h2>
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-400">47,511</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Villages Covered</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-3xl font-bold text-blue-600">47,511</h3>
+                        <p class="text-sm text-gray-600">Villages Covered</p>
                     </div>
-                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-400">45,87,553</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Beneficiaries Impacted</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-3xl font-bold text-blue-600">45,87,553</h3>
+                        <p class="text-sm text-gray-600">Beneficiaries Impacted</p>
                     </div>
-                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-400">₹1,09,607 Cr</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Funds Sanctioned</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-3xl font-bold text-blue-600">₹1,09,607 Cr</h3>
+                        <p class="text-sm text-gray-600">Funds Sanctioned</p>
                     </div>
-                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-400">41,496</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Works Completed</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-3xl font-bold text-blue-600">41,496</h3>
+                        <p class="text-sm text-gray-600">Works Completed</p>
                     </div>
                 </div>
-                <p class="mt-6 text-center text-gray-700 dark:text-gray-400 italic">"Real-time data ensuring every rupee is tracked and every project is visible."</p>
+                <p class="mt-6 text-center text-gray-700 italic">"Real-time data ensuring every rupee is tracked and every project is visible."</p>
             </div>
 
             <!-- Right Column: Transparency Tools -->
             <div>
                 <h2 class="text-2xl section-title">TRANSPARENCY TOOLS</h2>
-                <ul class="text-blue-700 dark:text-blue-400 transparency-tools">
+                <ul class="transparency-tools">
                     <li><a href="#" class="hover:underline">Follow the Money</a></li>
                     <li><a href="#" class="hover:underline">Live Visual Reports</a></li>
                     <li><a href="#" class="hover:underline">Agency Accountability</a></li>
