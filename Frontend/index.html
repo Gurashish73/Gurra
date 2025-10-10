@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAY SAARTHI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+        }
+        /* New Desktop Nav Styling */
+        .main-nav-container {
+            border: 2px solid #0d6efd;
+            border-radius: 9999px;
+            padding: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .main-nav-link {
+            transition: all 0.3s ease;
+            color: #0d6efd;
+        }
+
+        .main-nav-link.active, .main-nav-link:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* Hero Section with background image */
+        .hero-section {
+            background-image: url('/images/banner-inner-1.jpg'); /* <-- PLACE YOUR IMAGE LINK HERE */
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            padding-top: 60px; 
+            padding-bottom: 60px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background-image: linear-gradient(to bottom, white, rgba(255, 255, 255, 0));
+        }
+        
+        .search-bar-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #0d6efd;
+        }
+        .new-additions li {
+            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%230d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>') no-repeat left center;
+            background-size: 16px;
+            padding-left: 25px;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Header Styles */
+        #main-header-el {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- Main Header & Navigation --><header id="main-header-el" class="main-header transition-all duration-300 ease-in-out">
+        <!-- Top bar content --><div class="container mx-auto px-4">
+            <div class="py-1 flex justify-end items-center space-x-2">
+                <a href="#" class="rounded-full h-8 w-8 flex items-center justify-center text-sm transition text-gray-600 hover:bg-gray-200" title="Sitemap">
+                    <i class="fas fa-sitemap"></i>
+                </a>
+                 <a href="#" class="rounded-full h-8 w-8 flex items-center justify-center text-sm transition text-gray-600 hover:bg-gray-200" title="Screen Reader">
+                     <i class="fa-solid fa-person-circle-question"></i>
+                </a>
+                <div class="flex items-center border rounded-full bg-transparent">
+                     <button class="px-3 py-1 text-xs text-gray-600">A-</button>
+                     <button class="px-3 py-1 text-sm border-l border-r border-gray-300 text-gray-600">A</button>
+                     <button class="px-3 py-1 text-base text-gray-600">A+</button>
+                </div>
+                 <div class="flex items-center">
+                     <button class="w-6 h-6 bg-black border-2 border-gray-400 rounded-full"></button>
+                     <button class="w-6 h-6 bg-white border-2 border-gray-400 rounded-full ml-1"></button>
+                 </div>
+                 <!-- Social Media Dropdown --><div class="relative">
+                    <button id="social-toggle" class="rounded-full h-8 w-8 flex items-center justify-center text-sm transition text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <div id="social-dropdown" class="absolute hidden right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-20">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fab fa-facebook-f mr-2 text-blue-600"></i>Facebook</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fab fa-twitter mr-2 text-sky-500"></i>Twitter</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fab fa-instagram mr-2 text-pink-500"></i>Instagram</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fab fa-youtube mr-2 text-red-600"></i>YouTube</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- Placeholders for new banner and logo --><div class="hidden sm:flex w-24 h-6 bg-gray-300 rounded mr-4 items-center justify-center text-gray-500 text-[10px]">Banner</div>
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/40px-Emblem_of_India.svg.png" alt="Emblem of India" class="h-10 sm:h-12 mr-2 sm:mr-3">
+                <img src="https://igod.gov.in/images/igod_logo.png" alt="IGOD Logo" class="h-10 sm:h-12">
+                <div class="ml-2 sm:ml-4">
+                    <h1 class="text-lg sm:text-2xl font-bold text-blue-700">AJAY SAARTHI</h1>
+                    <p class="text-xs sm:text-sm text-gray-500 hidden sm:block">A one-point source to access Indian Government Websites at all levels and from all sectors</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center">
+                <div class="main-nav-container">
+                    <a href="#" class="main-nav-link active font-semibold py-2 px-5 rounded-full">HOME</a>
+                    <a href="#" class="main-nav-link font-semibold py-2 px-5 rounded-full">CATEGORIES</a>
+                    <a href="#" class="main-nav-link font-semibold py-2 px-5 rounded-full">SECTORS</a>
+                    <a href="#" class="main-nav-link font-semibold py-2 px-5 rounded-full">CONTRIBUTE</a>
+                </div>
+            </nav>
+            <!-- Mobile Menu Button --><div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu --><div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-sm shadow-md">
+            <nav class="flex flex-col items-center space-y-2 p-4">
+                <a href="#" class="mobile-nav-link active font-semibold py-2 px-5 rounded-full w-full text-center">HOME</a>
+                <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center">CATEGORIES</a>
+                <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center">SECTORS</a>
+                <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center">CONTRIBUTE</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section --><section class="hero-section">
+        <div class="relative w-full max-w-3xl px-4 z-10">
+            <div class="search-bar-container p-2 flex items-center rounded-full">
+                <input type="text" placeholder="Search by Keyword" class="w-full bg-transparent border-none focus:ring-0 text-base sm:text-lg px-4 py-2">
+                <button class="bg-white p-2 rounded-full">
+                    <i class="fas fa-search text-gray-500 text-xl"></i>
+                </button>
+            </div>
+            <div class="text-right mt-2">
+                <a href="#" class="text-gray-800 text-sm font-semibold hover:underline bg-transparent px-2 py-1 rounded-lg">
+                    <i class="fas fa-cog mr-1"></i> Advanced Search
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organization Categories Button --><div class="container mx-auto text-center px-4 relative z-10 -mt-7">
+        <button class="bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-50 transition w-full sm:w-auto shadow-md">
+            ORGANIZATION CATEGORIES <i class="fas fa-bars ml-2"></i>
+        </button>
+    </div>
+
+    <!-- Main Content Area --><main class="container mx-auto p-4 sm:p-8 pt-12 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <!-- In Focus Section --><div class="md:col-span-2">
+                <div class="flex flex-col md:flex-row items-start gap-6">
+                    <div class="w-full md:w-1/3 flex-shrink-0">
+                        <img src="https://placehold.co/400x250/e2e8f0/333?text=In+Focus+Image" alt="PM-Kisan" class="rounded-lg shadow-md w-full h-auto object-cover">
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">PM-Kisan Samman Nidhi</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            The PM-Kisan Samman Nidhi (Pradhan Mantri Kisan Samman Nidhi) is a Central Sector scheme by the Government of India. It provides financial assistance to small and marginal farmers to help them meet their agricultural and domestic needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Additions Section --><div>
+                <h2 class="text-2xl section-title">NEW ADDITIONS</h2>
+                <ul class="text-blue-700">
+                    <li><a href="#" class="hover:underline">Ksheerasree Portal</a></li>
+                    <li><a href="#" class="hover:underline">Forest Soil Health Card Portal</a></li>
+                    <li><a href="#" class="hover:underline">Bharat Gaurav Trains</a></li>
+                    <li><a href="#" class="hover:underline">Mizoram State Games Council</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const socialToggle = document.getElementById('social-toggle');
+            const socialDropdown = document.getElementById('social-dropdown');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Mobile Menu Toggle
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Social Dropdown Toggle
+            if (socialToggle && socialDropdown) {
+                socialToggle.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    socialDropdown.classList.toggle('hidden');
+                });
+                document.addEventListener('click', (event) => {
+                    if (!socialDropdown.classList.contains('hidden') && !socialDropdown.contains(event.target) && !socialToggle.contains(event.target)) {
+                        socialDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+
