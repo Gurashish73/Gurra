@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -19,11 +20,11 @@
             background-color: #000000;
             color: #ffffff;
         }
-        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white, .dark .bg-white {
+        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white, .dark .bg-white, .dark footer, .dark #local-snapshot-modal .bg-white {
              background-color: #000000 !important;
              box-shadow: 0 2px 4px rgba(255,255,255,0.1);
         }
-        .dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-700 { color: #ffffff; }
+        .dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-700, .dark .text-gray-400 { color: #ffffff; }
         .dark .text-blue-700, .dark .text-blue-600, .dark a, .dark .text-blue-700, .dark .transparency-tools a { color: #FCFF00; }
         .dark .main-nav-container { border-color: #FCFF00; }
         .dark .main-nav-link { color: #FCFF00; }
@@ -46,7 +47,7 @@
              background-color: transparent;
         }
         .dark .search-bar-container i { color: #FCFF00; }
-        .dark .bg-gray-100 {
+        .dark .bg-gray-100, .dark .bg-gray-50 {
             background-color: #111;
             border: 1px solid #444;
         }
@@ -249,19 +250,19 @@
                 <h2 class="text-2xl section-title">NATIONAL LIVE STATUS</h2>
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
                     <div class="bg-gray-100 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600">47,511</h3>
+                        <h3 id="villages-covered-stat" class="text-3xl font-bold text-blue-600">--</h3>
                         <p class="text-sm text-gray-600">Villages Covered</p>
                     </div>
                     <div class="bg-gray-100 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600">45,87,553</h3>
+                        <h3 id="beneficiaries-impacted-stat" class="text-3xl font-bold text-blue-600">--</h3>
                         <p class="text-sm text-gray-600">Beneficiaries Impacted</p>
                     </div>
                     <div class="bg-gray-100 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600">₹1,09,607 Cr</h3>
+                        <h3 id="funds-sanctioned-stat" class="text-3xl font-bold text-blue-600">--</h3>
                         <p class="text-sm text-gray-600">Funds Sanctioned</p>
                     </div>
                     <div class="bg-gray-100 p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-blue-600">41,496</h3>
+                        <h3 id="works-completed-stat" class="text-3xl font-bold text-blue-600">--</h3>
                         <p class="text-sm text-gray-600">Works Completed</p>
                     </div>
                 </div>
@@ -275,12 +276,120 @@
                     <li><a href="#" class="hover:underline">Follow the Money</a></li>
                     <li><a href="#" class="hover:underline">Live Visual Reports</a></li>
                     <li><a href="#" class="hover:underline">Agency Accountability</a></li>
+                    <li><a href="#" id="local-snapshot-link" class="hover:underline">Get Your Local Snapshot</a></li>
                     <li><a href="#" class="hover:underline">View Social Audit Calendar</a></li>
                     <li><a href="#" class="hover:underline">Subscribe for SMS/Voice Alerts</a></li>
                 </ul>
             </div>
         </div>
     </main>
+    
+    <!-- National Scorecard Section -->
+    <section class="bg-gray-50 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">National Scorecard: Key Performance Indicators</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1: Fund Utilization Funnel -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Fund Utilization Funnel</h3>
+                    <canvas id="funnelChart"></canvas>
+                </div>
+                <!-- Card 2: Component-wise Allocation -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Component-wise Allocation</h3>
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <!-- Card 3: Project Completion Rate -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Project Completion Rate (Trend)</h3>
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <!-- Card 4: Top 5 Project Types -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Top 5 Project Types</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accountability Engine Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-2">Driving Performance Through Transparency</h2>
+            <p class="text-center text-gray-600 mb-8">The Performance Leaderboard</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Top 5 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-green-600">Top 5 Performing States</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg shadow">
+                            <thead>
+                                <tr class="w-full bg-gray-100 text-left">
+                                    <th class="p-3">State Name</th>
+                                    <th class="p-3 text-center">Projects Completed (%)</th>
+                                    <th class="p-3 text-center">Fund Utilization (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-5-table-body">
+                                <!-- Rows will be inserted by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Bottom 5 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-red-600">Bottom 5 Performing States</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg shadow">
+                             <thead>
+                                <tr class="w-full bg-gray-100 text-left">
+                                    <th class="p-3">State Name</th>
+                                    <th class="p-3 text-center">Projects Completed (%)</th>
+                                    <th class="p-3 text-center">Fund Utilization (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bottom-5-table-body">
+                               <!-- Rows will be inserted by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+                <div class="md:col-span-2">
+                     <h4 class="font-bold mb-4">DARPAN-AJAY</h4>
+                     <p class="text-sm text-gray-400">A Real-Time Accountability Platform for the PM-AJAY Scheme by the Ministry of Social Justice & Empowerment.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About PM-AJAY</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Data Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                     <h4 class="font-bold mb-4">Supported By</h4>
+                     <div class="flex justify-center md:justify-start space-x-4 items-center h-10">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Digital_India_logo.svg" alt="Digital India Logo" class="h-full opacity-80 hover:opacity-100">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Ministry_of_Social_Justice_and_Empowerment_logo.svg/220px-Ministry_of_Social_Justice_and_Empowerment_logo.svg.png" alt="Ministry Logo" class="h-full bg-white p-1 rounded-sm opacity-80 hover:opacity-100">
+                     </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 mt-8 pt-4 border-t border-gray-700">
+                <p class="text-xs">This portal is a prototype developed for the Smart India Hackathon 2025.</p>
+            </div>
+        </div>
+    </footer>
+
 
     <!-- Advanced Search Modal -->
     <div id="advanced-search-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
@@ -317,20 +426,63 @@
             </div>
         </div>
     </div>
+    
+    <!-- Local Snapshot Modal -->
+    <div id="local-snapshot-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg m-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Your Local Snapshot</h3>
+                <button id="close-snapshot-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label for="location-input" class="block text-sm font-medium text-gray-700">Enter Your District Name</label>
+                    <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" id="location-input" class="flex-1 block w-full border border-gray-300 rounded-l-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., New Delhi">
+                        <button id="get-snapshot-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-blue-600 hover:bg-blue-700">
+                            Get Snapshot
+                        </button>
+                    </div>
+                </div>
+                <div id="snapshot-results" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center pt-4">
+                     <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="modal-projects-stat" class="text-2xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Projects Underway</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="modal-funds-stat" class="text-2xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Funds Utilized</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="modal-grievances-stat" class="text-2xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Grievances Resolved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const langToggle = document.getElementById('lang-toggle');
-            const langDropdown = document.getElementById('lang-dropdown');
+            // --- UI ELEMENT REFERENCES ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            const langToggle = document.getElementById('lang-toggle');
+            const langDropdown = document.getElementById('lang-dropdown');
+            // Advanced Search Modal
             const advancedSearchBtn = document.getElementById('advanced-search-btn');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const modal = document.getElementById('advanced-search-modal');
+            // Local Snapshot Modal
+            const localSnapshotLink = document.getElementById('local-snapshot-link');
+            const localSnapshotModal = document.getElementById('local-snapshot-modal');
+            const closeSnapshotModalBtn = document.getElementById('close-snapshot-modal-btn');
+            const locationInput = document.getElementById('location-input');
+            const getSnapshotBtn = document.getElementById('get-snapshot-btn');
 
 
-            // Accessibility Features
+            // --- ACCESSIBILITY FEATURES ---
             const fontDecrease = document.getElementById('font-decrease');
             const fontReset = document.getElementById('font-reset');
             const fontIncrease = document.getElementById('font-increase');
@@ -344,44 +496,251 @@
             themeDark.addEventListener('click', () => { htmlEl.classList.add('dark'); });
             themeLight.addEventListener('click', () => { htmlEl.classList.remove('dark'); });
 
-
-            // Mobile Menu Toggle
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-            }
-
-            // Language Dropdown Toggle
-            if (langToggle && langDropdown) {
-                langToggle.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    langDropdown.classList.toggle('hidden');
-                });
-            }
-
-             // Advanced Search Modal Toggle
+            // --- UI EVENT LISTENERS ---
+            if (mobileMenuButton) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            if (langToggle) langToggle.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); });
+            
+            // Advanced Search Modal Logic
             if(advancedSearchBtn && modal && closeModalBtn) {
-                advancedSearchBtn.addEventListener('click', () => {
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
+                advancedSearchBtn.addEventListener('click', () => modal.classList.replace('hidden', 'flex'));
+                closeModalBtn.addEventListener('click', () => modal.classList.replace('flex', 'hidden'));
+                modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.replace('flex', 'hidden'); });
+            }
+            
+            // Local Snapshot Modal Logic
+            if(localSnapshotLink && localSnapshotModal && closeSnapshotModalBtn && getSnapshotBtn) {
+                localSnapshotLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localSnapshotModal.classList.replace('hidden', 'flex');
                 });
-                closeModalBtn.addEventListener('click', () => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                });
-                modal.addEventListener('click', (event) => {
-                    if(event.target === modal) {
-                        modal.classList.add('hidden');
-                        modal.classList.remove('flex');
+                closeSnapshotModalBtn.addEventListener('click', () => localSnapshotModal.classList.replace('flex', 'hidden'));
+                localSnapshotModal.addEventListener('click', (e) => { if(e.target === localSnapshotModal) localSnapshotModal.classList.replace('flex', 'hidden'); });
+                
+                getSnapshotBtn.addEventListener('click', () => {
+                    const district = locationInput.value.trim();
+                    if (district) {
+                        fetchLocalData(district);
+                    } else {
+                        alert("Please enter a district name.");
                     }
                 });
             }
 
-            // Global click to close dropdowns
             document.addEventListener('click', (event) => {
                 if (langDropdown && !langDropdown.classList.contains('hidden') && !langDropdown.contains(event.target) && !langToggle.contains(event.target)) {
                     langDropdown.classList.add('hidden');
                 }
             });
+
+            // --- CHART.JS INITIALIZATION ---
+            let charts = {};
+
+            const initCharts = () => {
+                const chartIds = ['funnelChart', 'donutChart', 'lineChart', 'barChart'];
+                chartIds.forEach(id => {
+                    const canvas = document.getElementById(id);
+                    if (canvas) {
+                         const ctx = canvas.getContext('2d');
+                         if (charts[id]) charts[id].destroy();
+                         let type, options;
+                         switch(id) {
+                            case 'funnelChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
+                            case 'donutChart': type = 'doughnut'; options = { responsive: true, plugins: { legend: { position: 'top' } } }; break;
+                            case 'lineChart': type = 'line'; options = { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }; break;
+                            case 'barChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
+                         }
+                         charts[id] = new Chart(ctx, { type, data: {}, options });
+                    }
+                });
+            }
+            
+            initCharts();
+            
+            // --- DATA FETCHING AND UPDATING ---
+
+            // --- MOCK DATA (FALLBACK) ---
+            const MOCK_DATA = {
+                nationalStats: { villagesCovered: 47511, beneficiariesImpacted: 4587553, fundsSanctioned: 109607, worksCompleted: 41496 },
+                funnelChart: [109607, 95200, 75600, 68900],
+                donutChart: { labels: ['Adarsh Gram', 'Grants-in-Aid', 'Hostels', 'Admin & M&E'], data: [50, 43, 2, 5] },
+                lineChart: [65, 70, 72, 78, 85],
+                barChart: [12000, 9500, 8200, 7100, 6500],
+                leaderboards: {
+                    top5: [{ state: "Andhra Pradesh", projects: 98, funds: 95 },{ state: "Gujarat", projects: 95, funds: 92 },{ state: "Karnataka", projects: 92, funds: 88 },{ state: "Tamil Nadu", projects: 91, funds: 85 },{ state: "Maharashtra", projects: 89, funds: 84 }],
+                    bottom5: [{ state: "Bihar", projects: 45, funds: 50 },{ state: "Jharkhand", projects: 48, funds: 52 },{ state: "Assam", projects: 51, funds: 55 },{ state: "Odisha", projects: 55, funds: 58 },{ state: "West Bengal", projects: 58, funds: 62 }]
+                }
+            };
+            
+            // --- DATA FETCHING FUNCTIONS (MODULAR) ---
+
+            const fetchNationalStats = async () => {
+                // Add your API Key and Resource ID for National Stats here
+                // const apiKey = '...';
+                // For now, using mock data
+                return MOCK_DATA.nationalStats;
+            };
+
+            const fetchFunnelChartData = async () => {
+                // Add your API Key and Resource ID for Funnel Chart here
+                return MOCK_DATA.funnelChart;
+            };
+
+            const fetchDonutChartData = async () => {
+                const apiKey = '579b464db66ec23bdd00000133fb7135101845b740c2380f4cccd1d5';
+                const resourceId = '95b4bfc1-3802-4a47-9269-df1b9a242c74'; // Example: PMAGY data
+                const apiUrl = `https://api.data.gov.in/resource/${resourceId}?api-key=${apiKey}&format=json&limit=10`;
+                
+                if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
+                    console.log("Donut Chart: API Key not provided. Using mock data.");
+                    return MOCK_DATA.donutChart;
+                }
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const rawData = await response.json();
+                    
+                    // Simple processing: Summing up financial progress for different components
+                    const componentData = { 'Adarsh Gram': 0, 'Grants-in-Aid': 0, 'Hostels': 0, 'Admin & M&E': 0 };
+                    rawData.records.forEach(rec => {
+                        componentData['Adarsh Gram'] += parseFloat(rec.component_1_fin_cum) || 0;
+                        componentData['Grants-in-Aid'] += parseFloat(rec.component_2_fin_cum) || 0;
+                        componentData['Hostels'] += parseFloat(rec.component_3_fin_cum) || 0;
+                        componentData['Admin & M&E'] += parseFloat(rec.component_4_fin_cum) || 0;
+                    });
+
+                    console.log("Donut Chart: Successfully fetched and processed real data.");
+                    return {
+                        labels: Object.keys(componentData),
+                        data: Object.values(componentData)
+                    };
+                } catch (error) {
+                    console.error("Donut Chart: Failed to fetch real data. Using mock data.", error);
+                    return MOCK_DATA.donutChart;
+                }
+            };
+            
+            const fetchLineChartData = async () => {
+                 return MOCK_DATA.lineChart;
+            }
+            
+             const fetchBarChartData = async () => {
+                 return MOCK_DATA.barChart;
+            }
+            
+             const fetchLeaderboardData = async () => {
+                 return MOCK_DATA.leaderboards;
+            }
+
+
+            const fetchLocalData = async (district) => {
+                document.getElementById('modal-projects-stat').textContent = '...';
+                document.getElementById('modal-funds-stat').textContent = '...';
+                document.getElementById('modal-grievances-stat').textContent = '...';
+                
+                const geminiApiKey = "AIzaSyDzX6NrBh-02my-Sll8stjoUYffBkgVB4Y"; // IMPORTANT: Add your Gemini API Key here
+                if (!geminiApiKey) {
+                    console.log("Gemini API key not provided. Using mock local data.");
+                    updateLocalSnapshotWidget({ projectsUnderway: 15, fundsUtilized: "₹2.5 Cr", grievancesResolved: "89%" });
+                    return;
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                const prompt = `Find publicly available data for the PM-AJAY scheme in ${district} district. Provide the number of projects underway, the total funds utilized in crores, and the grievance resolution percentage. Format the response as a simple JSON object with keys: "projectsUnderway", "fundsUtilized", and "grievancesResolved" (e.g., "₹2.5 Cr", "89%").`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], tools: [{ "google_search": {} }] })
+                    });
+                    if (!response.ok) throw new Error(`Gemini API call failed: ${response.status}`);
+                    
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text.replace(/```json|```/g, '').trim();
+                    if(text) {
+                        const localData = JSON.parse(text);
+                        updateLocalSnapshotWidget(localData);
+                    } else { throw new Error("Invalid response from Gemini API"); }
+                } catch (error) {
+                    console.error("Error fetching local data:", error);
+                    updateLocalSnapshotWidget({ projectsUnderway: 'N/A', fundsUtilized: 'N/A', grievancesResolved: 'N/A' });
+                }
+            };
+            
+            // --- UI UPDATE FUNCTIONS (MODULAR) ---
+
+            const updateLocalSnapshotWidget = (data) => {
+                document.getElementById('modal-projects-stat').textContent = data.projectsUnderway;
+                document.getElementById('modal-funds-stat').textContent = data.fundsUtilized;
+                document.getElementById('modal-grievances-stat').textContent = data.grievancesResolved;
+            };
+
+            const updateNationalStats = (data) => {
+                document.getElementById('villages-covered-stat').textContent = data.villagesCovered.toLocaleString('en-IN');
+                document.getElementById('beneficiaries-impacted-stat').textContent = data.beneficiariesImpacted.toLocaleString('en-IN');
+                document.getElementById('funds-sanctioned-stat').textContent = `₹${data.fundsSanctioned.toLocaleString('en-IN')} Cr`;
+                document.getElementById('works-completed-stat').textContent = data.worksCompleted.toLocaleString('en-IN');
+            };
+
+            const updateFunnelChart = (data) => {
+                charts.funnelChart.data = { labels: ['Sanctioned', 'Released to State', 'Released to District', 'Utilized'], datasets: [{ data, backgroundColor: ['rgba(54, 162, 235, 0.6)','rgba(75, 192, 192, 0.6)','rgba(255, 206, 86, 0.6)','rgba(153, 102, 255, 0.6)'] }] };
+                charts.funnelChart.update();
+            };
+
+            const updateDonutChart = (data) => {
+                charts.donutChart.data = { labels: data.labels, datasets: [{ data: data.data, backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#9E9E9E'] }] };
+                charts.donutChart.update();
+            };
+
+            const updateLineChart = (data) => {
+                 charts.lineChart.data = { labels: ['Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025'], datasets: [{ label: '% Projects Completed', data, fill: false, borderColor: 'rgb(75, 192, 192)', tension: 0.1 }] };
+                 charts.lineChart.update();
+            };
+            
+            const updateBarChart = (data) => {
+                 charts.barChart.data = { labels: ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'], datasets: [{ label: 'Number of Projects', data, backgroundColor: '#FF6384' }] };
+                 charts.barChart.update();
+            };
+            
+            const updateLeaderboards = (data) => {
+                const top5Body = document.getElementById('top-5-table-body');
+                const bottom5Body = document.getElementById('bottom-5-table-body');
+                top5Body.innerHTML = data.top5.map(row => `
+                    <tr class="border-b"><td class="p-3">${row.state}</td><td class="p-3 text-center">${row.projects}% <i class="fas fa-arrow-up text-green-500"></i></td><td class="p-3 text-center">${row.funds}% <i class="fas fa-arrow-up text-green-500"></i></td></tr>`).join('');
+                bottom5Body.innerHTML = data.bottom5.map(row => `
+                    <tr class="border-b"><td class="p-3">${row.state}</td><td class="p-3 text-center">${row.projects}% <i class="fas fa-arrow-down text-red-500"></i></td><td class="p-3 text-center">${row.funds}% <i class="fas fa-arrow-down text-red-500"></i></td></tr>`).join('');
+            };
+
+            // --- INITIAL PAGE LOAD ---
+            const loadDashboard = async () => {
+                // Fetch all data concurrently
+                const [
+                    nationalStats,
+                    funnelData,
+                    donutData,
+                    lineData,
+                    barData,
+                    leaderboardData
+                ] = await Promise.all([
+                    fetchNationalStats(),
+                    fetchFunnelChartData(),
+                    fetchDonutChartData(),
+                    fetchLineChartData(),
+                    fetchBarChartData(),
+                    fetchLeaderboardData()
+                ]);
+
+                // Update all UI components with the fetched data
+                updateNationalStats(nationalStats);
+                updateFunnelChart(funnelData);
+                updateDonutChart(donutData);
+                updateLineChart(lineData);
+                updateBarChart(barData);
+                updateLeaderboards(leaderboardData);
+            };
+
+            loadDashboard();
         });
     </script>
 
