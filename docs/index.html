@@ -20,7 +20,7 @@
             background-color: #000000;
             color: #ffffff;
         }
-        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white, .dark .bg-white, .dark footer, .dark #local-snapshot-modal .bg-white, .dark #grievance-modal .bg-white {
+        .dark #main-header-el, .dark #mobile-menu, .dark #advanced-search-modal .bg-white, .dark .bg-white, .dark footer, .dark #local-snapshot-modal .bg-white, .dark #grievance-modal .bg-white, .dark #flowchart-modal .bg-white {
              background-color: #000000 !important;
              box-shadow: 0 2px 4px rgba(255,255,255,0.1);
         }
@@ -101,7 +101,7 @@
         }
 
         .hero-section {
-            background-image: url('https://placehold.co/1920x400/000000/FFFFFF?text=PM-AJAY+Scheme');
+            background-image: url('/docs/images/banner-inner-1.jpg');
             background-size: cover;
             background-position: center;
             height: 400px;
@@ -195,10 +195,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .explainer-step:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         .explainer-step .icon-circle {
             width: 50px;
@@ -251,6 +253,15 @@
         }
         .dark .suggestion-item:hover {
             background-color: #e2e8f0;
+        }
+
+        /* Animation for Modal */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out forwards;
         }
 
     </style>
@@ -622,8 +633,23 @@
         </div>
     </div>
 
+    <!-- Flowchart Detail Modal -->
+    <div id="flowchart-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl m-4 relative animate-fade-in-up">
+            <button id="close-flowchart-modal-btn" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h3 id="flowchart-modal-title" class="text-2xl font-bold mb-4 text-blue-700"></h3>
+            <div id="flowchart-modal-content" class="space-y-4 text-gray-700">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // --- GEMINI API KEY ---
+      const geminiApiKey = "AIzaSyBKIy8ScHv6JqVJAMuTibo7ikvBzMSfwXo"; 
+      
       // --- UI ELEMENT REFERENCES ---
       const mobileMenuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
@@ -651,6 +677,11 @@
       // Search Autocomplete
       const searchInput = document.getElementById('main-search-input');
       const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+      // New Flowchart Modal Elements
+      const flowchartModal = document.getElementById('flowchart-modal');
+      const closeFlowchartModalBtn = document.getElementById('close-flowchart-modal-btn');
+      const flowchartModalTitle = document.getElementById('flowchart-modal-title');
+      const flowchartModalContent = document.getElementById('flowchart-modal-content');
 
 
       // --- AUTOCOMPLETE FEATURE ---
@@ -674,7 +705,6 @@
         suggestionsContainer.innerHTML = '<div class="p-4 text-gray-500">Loading...</div>';
         suggestionsContainer.classList.remove('hidden');
 
-        const geminiApiKey = ""; // NOTE: API key removed for security
         if (!geminiApiKey) {
             console.warn("Gemini API key is not available. Using mock suggestions.");
             const mockSuggestions = ["Delhi", "Darbhanga", "Deoria", "Dhanbad", "Dhar", "Dholpur"];
@@ -785,25 +815,25 @@
         }
       });
 
-      // --- SCHEME EXPLAINER LOGIC ---
+    // --- SCHEME EXPLAINER LOGIC (STATIC CARDS) ---
       const explainerContent = {
         '1': `
           <div class="explainer-flowchart">
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-search-location"></i></div>
-              <h3>1. Village Selection</h3>
+              <h3>Village Selection</h3>
               <p>Villages with over 50% SC population are identified for holistic development.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-clipboard-list"></i></div>
-              <h3>2. Gap Analysis</h3>
+              <h3>Gap Analysis</h3>
               <p>A committee assesses the village's needs for infrastructure, housing, and social services.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-hard-hat"></i></div>
-              <h3>3. Project Implementation</h3>
+              <h3>Project Implementation</h3>
               <p>Funds are released to execute projects like roads, water supply, and community centers.</p>
             </div>
           </div>
@@ -812,19 +842,19 @@
           <div class="explainer-flowchart">
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
-              <h3>1. Proposal by Agency</h3>
+              <h3>Proposal by Agency</h3>
               <p>An eligible NGO or institution submits a project proposal for community development.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-stamp"></i></div>
-              <h3>2. District/State Approval</h3>
+              <h3>District/State Approval</h3>
               <p>The proposal is reviewed and approved by the relevant government authorities.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-users"></i></div>
-              <h3>3. Funds & Community Benefit</h3>
+              <h3>Funds & Community Benefit</h3>
               <p>Grant-in-Aid (GIA) is released to the agency to execute projects that directly benefit the SC community.</p>
             </div>
           </div>
@@ -833,37 +863,115 @@
           <div class="explainer-flowchart">
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-map-marked-alt"></i></div>
-              <h3>1. State Proposal</h3>
+              <h3>State Proposal</h3>
               <p>The State Government identifies the need for a hostel and provides the land.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-rupee-sign"></i></div>
-              <h3>2. Central Sanction</h3>
+              <h3>Central Sanction</h3>
               <p>The Central Government reviews the proposal and sanctions the funds for construction.</p>
             </div>
             <div class="explainer-arrow">&rarr;</div>
             <div class="explainer-step">
               <div class="icon-circle"><i class="fas fa-user-graduate"></i></div>
-              <h3>3. Construction & Occupancy</h3>
+              <h3>Construction & Occupancy</h3>
               <p>The hostel is built and becomes available for students from the SC community.</p>
             </div>
           </div>
         `
       };
 
+      const updateExplainerContent = (contentId) => {
+        if (explainerContentArea) {
+            explainerContentArea.innerHTML = explainerContent[contentId] || '';
+        }
+      };
+
       if (explainerBtns.length > 0 && explainerContentArea) {
-        explainerContentArea.innerHTML = explainerContent['1']; // Set initial content
+        updateExplainerContent('1'); // Set initial content
 
         explainerBtns.forEach(btn => {
           btn.addEventListener('click', () => {
             explainerBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const contentId = btn.id.split('-')[2];
-            explainerContentArea.innerHTML = explainerContent[contentId] || '';
+            updateExplainerContent(contentId);
           });
         });
       }
+
+      // --- NEW: FLOWCHART MODAL LOGIC & GEMINI INTEGRATION ---
+
+      const openFlowchartModal = () => flowchartModal.classList.replace('hidden', 'flex');
+      const closeFlowchartModal = () => flowchartModal.classList.replace('flex', 'hidden');
+      if (closeFlowchartModalBtn) closeFlowchartModalBtn.addEventListener('click', closeFlowchartModal);
+      if (flowchartModal) flowchartModal.addEventListener('click', (e) => { if(e.target === flowchartModal) closeFlowchartModal(); });
+
+      const renderFlowchartDetail = (data) => {
+          const { explanation, flowchart } = data;
+          let flowchartHtml = `<p class="text-base mb-6 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">${explanation || 'No explanation available.'}</p>`;
+          
+          if (flowchart && flowchart.length > 0) {
+              flowchartHtml += '<div class="space-y-4">';
+              flowchart.forEach((step, index) => {
+                  flowchartHtml += `
+                      <div class="flex items-start">
+                          <div class="flex-shrink-0 bg-blue-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-4">${index + 1}</div>
+                          <p class="pt-1 text-gray-800">${step}</p>
+                      </div>
+                  `;
+              });
+              flowchartHtml += '</div>';
+          }
+          flowchartModalContent.innerHTML = flowchartHtml;
+      };
+
+      const fetchFlowchartDetail = async (topic) => {
+        if (!flowchartModal || !flowchartModalTitle || !flowchartModalContent) return;
+
+        flowchartModalTitle.textContent = topic;
+        flowchartModalContent.innerHTML = `<div class="text-center p-8">Generating explanation... <i class="fas fa-spinner fa-spin text-2xl text-blue-600"></i></div>`;
+        openFlowchartModal();
+
+        if (!geminiApiKey) {
+            flowchartModalContent.innerHTML = `<div class="text-center p-8 text-red-500">AI features are currently disabled. API key is not configured.</div>`;
+            return;
+        }
+
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+        const prompt = `For the topic "${topic}" related to the PM-AJAY Indian government scheme, generate a detailed explanation and a simple step-by-step flowchart. Return a JSON object with two keys: "explanation" (a string with 2-3 sentences of detailed explanation) and "flowchart" (an array of strings, where each string is a single, clear step in the process).`;
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "explanation": { "type": "STRING" }, "flowchart": { type: "ARRAY", items: { type: "STRING" } } }, required: ["explanation", "flowchart"] } } };
+
+        try {
+            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            const result = await response.json();
+            const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+                const data = JSON.parse(text);
+                renderFlowchartDetail(data);
+            } else {
+                throw new Error("Invalid response from API");
+            }
+        } catch (error) {
+            console.error("Error fetching flowchart detail:", error);
+            flowchartModalContent.innerHTML = `<div class="text-center p-8 text-red-500">Could not generate the explanation. Please try again later.</div>`;
+        }
+      };
+      
+      if (explainerContentArea) {
+        explainerContentArea.addEventListener('click', (e) => {
+            const card = e.target.closest('.explainer-step');
+            if (card) {
+                const title = card.querySelector('h3')?.textContent;
+                if (title) {
+                    fetchFlowchartDetail(title);
+                }
+            }
+        });
+      }
+
 
       // --- CHART.JS INITIALIZATION ---
       let charts = {};
@@ -939,8 +1047,52 @@
         }
       };
 
-      const fetchNationalStats = async () => MOCK_DATA.nationalStats; // This can also be converted to an API call if data is available
-      const fetchLocalData = async (district) => ({ projectsUnderway: '12', fundsUtilized: '₹1.5 Cr', grievancesResolved: '8' }); // Mock
+      const fetchNationalStats = async () => MOCK_DATA.nationalStats;
+      
+        const fetchLocalData = async (district) => {
+            document.getElementById('modal-projects-stat').textContent = '...';
+            document.getElementById('modal-funds-stat').textContent = '...';
+            document.getElementById('modal-grievances-stat').textContent = '...';
+
+            if (!geminiApiKey) {
+                console.error("Gemini API key not provided.");
+                return { projectsUnderway: '12', fundsUtilized: '₹1.5 Cr', grievancesResolved: '8' };
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+            const prompt = `You are a data provider for a government dashboard. For the district of "${district}", provide a realistic but consistent data snapshot for the PM-AJAY scheme. The numbers should be plausible and always the same for the same district name. Return a JSON object with three keys: "projectsUnderway" (a number as a string), "fundsUtilized" (a string like "₹X.X Cr"), and "grievancesResolved" (a number as a string).`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "projectsUnderway": { "type": "STRING" },
+                            "fundsUtilized": { "type": "STRING" },
+                            "grievancesResolved": { "type": "STRING" }
+                        },
+                        required: ["projectsUnderway", "fundsUtilized", "grievancesResolved"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                    return JSON.parse(text);
+                } else {
+                    throw new Error("Invalid response from API");
+                }
+            } catch (error) {
+                console.error("Error fetching local snapshot data:", error);
+                return { projectsUnderway: '15', fundsUtilized: '₹2.1 Cr', grievancesResolved: '11' };
+            }
+        };
       
       const fetchFunnelChartData = () => fetchFromDataGov(RESOURCE_IDS.funnel, MOCK_DATA.funnelChart, records => {
         const record = records[0]; // Assuming funnel data is in a single record
@@ -968,9 +1120,6 @@
 
       const fetchLeaderboardData = async () => MOCK_DATA.leaderboards; // This can also be converted
       
-      // --- GEMINI API (REMOVED KEY FOR SECURITY) ---
-      const geminiApiKey = ""; 
-
       const fetchGrievanceDraft = async (userInput) => {
         const outputContainer = document.getElementById('grievance-output');
         if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyzing...';
