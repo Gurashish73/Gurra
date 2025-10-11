@@ -71,11 +71,11 @@
          .dark .explainer-arrow {
             color: #FCFF00;
         }
-        .dark #lang-dropdown, .dark #social-dropdown, .dark #role-login-dropdown {
+        .dark #lang-dropdown, .dark #social-dropdown {
             background-color: #111;
             border: 1px solid #444;
         }
-        .dark #lang-dropdown a:hover, .dark #social-dropdown a:hover, .dark #role-login-dropdown a:hover {
+        .dark #lang-dropdown a:hover, .dark #social-dropdown a:hover {
             background-color: #333;
         }
 
@@ -101,7 +101,7 @@
         }
 
         .hero-section {
-            background-image: url('/docs/images/banner-inner-1.jpg');
+            background-image: url('./docs/images/banner-inner-1.jpg');
             background-size: cover;
             background-position: center;
             height: 400px;
@@ -316,18 +316,7 @@
                         <a href="#" class="main-nav-link font-semibold py-1 px-4 rounded-full text-xs">ABOUT THE SCHEME</a>
                     </div>
                 </nav>
-                <!-- Role-based Login Dropdown -->
-                <div class="relative">
-                    <button id="role-login-toggle" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition flex items-center">
-                        Login <i class="fas fa-caret-down ml-2"></i>
-                    </button>
-                    <div id="role-login-dropdown" class="absolute hidden right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Central Admin</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">State Nodal Officer</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">District Collector</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">For Agencies</a>
-                    </div>
-                </div>
+                <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Login</a>
             </div>
             <!-- Mobile Menu Button --><div class="md:hidden">
                 <button id="mobile-menu-button" class="focus:outline-none text-gray-600">
@@ -342,18 +331,7 @@
                  <a href="#" id="grievance-link-mobile" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">LODGE A GRIEVANCE</a>
                  <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">ABOUT THE SCHEME</a>
                 <div class="pt-4 w-full">
-                    <!-- Mobile Role-based Login Dropdown -->
-                    <div class="relative w-full">
-                        <button id="role-login-toggle-mobile" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center flex items-center justify-center">
-                            Login <i class="fas fa-caret-down ml-2"></i>
-                        </button>
-                        <div id="role-login-dropdown-mobile" class="hidden mt-2 w-full bg-white rounded-md shadow-lg z-20">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">Central Admin</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">State Nodal Officer</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">District Collector</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">For Agencies</a>
-                        </div>
-                    </div>
+                    <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center">Login</a>
                 </div>
             </nav>
         </div>
@@ -407,7 +385,7 @@
                     </div>
                 </div>
                  <div class="mt-6 text-center">
-                    <button id="ai-summary-btn" class="bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-200 transition">AI Summary</button>
+                    <button id="ai-summary-btn" class="bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-200 transition">✨ Get AI Summary</button>
                     <div id="ai-summary-output" class="hidden mt-4 p-4 bg-gray-100 rounded-lg text-sm text-gray-700 italic"></div>
                 </div>
             </div>
@@ -621,35 +599,16 @@
     <div id="grievance-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl m-4">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold">AI-Powered Grievance Assistant ✨</h3>
+                <h3 class="text-xl font-semibold">Lodge a Grievance</h3>
                 <button id="close-grievance-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             </div>
             <div class="space-y-4">
                 <div>
-                    <label for="grievance-input" class="block text-sm font-medium text-gray-700">1. Describe your issue in your own words</label>
-                    <textarea id="grievance-input" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., The new road in my village has developed cracks within a month..."></textarea>
+                    <label for="grievance-input" class="block text-sm font-medium text-gray-700">Describe your issue in your own words</label>
+                    <textarea id="grievance-input" rows="8" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., The new road in my village has developed cracks within a month..."></textarea>
                 </div>
-                <div class="text-center">
-                    <button id="analyze-grievance-btn" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">
-                        Analyze & Draft Grievance
-                    </button>
-                </div>
-                <div id="grievance-output" class="hidden space-y-4 pt-4 border-t">
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">2. Grievance Category</label>
-                        <input type="text" id="grievance-category" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm">
-                    </div>
-                     <div>
-                        <label class="block text-sm font-medium text-gray-700">3. Summary of Issue</label>
-                        <input type="text" id="grievance-summary" readonly class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="grievance-draft" class="block text-sm font-medium text-gray-700">4. Formal Grievance Draft</label>
-                        <textarea id="grievance-draft" rows="8" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
-                    </div>
-                     <div class="text-right">
-                        <button class="bg-green-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-green-700 transition">Submit Grievance</button>
-                    </div>
+                <div class="text-right">
+                    <button class="bg-green-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-green-700 transition">Submit Grievance</button>
                 </div>
             </div>
         </div>
@@ -677,10 +636,6 @@
       const mobileMenu = document.getElementById('mobile-menu');
       const langToggle = document.getElementById('lang-toggle');
       const langDropdown = document.getElementById('lang-dropdown');
-      const roleLoginToggle = document.getElementById('role-login-toggle');
-      const roleLoginDropdown = document.getElementById('role-login-dropdown');
-      const roleLoginToggleMobile = document.getElementById('role-login-toggle-mobile');
-      const roleLoginDropdownMobile = document.getElementById('role-login-dropdown-mobile');
       // Modals
       const advancedSearchBtn = document.getElementById('advanced-search-btn');
       const closeModalBtn = document.getElementById('close-modal-btn');
@@ -698,7 +653,6 @@
       // Gemini Features
       const getSnapshotBtn = document.getElementById('get-snapshot-btn');
       const locationInput = document.getElementById('location-input');
-      const analyzeGrievanceBtn = document.getElementById('analyze-grievance-btn');
       const aiSummaryBtn = document.getElementById('ai-summary-btn');
       // Search Autocomplete
       const searchInput = document.getElementById('main-search-input');
@@ -817,18 +771,6 @@
       // --- UI EVENT LISTENERS ---
       if (mobileMenuButton && mobileMenu) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
       if (langToggle && langDropdown) langToggle.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); });
-      if (roleLoginToggle && roleLoginDropdown) {
-        roleLoginToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            roleLoginDropdown.classList.toggle('hidden');
-        });
-      }
-      if (roleLoginToggleMobile && roleLoginDropdownMobile) {
-        roleLoginToggleMobile.addEventListener('click', (e) => {
-            e.stopPropagation();
-            roleLoginDropdownMobile.classList.toggle('hidden');
-        });
-      }
 
       // Modal Logic
       const setupModal = (openBtn, modalEl, closeBtn) => {
@@ -847,9 +789,6 @@
       document.addEventListener('click', (event) => {
         if (langDropdown && !langDropdown.classList.contains('hidden') && !langDropdown.contains(event.target) && !langToggle.contains(event.target)) {
           langDropdown.classList.add('hidden');
-        }
-         if (roleLoginDropdown && !roleLoginDropdown.classList.contains('hidden') && !roleLoginDropdown.contains(event.target) && !roleLoginToggle.contains(event.target)) {
-          roleLoginDropdown.classList.add('hidden');
         }
         if (suggestionsContainer && !suggestionsContainer.contains(event.target) && event.target !== searchInput) {
             suggestionsContainer.classList.add('hidden');
@@ -1159,42 +1098,7 @@
         data: records.slice(0, 5).map(r => parseInt(r.number_of_projects))
       }));
 
-      const fetchLeaderboardData = async () => MOCK_DATA.leaderboards; // This can also be converted
-      
-      const fetchGrievanceDraft = async (userInput) => {
-        const outputContainer = document.getElementById('grievance-output');
-        if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyzing...';
-
-        if (!geminiApiKey) {
-          console.error("Gemini API key not provided.");
-          alert("AI features are currently disabled. Please configure a backend proxy for the API key.");
-          if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyze & Draft Grievance';
-          return;
-        }
-
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
-        const prompt = `A citizen has reported an issue related to the PM-AJAY scheme. Their report is: "${userInput}". \n\nBased on this, perform the following tasks:\n1. Categorize the issue into one of these categories: 'Fund Misuse', 'Poor Quality of Work', 'Project Stalled', 'Eligibility Issue', 'Other'.\n2. Summarize the core problem in a single, concise sentence.\n3. Write a formal grievance letter to the District Magistrate based on the user's report. The letter should be polite, clear, and state the problem and the desired action. Address it "To the District Magistrate," and sign off as "A Concerned Citizen".`;
-        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "category": { "type": "STRING" }, "summary": { "type": "STRING" }, "draft": { "type": "STRING" } }, required: ["category", "summary", "draft"] } } };
-
-        try {
-          const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-          if (!response.ok) throw new Error(`API Error: ${response.status}`);
-          const result = await response.json();
-          const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            const data = JSON.parse(text);
-            document.getElementById('grievance-category').value = data.category;
-            document.getElementById('grievance-summary').value = data.summary;
-            document.getElementById('grievance-draft').value = data.draft;
-            if(outputContainer) outputContainer.classList.remove('hidden');
-          } else { throw new Error("Invalid response from API"); }
-        } catch (error) {
-          console.error("Error fetching grievance draft:", error);
-          alert("Could not generate AI draft. Please try again.");
-        } finally {
-          if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyze & Draft Grievance';
-        }
-      };
+      const fetchLeaderboardData = async () => MOCK_DATA.leaderboards; 
       
       const fetchNationalSummary = async () => {
         const outputContainer = document.getElementById('ai-summary-output');
@@ -1251,14 +1155,7 @@
             }
         });
       }
-      if (analyzeGrievanceBtn) {
-        analyzeGrievanceBtn.addEventListener('click', () => {
-          const userInputEl = document.getElementById('grievance-input');
-          if (userInputEl && userInputEl.value.trim()) {
-            fetchGrievanceDraft(userInputEl.value);
-          } else { alert("Please describe your issue first."); }
-        });
-      }
+
       if (aiSummaryBtn) {
         aiSummaryBtn.addEventListener('click', fetchNationalSummary);
       }
