@@ -71,11 +71,11 @@
          .dark .explainer-arrow {
             color: #FCFF00;
         }
-        .dark #lang-dropdown, .dark #social-dropdown {
+        .dark #lang-dropdown, .dark #social-dropdown, .dark #role-login-dropdown {
             background-color: #111;
             border: 1px solid #444;
         }
-        .dark #lang-dropdown a:hover, .dark #social-dropdown a:hover {
+        .dark #lang-dropdown a:hover, .dark #social-dropdown a:hover, .dark #role-login-dropdown a:hover {
             background-color: #333;
         }
 
@@ -316,7 +316,18 @@
                         <a href="#" class="main-nav-link font-semibold py-1 px-4 rounded-full text-xs">ABOUT THE SCHEME</a>
                     </div>
                 </nav>
-                <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Login / Signup</a>
+                <!-- Role-based Login Dropdown -->
+                <div class="relative">
+                    <button id="role-login-toggle" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition flex items-center">
+                        Login <i class="fas fa-caret-down ml-2"></i>
+                    </button>
+                    <div id="role-login-dropdown" class="absolute hidden right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Central Admin</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">State Nodal Officer</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">District Collector</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">For Agencies</a>
+                    </div>
+                </div>
             </div>
             <!-- Mobile Menu Button --><div class="md:hidden">
                 <button id="mobile-menu-button" class="focus:outline-none text-gray-600">
@@ -331,7 +342,18 @@
                  <a href="#" id="grievance-link-mobile" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">LODGE A GRIEVANCE</a>
                  <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">ABOUT THE SCHEME</a>
                 <div class="pt-4 w-full">
-                    <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center">Login / Signup</a>
+                    <!-- Mobile Role-based Login Dropdown -->
+                    <div class="relative w-full">
+                        <button id="role-login-toggle-mobile" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center flex items-center justify-center">
+                            Login <i class="fas fa-caret-down ml-2"></i>
+                        </button>
+                        <div id="role-login-dropdown-mobile" class="hidden mt-2 w-full bg-white rounded-md shadow-lg z-20">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">Central Admin</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">State Nodal Officer</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">District Collector</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">For Agencies</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -385,7 +407,7 @@
                     </div>
                 </div>
                  <div class="mt-6 text-center">
-                    <button id="ai-summary-btn" class="bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-200 transition">✨ Get AI Summary</button>
+                    <button id="ai-summary-btn" class="bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-200 transition">AI Summary</button>
                     <div id="ai-summary-output" class="hidden mt-4 p-4 bg-gray-100 rounded-lg text-sm text-gray-700 italic"></div>
                 </div>
             </div>
@@ -655,6 +677,10 @@
       const mobileMenu = document.getElementById('mobile-menu');
       const langToggle = document.getElementById('lang-toggle');
       const langDropdown = document.getElementById('lang-dropdown');
+      const roleLoginToggle = document.getElementById('role-login-toggle');
+      const roleLoginDropdown = document.getElementById('role-login-dropdown');
+      const roleLoginToggleMobile = document.getElementById('role-login-toggle-mobile');
+      const roleLoginDropdownMobile = document.getElementById('role-login-dropdown-mobile');
       // Modals
       const advancedSearchBtn = document.getElementById('advanced-search-btn');
       const closeModalBtn = document.getElementById('close-modal-btn');
@@ -791,6 +817,18 @@
       // --- UI EVENT LISTENERS ---
       if (mobileMenuButton && mobileMenu) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
       if (langToggle && langDropdown) langToggle.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); });
+      if (roleLoginToggle && roleLoginDropdown) {
+        roleLoginToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            roleLoginDropdown.classList.toggle('hidden');
+        });
+      }
+      if (roleLoginToggleMobile && roleLoginDropdownMobile) {
+        roleLoginToggleMobile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            roleLoginDropdownMobile.classList.toggle('hidden');
+        });
+      }
 
       // Modal Logic
       const setupModal = (openBtn, modalEl, closeBtn) => {
@@ -809,6 +847,9 @@
       document.addEventListener('click', (event) => {
         if (langDropdown && !langDropdown.classList.contains('hidden') && !langDropdown.contains(event.target) && !langToggle.contains(event.target)) {
           langDropdown.classList.add('hidden');
+        }
+         if (roleLoginDropdown && !roleLoginDropdown.classList.contains('hidden') && !roleLoginDropdown.contains(event.target) && !roleLoginToggle.contains(event.target)) {
+          roleLoginDropdown.classList.add('hidden');
         }
         if (suggestionsContainer && !suggestionsContainer.contains(event.target) && event.target !== searchInput) {
             suggestionsContainer.classList.add('hidden');
