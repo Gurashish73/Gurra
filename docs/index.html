@@ -101,7 +101,7 @@
         }
 
         .hero-section {
-            background-image: url('/docs/images/banner-inner-1.jpg');
+            background-image: url('https://placehold.co/1920x400/000000/FFFFFF?text=PM-AJAY+Scheme');
             background-size: cover;
             background-position: center;
             height: 400px;
@@ -237,6 +237,21 @@
             }
         }
 
+        /* Autocomplete Styles */
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .suggestion-item:hover {
+            background-color: #f1f1f1;
+        }
+        .dark .suggestion-item {
+            color: #333;
+        }
+        .dark .suggestion-item:hover {
+            background-color: #e2e8f0;
+        }
 
     </style>
 </head>
@@ -305,7 +320,7 @@
                  <a href="#" id="grievance-link-mobile" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">LODGE A GRIEVANCE</a>
                  <a href="#" class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">ABOUT THE SCHEME</a>
                 <div class="pt-4 w-full">
-                    <a href="./Pages/login.html" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center">Login / Signup</a>
+                    <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center">Login / Signup</a>
                 </div>
             </nav>
         </div>
@@ -314,11 +329,13 @@
     <!-- Hero Section --><section class="hero-section">
         <div class="relative w-full max-w-3xl px-4 z-10">
             <div class="search-bar-container p-2 flex items-center rounded-full">
-                <input type="text" placeholder="Enter your State, District, or Village name..." class="w-full bg-transparent border-none focus:ring-0 text-base sm:text-lg px-4 py-2">
+                <input type="text" id="main-search-input" placeholder="Enter your State, District, or Village name..." class="w-full bg-transparent border-none focus:ring-0 text-base sm:text-lg px-4 py-2">
                 <button class="bg-white p-2 rounded-full">
                     <i class="fas fa-search text-gray-500 text-xl"></i>
                 </button>
             </div>
+            <!-- Autocomplete Suggestions Container -->
+            <div id="autocomplete-suggestions" class="absolute hidden w-full bg-white rounded-lg shadow-lg mt-1 z-20"></div>
             <div class="text-right mt-2">
                 <button id="advanced-search-btn" class="text-white text-sm font-semibold hover:underline bg-transparent px-2 py-1 rounded-lg">
                     <i class="fas fa-cog mr-1"></i> Advanced Search
@@ -506,7 +523,30 @@
                 <h3 class="text-xl font-semibold">Advanced Search Filters</h3>
                 <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             </div>
-            <!-- ... modal content ... -->
+            <!-- Modal content -->
+            <div class="space-y-4">
+                <div>
+                    <label for="state-select" class="block text-sm font-medium text-gray-700">State</label>
+                    <select id="state-select" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option>Select a State</option>
+                        <option>Andhra Pradesh</option>
+                        <option>Gujarat</option>
+                        <option>Karnataka</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="component-select" class="block text-sm font-medium text-gray-700">Scheme Component</label>
+                    <select id="component-select" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option>All Components</option>
+                        <option>Adarsh Gram</option>
+                        <option>Grants-in-Aid</option>
+                        <option>Hostels</option>
+                    </select>
+                </div>
+                <div class="text-right">
+                    <button class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Apply Filters</button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -517,7 +557,30 @@
                 <h3 class="text-xl font-semibold">Your Local Snapshot ✨</h3>
                 <button id="close-snapshot-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             </div>
-            <!-- ... modal content ... -->
+            <!-- Modal content -->
+            <div class="space-y-4">
+                 <div>
+                    <label for="location-input" class="block text-sm font-medium text-gray-700">Enter your District name:</label>
+                    <input type="text" id="location-input" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Anantapur">
+                </div>
+                <div class="text-center">
+                    <button id="get-snapshot-btn" class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Get Snapshot</button>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t">
+                    <div>
+                        <h4 id="modal-projects-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Projects Underway</p>
+                    </div>
+                     <div>
+                        <h4 id="modal-funds-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Funds Utilized</p>
+                    </div>
+                     <div>
+                        <h4 id="modal-grievances-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Grievances Resolved</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -580,11 +643,106 @@
       // Scheme Explainer
       const explainerBtns = document.querySelectorAll('.explainer-btn');
       const explainerContentArea = document.getElementById('explainer-content-area');
-      // Gemini Features (may be missing in DOM — that's okay)
+      // Gemini Features
       const getSnapshotBtn = document.getElementById('get-snapshot-btn');
       const locationInput = document.getElementById('location-input');
       const analyzeGrievanceBtn = document.getElementById('analyze-grievance-btn');
       const aiSummaryBtn = document.getElementById('ai-summary-btn');
+      // Search Autocomplete
+      const searchInput = document.getElementById('main-search-input');
+      const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+
+
+      // --- AUTOCOMPLETE FEATURE ---
+      const debounce = (func, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+      };
+
+      const fetchAutocompleteSuggestions = async (query) => {
+        if (!query) {
+            suggestionsContainer.innerHTML = '';
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+
+        suggestionsContainer.innerHTML = '<div class="p-4 text-gray-500">Loading...</div>';
+        suggestionsContainer.classList.remove('hidden');
+
+        const geminiApiKey = ""; // NOTE: API key removed for security
+        if (!geminiApiKey) {
+            console.warn("Gemini API key is not available. Using mock suggestions.");
+            const mockSuggestions = ["Delhi", "Darbhanga", "Deoria", "Dhanbad", "Dhar", "Dholpur"];
+            renderSuggestions(mockSuggestions.filter(s => s.toLowerCase().startsWith(query.toLowerCase())));
+            return;
+        }
+
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+        const prompt = `Based on the search query "${query}" for the PM-AJAY scheme in India, provide up to 5 relevant autocomplete suggestions. These can be states, districts, or villages in India. Return the result as a JSON array of strings.`;
+
+        const payload = {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: "ARRAY",
+                    items: { type: "STRING" }
+                }
+            }
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            const result = await response.json();
+            const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+                const suggestions = JSON.parse(text);
+                renderSuggestions(suggestions);
+            } else {
+                throw new Error("Invalid response from API");
+            }
+        } catch (error) {
+            console.error("Error fetching autocomplete suggestions:", error);
+            suggestionsContainer.innerHTML = '<div class="p-4 text-red-500">Could not fetch suggestions.</div>';
+        }
+      };
+
+      const renderSuggestions = (suggestions) => {
+        if (!suggestions || suggestions.length === 0) {
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+        suggestionsContainer.innerHTML = '';
+        suggestions.forEach(suggestion => {
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            item.textContent = suggestion;
+            item.addEventListener('click', () => {
+                searchInput.value = suggestion;
+                suggestionsContainer.classList.add('hidden');
+            });
+            suggestionsContainer.appendChild(item);
+        });
+        suggestionsContainer.classList.remove('hidden');
+      };
+
+      const debouncedFetch = debounce(fetchAutocompleteSuggestions, 300);
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            debouncedFetch(e.target.value);
+        });
+      }
 
       // --- ACCESSIBILITY FEATURES ---
       const fontDecrease = document.getElementById('font-decrease');
@@ -621,6 +779,9 @@
       document.addEventListener('click', (event) => {
         if (langDropdown && !langDropdown.classList.contains('hidden') && !langDropdown.contains(event.target) && !langToggle.contains(event.target)) {
           langDropdown.classList.add('hidden');
+        }
+        if (suggestionsContainer && !suggestionsContainer.contains(event.target) && event.target !== searchInput) {
+            suggestionsContainer.classList.add('hidden');
         }
       });
 
@@ -712,76 +873,103 @@
           const canvas = document.getElementById(id);
           if (canvas) {
             const ctx = canvas.getContext('2d');
-
-            // Ensure previous chart destroyed
             if (charts[id]) charts[id].destroy();
-
-            // default minimal data so Chart.js won't error before first update
             const defaultData = { labels: [], datasets: [{ data: [] }] };
             let type = 'bar', options = { responsive: true };
 
             switch(id) {
-              case 'funnelChart':
-                type = 'bar';
-                options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } };
-                break;
-              case 'donutChart':
-                type = 'doughnut';
-                options = { responsive: true, plugins: { legend: { position: 'top' } } };
-                break;
-              case 'lineChart':
-                type = 'line';
-                options = { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } };
-                break;
-              case 'barChart':
-                type = 'bar';
-                options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } };
-                break;
+              case 'funnelChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
+              case 'donutChart': type = 'doughnut'; options = { responsive: true, plugins: { legend: { position: 'top' } } }; break;
+              case 'lineChart': type = 'line'; options = { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }; break;
+              case 'barChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
             }
-
             charts[id] = new Chart(ctx, { type, data: defaultData, options });
           }
         });
       };
       initCharts();
-
-      // --- DATA FETCHING AND UPDATING ---
-
+      
       // --- MOCK DATA (FALLBACK) ---
       const MOCK_DATA = {
         nationalStats: { villagesCovered: 47511, beneficiariesImpacted: 4587553, fundsSanctioned: 109607, worksCompleted: 41496 },
         funnelChart: [109607, 95200, 75600, 68900],
         donutChart: { labels: ['Adarsh Gram', 'Grants-in-Aid', 'Hostels', 'Admin & M&E'], data: [50, 43, 2, 5] },
         lineChart: [65, 70, 72, 78, 85],
-        barChart: [12000, 9500, 8200, 7100, 6500],
+        barChart: { 
+            labels: ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'], 
+            data: [12000, 9500, 8200, 7100, 6500] 
+        },
         leaderboards: {
           top5: [{ state: "Andhra Pradesh", projects: 98, funds: 95 },{ state: "Gujarat", projects: 95, funds: 92 },{ state: "Karnataka", projects: 92, funds: 88 },{ state: "Tamil Nadu", projects: 91, funds: 85 },{ state: "Maharashtra", projects: 89, funds: 84 }],
           bottom5: [{ state: "Bihar", projects: 45, funds: 50 },{ state: "Jharkhand", projects: 48, funds: 52 },{ state: "Assam", projects: 51, funds: 55 },{ state: "Odisha", projects: 55, funds: 58 },{ state: "West Bengal", projects: 58, funds: 62 }]
         }
       };
 
-      // --- GEMINI API KEY (placeholder) ---
-      const geminiApiKey = "AIzaSyBKIy8ScHv6JqVJAMuTibo7ikvBzMSfwXo";
+      // --- API CONFIGURATION ---
+      // IMPORTANT: Replace with your actual data.gov.in API key.
+      const DATA_GOV_API_KEY = 'YOUR_API_KEY_HERE'; 
 
-      // --- DATA FETCHING FUNCTIONS (MODULAR) ---
-      const fetchNationalStats = async () => MOCK_DATA.nationalStats;
-      const fetchFunnelChartData = async () => MOCK_DATA.funnelChart;
-      const fetchLineChartData = async () => MOCK_DATA.lineChart;
-      const fetchBarChartData = async () => MOCK_DATA.barChart;
-      const fetchLeaderboardData = async () => MOCK_DATA.leaderboards;
-
-      // << FIX: actually return the donut chart data instead of undefined >>
-      const fetchDonutChartData = async () => {
-        // In a real integration, do the API call here.
-        // For now return the fallback object used elsewhere in the code.
-        return MOCK_DATA.donutChart;
+      // Replace with actual Resource IDs from data.gov.in for PM-AJAY scheme
+      const RESOURCE_IDS = {
+        funnel: 'c2f5a623-a212-4e73-b328-1be789431ab7', // Example ID for fund utilization
+        donut: 'e4b0942b-ea99-4f71-a8f2-8178263e7228',  // Example ID for component allocation
+        line: '9f23c6a4-7a5d-4a1b-853f-3a830957b44b',   // Example ID for completion trend
+        bar: '3b0f5b6d-3a4a-4e9a-9b87-5a67c5e5e3a3'     // Example ID for project types
       };
 
-      // --- GEMINI-POWERED FEATURE FUNCTIONS ---
-      const fetchLocalData = async (district) => {
-        // Placeholder - implement real fetch when ready. Return a safe object shape if used.
-        return { projectsUnderway: '—', fundsUtilized: '—', grievancesResolved: '—' };
+      // --- DATA FETCHING FUNCTIONS ---
+      const fetchFromDataGov = async (resourceId, mockData, processor) => {
+        if (!DATA_GOV_API_KEY || DATA_GOV_API_KEY === 'YOUR_API_KEY_HERE') {
+            console.warn('data.gov.in API key is missing. Using mock data.');
+            return mockData;
+        }
+        const apiUrl = `https://api.data.gov.in/resource/${resourceId}?api-key=${DATA_GOV_API_KEY}&format=json&limit=10`;
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            const apiResult = await response.json();
+            if (apiResult && apiResult.records) {
+                return processor(apiResult.records);
+            }
+            console.warn(`Could not process API data for resource ${resourceId}. Using mock data.`);
+            return mockData;
+        } catch (error) {
+            console.error(`Error fetching from data.gov.in for resource ${resourceId}:`, error);
+            return mockData;
+        }
       };
+
+      const fetchNationalStats = async () => MOCK_DATA.nationalStats; // This can also be converted to an API call if data is available
+      const fetchLocalData = async (district) => ({ projectsUnderway: '12', fundsUtilized: '₹1.5 Cr', grievancesResolved: '8' }); // Mock
+      
+      const fetchFunnelChartData = () => fetchFromDataGov(RESOURCE_IDS.funnel, MOCK_DATA.funnelChart, records => {
+        const record = records[0]; // Assuming funnel data is in a single record
+        return [
+            parseInt(record.funds_sanctioned),
+            parseInt(record.released_to_state),
+            parseInt(record.released_to_district),
+            parseInt(record.utilized)
+        ];
+      });
+
+      const fetchDonutChartData = () => fetchFromDataGov(RESOURCE_IDS.donut, MOCK_DATA.donutChart, records => ({
+        labels: records.map(r => r.scheme_component),
+        data: records.map(r => parseFloat(r.percentage_allocation))
+      }));
+      
+      const fetchLineChartData = () => fetchFromDataGov(RESOURCE_IDS.line, MOCK_DATA.lineChart, records => 
+        records.map(r => parseFloat(r.completion_rate_percent))
+      );
+      
+      const fetchBarChartData = () => fetchFromDataGov(RESOURCE_IDS.bar, MOCK_DATA.barChart, records => ({
+        labels: records.slice(0, 5).map(r => r.project_type),
+        data: records.slice(0, 5).map(r => parseInt(r.number_of_projects))
+      }));
+
+      const fetchLeaderboardData = async () => MOCK_DATA.leaderboards; // This can also be converted
+      
+      // --- GEMINI API (REMOVED KEY FOR SECURITY) ---
+      const geminiApiKey = ""; 
 
       const fetchGrievanceDraft = async (userInput) => {
         const outputContainer = document.getElementById('grievance-output');
@@ -789,36 +977,17 @@
 
         if (!geminiApiKey) {
           console.error("Gemini API key not provided.");
-          alert("AI features are currently disabled. API key is missing.");
+          alert("AI features are currently disabled. Please configure a backend proxy for the API key.");
           if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyze & Draft Grievance';
           return;
         }
 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
         const prompt = `A citizen has reported an issue related to the PM-AJAY scheme. Their report is: "${userInput}". \n\nBased on this, perform the following tasks:\n1. Categorize the issue into one of these categories: 'Fund Misuse', 'Poor Quality of Work', 'Project Stalled', 'Eligibility Issue', 'Other'.\n2. Summarize the core problem in a single, concise sentence.\n3. Write a formal grievance letter to the District Magistrate based on the user's report. The letter should be polite, clear, and state the problem and the desired action. Address it "To the District Magistrate," and sign off as "A Concerned Citizen".`;
-
-        const payload = {
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "OBJECT",
-              properties: {
-                "category": { "type": "STRING" },
-                "summary": { "type": "STRING" },
-                "draft": { "type": "STRING" }
-              },
-              required: ["category", "summary", "draft"]
-            }
-          }
-        };
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "category": { "type": "STRING" }, "summary": { "type": "STRING" }, "draft": { "type": "STRING" } }, required: ["category", "summary", "draft"] } } };
 
         try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+          const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
           if (!response.ok) throw new Error(`API Error: ${response.status}`);
           const result = await response.json();
           const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -827,10 +996,8 @@
             document.getElementById('grievance-category').value = data.category;
             document.getElementById('grievance-summary').value = data.summary;
             document.getElementById('grievance-draft').value = data.draft;
-            outputContainer.classList.remove('hidden');
-          } else {
-            throw new Error("Invalid response from API");
-          }
+            if(outputContainer) outputContainer.classList.remove('hidden');
+          } else { throw new Error("Invalid response from API"); }
         } catch (error) {
           console.error("Error fetching grievance draft:", error);
           alert("Could not generate AI draft. Please try again.");
@@ -838,82 +1005,76 @@
           if (analyzeGrievanceBtn) analyzeGrievanceBtn.textContent = 'Analyze & Draft Grievance';
         }
       };
-
+      
       const fetchNationalSummary = async () => {
         const outputContainer = document.getElementById('ai-summary-output');
         if (aiSummaryBtn) aiSummaryBtn.textContent = 'Generating...';
 
         if (!geminiApiKey) {
-          console.error("Gemini API key not provided.");
-          outputContainer.textContent = "AI features are currently disabled. API key is missing.";
-          outputContainer.classList.remove('hidden');
-          if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
-          return;
+            console.error("Gemini API key not provided.");
+            if(outputContainer) {
+                outputContainer.textContent = "AI features are currently disabled. Please configure a backend proxy for the API key.";
+                outputContainer.classList.remove('hidden');
+            }
+            if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
+            return;
         }
 
         const stats = {
-          villages: document.getElementById('villages-covered-stat').textContent,
-          beneficiaries: document.getElementById('beneficiaries-impacted-stat').textContent,
-          funds: document.getElementById('funds-sanctioned-stat').textContent,
-          works: document.getElementById('works-completed-stat').textContent,
+            villages: document.getElementById('villages-covered-stat').textContent,
+            beneficiaries: document.getElementById('beneficiaries-impacted-stat').textContent,
+            funds: document.getElementById('funds-sanctioned-stat').textContent,
+            works: document.getElementById('works-completed-stat').textContent,
         };
-
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
         const prompt = `The current national live status for the PM-AJAY scheme is as follows: Villages Covered: ${stats.villages}, Beneficiaries Impacted: ${stats.beneficiaries}, Funds Sanctioned: ${stats.funds}, Works Completed: ${stats.works}. As a helpful assistant, explain what these numbers mean to a citizen in a simple, encouraging, one-paragraph summary.`;
-
+        
         try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-          });
-          if (!response.ok) throw new Error(`API Error: ${response.status}`);
-          const result = await response.json();
-          const summary = result.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (summary) {
-            outputContainer.textContent = summary;
-            outputContainer.classList.remove('hidden');
-          } else {
-            throw new Error("Invalid response from API");
-          }
+            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            const result = await response.json();
+            const summary = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (summary && outputContainer) {
+                outputContainer.textContent = summary;
+                outputContainer.classList.remove('hidden');
+            } else { throw new Error("Invalid response from API"); }
         } catch (error) {
-          console.error("Error fetching national summary:", error);
-          outputContainer.textContent = "Could not generate AI summary at this time.";
-          outputContainer.classList.remove('hidden');
+            console.error("Error fetching national summary:", error);
+            if(outputContainer) {
+                outputContainer.textContent = "Could not generate AI summary at this time.";
+                outputContainer.classList.remove('hidden');
+            }
         } finally {
-          if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
+            if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
         }
       };
 
-      // Event Listeners for AI features
+      // --- EVENT LISTENERS FOR AI & DYNAMIC FEATURES ---
+      if (getSnapshotBtn) {
+        getSnapshotBtn.addEventListener('click', async () => {
+            const district = locationInput ? locationInput.value : '';
+            if (district.trim()) {
+                const data = await fetchLocalData(district.trim());
+                updateLocalSnapshotWidget(data);
+            } else {
+                alert('Please enter a district name.');
+            }
+        });
+      }
       if (analyzeGrievanceBtn) {
         analyzeGrievanceBtn.addEventListener('click', () => {
           const userInputEl = document.getElementById('grievance-input');
-          const userInput = userInputEl ? userInputEl.value : '';
-          if (userInput.trim()) {
-            fetchGrievanceDraft(userInput);
-          } else {
-            alert("Please describe your issue first.");
-          }
+          if (userInputEl && userInputEl.value.trim()) {
+            fetchGrievanceDraft(userInputEl.value);
+          } else { alert("Please describe your issue first."); }
         });
       }
       if (aiSummaryBtn) {
         aiSummaryBtn.addEventListener('click', fetchNationalSummary);
       }
+      
 
-      // --- UI UPDATE FUNCTIONS (MODULAR) ---
-      const updateLocalSnapshotWidget = (data) => {
-        // Defensive: only update if elements exist
-        const pStat = document.getElementById('modal-projects-stat');
-        const fStat = document.getElementById('modal-funds-stat');
-        const gStat = document.getElementById('modal-grievances-stat');
-        if (pStat && fStat && gStat && data) {
-          pStat.textContent = data.projectsUnderway;
-          fStat.textContent = data.fundsUtilized;
-          gStat.textContent = data.grievancesResolved;
-        }
-      };
-
+      // --- UI UPDATE FUNCTIONS ---
       const updateNationalStats = (data) => {
         if (!data) return;
         const villagesEl = document.getElementById('villages-covered-stat');
@@ -926,39 +1087,55 @@
         if (worksEl) worksEl.textContent = data.worksCompleted.toLocaleString('en-IN');
       };
 
+      const updateLocalSnapshotWidget = (data) => {
+        const pStat = document.getElementById('modal-projects-stat');
+        const fStat = document.getElementById('modal-funds-stat');
+        const gStat = document.getElementById('modal-grievances-stat');
+        if (pStat && fStat && gStat && data) {
+          pStat.textContent = data.projectsUnderway;
+          fStat.textContent = data.fundsUtilized;
+          gStat.textContent = data.grievancesResolved;
+        }
+      };
+
       const updateFunnelChart = (data) => {
-        if (!data) { console.warn('Funnel chart data missing'); return; }
-        if (charts.funnelChart) {
+        if (charts.funnelChart && data) {
           charts.funnelChart.data = { labels: ['Sanctioned', 'Released to State', 'Released to District', 'Utilized'], datasets: [{ data, backgroundColor: ['rgba(54, 162, 235, 0.6)','rgba(75, 192, 192, 0.6)','rgba(255, 206, 86, 0.6)','rgba(153, 102, 255, 0.6)'] }] };
           charts.funnelChart.update();
         }
       };
 
       const updateDonutChart = (data) => {
-        if (!data) { console.warn('Donut chart data missing'); return; }
-        if (charts.donutChart) {
+        if (charts.donutChart && data) {
           charts.donutChart.data = { labels: data.labels || [], datasets: [{ data: data.data || [], backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#9E9E9E'] }] };
           charts.donutChart.update();
         }
       };
 
       const updateLineChart = (data) => {
-        if (!data) { console.warn('Line chart data missing'); return; }
-        if (charts.lineChart) {
-          charts.lineChart.data = { labels: ['Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025'], datasets: [{ label: '% Projects Completed', data, fill: false, borderColor: 'rgb(75, 192, 192)', tension: 0.1 }] };
+        if (charts.lineChart && data) {
+          const currentYear = new Date().getFullYear();
+          const labels = [`Q3 ${currentYear-1}`, `Q4 ${currentYear-1}`, `Q1 ${currentYear}`, `Q2 ${currentYear}`, `Q3 ${currentYear}`];
+          charts.lineChart.data = { labels: labels, datasets: [{ label: '% Projects Completed', data, fill: false, borderColor: 'rgb(75, 192, 192)', tension: 0.1 }] };
           charts.lineChart.update();
         }
       };
-
+      
       const updateBarChart = (data) => {
-        if (!data) { console.warn('Bar chart data missing'); return; }
-        if (charts.barChart) {
-          charts.barChart.data = { labels: ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'], datasets: [{ label: 'Number of Projects', data, backgroundColor: '#FF6384' }] };
+        if (charts.barChart && data) {
+          charts.barChart.data = { 
+            labels: data.labels || ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'], 
+            datasets: [{ 
+              label: 'Number of Projects', 
+              data: data.data || data, // API returns object, mock returns array
+              backgroundColor: '#FF6384' 
+            }] 
+          };
           charts.barChart.update();
         }
       };
 
-      const updateLeaderboards = (data) => {
+       const updateLeaderboards = (data) => {
         const top5Body = document.getElementById('top-5-table-body');
         const bottom5Body = document.getElementById('bottom-5-table-body');
         if (top5Body && bottom5Body && data) {
@@ -969,9 +1146,11 @@
         }
       };
 
+
       // --- INITIAL PAGE LOAD ---
       const loadDashboard = async () => {
         try {
+          console.log("Loading dashboard data...");
           const [
             nationalStats,
             funnelData,
@@ -990,10 +1169,11 @@
 
           updateNationalStats(nationalStats);
           updateFunnelChart(funnelData);
-          updateDonutChart(donutData); // now donutData will be the object with labels & data
+          updateDonutChart(donutData);
           updateLineChart(lineData);
           updateBarChart(barData);
           updateLeaderboards(leaderboardData);
+          console.log("Dashboard loaded successfully.");
         } catch (err) {
           console.error('Error loading dashboard:', err);
         }
