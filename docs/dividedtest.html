@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARPAN-AJAY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* High Contrast Dark Mode Styles */
+        .dark body {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .dark #main-header-el,
+        .dark #mobile-menu,
+        .dark #advanced-search-modal .bg-white,
+        .dark .bg-white,
+        .dark footer,
+        .dark #local-snapshot-modal .bg-white,
+        .dark #grievance-modal .bg-white,
+        .dark #flowchart-modal .bg-white,
+        .dark #map-modal-content {
+            background-color: #000000 !important;
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        .dark .text-gray-600,
+        .dark .text-gray-500,
+        .dark .text-gray-700,
+        .dark .text-gray-400 {
+            color: #ffffff;
+        }
+
+        .dark .text-blue-700,
+        .dark .text-blue-600,
+        .dark a,
+        .dark .text-blue-700,
+        .dark .transparency-tools a {
+            color: #FCFF00;
+        }
+
+        .dark .main-nav-container {
+            border-color: #FCFF00;
+        }
+
+        .dark .main-nav-link {
+            color: #FCFF00;
+        }
+
+        .dark .main-nav-link.active,
+        .dark .main-nav-link:hover {
+            background-color: #FCFF00;
+            color: #000000;
+        }
+
+        .dark .text-gray-800 {
+            color: #ffffff;
+        }
+
+        .dark .border-blue-600 {
+            border-color: #FCFF00;
+        }
+
+        .dark .section-title {
+            color: #FCFF00;
+        }
+
+        .dark .section-title::after {
+            background-color: #FCFF00;
+        }
+
+        .dark .hero-section {
+            filter: grayscale(100%);
+        }
+
+        .dark .hero-section::before {
+            background-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0));
+        }
+
+        .dark .search-bar-container {
+            background-color: #000;
+            border: 2px solid #FCFF00;
+        }
+
+        .dark .search-bar-container input::placeholder {
+            color: #ccc;
+        }
+
+        .dark .search-bar-container input,
+        .dark .search-bar-container button {
+            color: #ffffff;
+            background-color: transparent;
+        }
+
+        .dark .search-bar-container i {
+            color: #FCFF00;
+        }
+
+        .dark .bg-gray-100,
+        .dark .bg-gray-50,
+        .dark .explainer-step {
+            background-color: #111;
+            border: 1px solid #444;
+        }
+
+        .dark .transparency-tools li {
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24" fill="none" stroke="%23FCFF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>');
+        }
+
+        .dark #mid-section-btn {
+            background-color: #FCFF00 !important;
+            color: #000 !important;
+            border-color: #FCFF00 !important;
+        }
+
+        .dark a.bg-blue-600,
+        .dark button.bg-blue-600,
+        .dark .explainer-btn.active {
+            background-color: #FCFF00 !important;
+            color: #000 !important;
+        }
+
+        .dark .explainer-btn {
+            background-color: #222;
+            color: #FCFF00;
+            border-color: #FCFF00;
+        }
+
+        .dark .explainer-arrow {
+            color: #FCFF00;
+        }
+
+        .dark #lang-dropdown,
+        .dark #social-dropdown {
+            background-color: #111;
+            border: 1px solid #444;
+        }
+
+        .dark #lang-dropdown a:hover,
+        .dark #social-dropdown a:hover {
+            background-color: #333;
+        }
+
+
+        .main-nav-container {
+            border: 2px solid #0d6efd;
+            border-radius: 9999px;
+            padding: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .main-nav-link {
+            transition: all 0.3s ease;
+            color: #0d6efd;
+        }
+
+        .main-nav-link.active,
+        .main-nav-link:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .hero-section {
+            background-image: url('https://placehold.co/1920x400/000000/FFFFFF?text=PM-AJAY+Scheme');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background-image: linear-gradient(to bottom, white, rgba(255, 255, 255, 0));
+        }
+
+        .search-bar-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #0d6efd;
+        }
+
+        .transparency-tools li {
+            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24" fill="none" stroke="%230d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>') no-repeat left center;
+            background-size: 16px;
+            padding-left: 25px;
+            margin-bottom: 0.75rem;
+        }
+
+        #main-header-el {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Scheme Explainer Styles */
+        .explainer-btn {
+            background-color: #fff;
+            color: #0d6efd;
+            border: 2px solid #0d6efd;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .explainer-btn.active,
+        .explainer-btn:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .explainer-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .explainer-flowchart {
+                flex-direction: row;
+                justify-content: center;
+                align-items: stretch;
+            }
+        }
+
+        .explainer-step {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .explainer-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .explainer-step .icon-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .explainer-step h3 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .dark .explainer-step h3 {
+            color: #fff;
+        }
+
+        .explainer-step p {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .explainer-arrow {
+            display: none;
+            /* Hidden on mobile */
+        }
+
+        @media (min-width: 768px) {
+            .explainer-arrow {
+                display: flex;
+                align-items: center;
+                font-size: 2.5rem;
+                color: #0d6efd;
+            }
+        }
+
+        /* Autocomplete Styles */
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dark .suggestion-item {
+            color: #333;
+        }
+
+        .dark .suggestion-item:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Animation for Modal */
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out forwards;
+        }
+
+        /* Map Styles */
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-content {
+            font-size: 14px;
+        }
+
+        .info-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+
+    <!-- Main Header & Navigation -->
+    <header id="main-header-el" class="main-header transition-all duration-300 ease-in-out">
+        <!-- Top bar content -->
+        <div class="container mx-auto px-4">
+            <div class="py-1 flex justify-end items-center space-x-2">
+                <a href="#"
+                    class="rounded-full h-8 w-8 flex items-center justify-center text-sm transition text-gray-600 hover:bg-gray-200"
+                    title="Sitemap">
+                    <i class="fas fa-sitemap"></i>
+                </a>
+                <a href="#"
+                    class="rounded-full h-8 w-8 flex items-center justify-center text-sm transition text-gray-600 hover:bg-gray-200"
+                    title="Screen Reader">
+                    <i class="fa-solid fa-person-circle-question"></i>
+                </a>
+                <!-- Language Selector -->
+                <div class="relative">
+                    <button id="lang-toggle"
+                        class="flex items-center rounded-full px-3 py-1 text-sm text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-globe mr-1"></i> English <i class="fas fa-caret-down ml-1"></i>
+                    </button>
+                    <div id="lang-dropdown"
+                        class="absolute hidden right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-20">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">हिन्दी</a>
+                    </div>
+                </div>
+                <div class="flex items-center border rounded-full bg-transparent">
+                    <button id="font-decrease" class="px-3 py-1 text-xs text-gray-600">A-</button>
+                    <button id="font-reset"
+                        class="px-3 py-1 text-sm border-l border-r border-gray-300 text-gray-600">A</button>
+                    <button id="font-increase" class="px-3 py-1 text-base text-gray-600">A+</button>
+                </div>
+                <div class="flex items-center">
+                    <button id="theme-dark" class="w-6 h-6 bg-black border-2 border-gray-400 rounded-full"></button>
+                    <button id="theme-light"
+                        class="w-6 h-6 bg-white border-2 border-gray-400 rounded-full ml-1"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/80px-Emblem_of_India.svg.png"
+                    alt="Emblem of India" class="h-12 mr-4">
+                <div class="ml-2 sm:ml-4">
+                    <h1 class="text-lg sm:text-2xl font-bold text-blue-700">DARPAN-AJAY</h1>
+                    <p class="text-xs sm:text-sm text-gray-500 hidden sm:block max-w-xs">A Real-Time Accountability
+                        Platform for the PM-AJAY Scheme.</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-4 w-full md:w-auto justify-end mt-2 md:mt-0">
+                <nav>
+                    <div class="main-nav-container">
+                        <a href="#" class="main-nav-link active font-semibold py-1 px-4 rounded-full text-xs">HOME</a>
+                        <a href="#" class="main-nav-link font-semibold py-1 px-4 rounded-full text-xs">PERFORMANCE
+                            RANKINGS</a>
+                        <a href="#" id="grievance-link"
+                            class="main-nav-link font-semibold py-1 px-4 rounded-full text-xs">LODGE A GRIEVANCE</a>
+                        <a href="#" class="main-nav-link font-semibold py-1 px-4 rounded-full text-xs">ABOUT THE
+                            SCHEME</a>
+                    </div>
+                </nav>
+                <a href="#"
+                    class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Login</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-sm shadow-md">
+            <nav class="flex flex-col items-center space-y-2 p-4">
+                <a href="#"
+                    class="mobile-nav-link active font-semibold py-2 px-5 rounded-full w-full text-center text-xs">HOME</a>
+                <a href="#"
+                    class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">PERFORMANCE
+                    RANKINGS</a>
+                <a href="#" id="grievance-link-mobile"
+                    class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">LODGE A
+                    GRIEVANCE</a>
+                <a href="#"
+                    class="mobile-nav-link font-semibold py-2 px-5 rounded-full w-full text-center text-xs">ABOUT THE
+                    SCHEME</a>
+                <div class="pt-4 w-full">
+                    <a href="#"
+                        class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition w-full block text-center">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="relative w-full max-w-3xl px-4 z-10">
+            <div class="search-bar-container p-2 flex items-center rounded-full">
+                <input type="text" id="main-search-input" placeholder="Enter your State, District, or Village name..."
+                    class="w-full bg-transparent border-none focus:ring-0 text-base sm:text-lg px-4 py-2">
+                <button class="bg-white p-2 rounded-full">
+                    <i class="fas fa-search text-gray-500 text-xl"></i>
+                </button>
+            </div>
+            <!-- Autocomplete Suggestions Container -->
+            <div id="autocomplete-suggestions" class="absolute hidden w-full bg-white rounded-lg shadow-lg mt-1 z-20">
+            </div>
+            <div class="text-right mt-2">
+                <button id="advanced-search-btn"
+                    class="text-white text-sm font-semibold hover:underline bg-transparent px-2 py-1 rounded-lg">
+                    <i class="fas fa-cog mr-1"></i> Advanced Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mid-Section Button -->
+    <div class="container mx-auto text-center px-4 relative z-10 -mt-7">
+        <button id="mid-section-btn"
+            class="bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-50 transition w-full sm:w-auto shadow-md">
+            VIEW NATIONAL PROJECT MAP <i class="fas fa-map-marked-alt ml-2"></i>
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto p-4 sm:p-8 pt-12 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <!-- Left Column: National Stats -->
+            <div class="md:col-span-2">
+                <h2 class="text-2xl section-title">NATIONAL LIVE STATUS</h2>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="villages-covered-stat" class="text-3xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Villages Covered</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="beneficiaries-impacted-stat" class="text-3xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Beneficiaries Impacted</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="funds-sanctioned-stat" class="text-3xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Funds Sanctioned</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 id="works-completed-stat" class="text-3xl font-bold text-blue-600">--</h3>
+                        <p class="text-sm text-gray-600">Works Completed</p>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button id="ai-summary-btn"
+                        class="bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-200 transition">✨
+                        Get AI Summary</button>
+                    <div id="ai-summary-output"
+                        class="hidden mt-4 p-4 bg-gray-100 rounded-lg text-sm text-gray-700 italic"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: Transparency Tools -->
+            <div>
+                <h2 class="text-2xl section-title">TRANSPARENCY TOOLS</h2>
+                <ul class="transparency-tools">
+                    <li><a href="#" class="hover:underline">Follow the Money</a></li>
+                    <li><a href="#" class="hover:underline">Live Visual Reports</a></li>
+                    <li><a href="#" class="hover:underline">Agency Accountability</a></li>
+                    <li><a href="#" id="local-snapshot-link" class="hover:underline">Get Your Local Snapshot</a></li>
+                    <li><a href="#" class="hover:underline">View Social Audit Calendar</a></li>
+                    <li><a href="#" class="hover:underline">Subscribe for SMS/Voice Alerts</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- National Scorecard Section -->
+    <section class="bg-gray-50 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">National Scorecard: Key Performance Indicators</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1: Fund Utilization Funnel -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Fund Utilization Funnel</h3>
+                    <canvas id="funnelChart"></canvas>
+                </div>
+                <!-- Card 2: Component-wise Allocation -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Component-wise Allocation</h3>
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <!-- Card 3: Project Completion Rate -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Project Completion Rate (Trend)</h3>
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <!-- Card 4: Top 5 Project Types -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-semibold mb-4 text-center">Top 5 Project Types</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scheme Explainer Module -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">How the Scheme Works: An Interactive Guide</h2>
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8 flex-wrap gap-2">
+                <button id="explainer-btn-1" class="explainer-btn active">What is an Adarsh Gram?</button>
+                <button id="explainer-btn-2" class="explainer-btn">How does a GIA project help me?</button>
+                <button id="explainer-btn-3" class="explainer-btn">How does a Hostel get built?</button>
+            </div>
+            <div id="explainer-content-area" class="relative min-h-[200px]">
+                <!-- Content will be dynamically inserted here by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Accountability Engine Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-2">Driving Performance Through Transparency</h2>
+            <p class="text-center text-gray-600 mb-8">The Performance Leaderboard</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Top 5 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-green-600">Top 5 Performing States</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg shadow">
+                            <thead>
+                                <tr class="w-full bg-gray-100 text-left">
+                                    <th class="p-3">State Name</th>
+                                    <th class="p-3 text-center">Projects Completed (%)</th>
+                                    <th class="p-3 text-center">Fund Utilization (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-5-table-body">
+                                <!-- Rows will be inserted by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Bottom 5 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-red-600">Bottom 5 Performing States</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg shadow">
+                            <thead>
+                                <tr class="w-full bg-gray-100 text-left">
+                                    <th class="p-3">State Name</th>
+                                    <th class="p-3 text-center">Projects Completed (%)</th>
+                                    <th class="p-3 text-center">Fund Utilization (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bottom-5-table-body">
+                                <!-- Rows will be inserted by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+                <div class="md:col-span-2">
+                    <h4 class="font-bold mb-4">DARPAN-AJAY</h4>
+                    <p class="text-sm text-gray-400">A Real-Time Accountability Platform for the PM-AJAY Scheme by the
+                        Ministry of Social Justice & Empowerment.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About PM-AJAY</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Data Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Supported By</h4>
+                    <div class="flex justify-center md:justify-start space-x-4 items-center h-10">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Digital_India_logo.svg"
+                            alt="Digital India Logo" class="h-full opacity-80 hover:opacity-100">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Ministry_of_Social_Justice_and_Empowerment_logo.svg/220px-Ministry_of_Social_Justice_and_Empowerment_logo.svg.png"
+                            alt="Ministry Logo" class="h-full bg-white p-1 rounded-sm opacity-80 hover:opacity-100">
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 mt-8 pt-4 border-t border-gray-700">
+                <p class="text-xs">This portal is a prototype developed for the Smart India Hackathon 2025.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <!-- Advanced Search Modal -->
+    <div id="advanced-search-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md m-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Advanced Search Filters</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <!-- Modal content -->
+            <div class="space-y-4">
+                <div>
+                    <label for="state-select" class="block text-sm font-medium text-gray-700">State</label>
+                    <select id="state-select"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option>Select a State</option>
+                        <option>Andhra Pradesh</option>
+                        <option>Gujarat</option>
+                        <option>Karnataka</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="component-select" class="block text-sm font-medium text-gray-700">Scheme
+                        Component</label>
+                    <select id="component-select"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option>All Components</option>
+                        <option>Adarsh Gram</option>
+                        <option>Grants-in-Aid</option>
+                        <option>Hostels</option>
+                    </select>
+                </div>
+                <div class="text-right">
+                    <button
+                        class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Apply
+                        Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local Snapshot Modal -->
+    <div id="local-snapshot-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg m-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Your Local Snapshot ✨</h3>
+                <button id="close-snapshot-modal-btn"
+                    class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <!-- Modal content -->
+            <div class="space-y-4">
+                <div>
+                    <label for="location-input" class="block text-sm font-medium text-gray-700">Enter your District
+                        name:</label>
+                    <input type="text" id="location-input"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="e.g., Anantapur">
+                </div>
+                <div class="text-center">
+                    <button id="get-snapshot-btn"
+                        class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-blue-700 transition">Get
+                        Snapshot</button>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t">
+                    <div>
+                        <h4 id="modal-projects-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Projects Underway</p>
+                    </div>
+                    <div>
+                        <h4 id="modal-funds-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Funds Utilized</p>
+                    </div>
+                    <div>
+                        <h4 id="modal-grievances-stat" class="text-2xl font-bold text-blue-600">--</h4>
+                        <p class="text-sm text-gray-600">Grievances Resolved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grievance Modal -->
+    <div id="grievance-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl m-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Lodge a Grievance</h3>
+                <button id="close-grievance-modal-btn"
+                    class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label for="grievance-input" class="block text-sm font-medium text-gray-700">Describe your issue in
+                        your own words</label>
+                    <textarea id="grievance-input" rows="8"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="e.g., The new road in my village has developed cracks within a month..."></textarea>
+                </div>
+                <div class="text-right">
+                    <button
+                        class="bg-green-600 text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-green-700 transition">Submit
+                        Grievance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flowchart Detail Modal -->
+    <div id="flowchart-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl m-4 relative animate-fade-in-up">
+            <button id="close-flowchart-modal-btn"
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            <h3 id="flowchart-modal-title" class="text-2xl font-bold mb-4 text-blue-700"></h3>
+            <div id="flowchart-modal-content" class="space-y-4 text-gray-700">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div id="map-modal" class="fixed inset-0 bg-black bg-opacity-60 z-[100] hidden items-center justify-center">
+        <div id="map-modal-content" class="bg-white rounded-lg shadow-xl w-11/12 h-5/6 relative">
+            <button id="close-map-modal-btn"
+                class="absolute top-2 right-3 text-gray-300 hover:text-white text-4xl font-bold z-[1000]">&times;</button>
+            <button id="back-to-india-btn"
+                class="absolute top-3 left-3 bg-white text-blue-600 font-bold py-1 px-3 rounded-full shadow-md z-[1000] hidden"><i
+                    class="fas fa-arrow-left mr-2"></i> Back to India</button>
+            <div id="map"></div>
+        </div>
+    </div>
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- GEMINI API KEY ---
+            const geminiApiKey = "AIzaSyBKIy8ScHv6JqVJAMuTibo7ikvBzMSfwXo";
+
+            // --- UI ELEMENT REFERENCES ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const langToggle = document.getElementById('lang-toggle');
+            const langDropdown = document.getElementById('lang-dropdown');
+            // Modals
+            const advancedSearchBtn = document.getElementById('advanced-search-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modal = document.getElementById('advanced-search-modal');
+            const localSnapshotLink = document.getElementById('local-snapshot-link');
+            const localSnapshotModal = document.getElementById('local-snapshot-modal');
+            const closeSnapshotModalBtn = document.getElementById('close-snapshot-modal-btn');
+            const grievanceLink = document.getElementById('grievance-link');
+            const grievanceLinkMobile = document.getElementById('grievance-link-mobile');
+            const grievanceModal = document.getElementById('grievance-modal');
+            const closeGrievanceModalBtn = document.getElementById('close-grievance-modal-btn');
+            // Scheme Explainer
+            const explainerBtns = document.querySelectorAll('.explainer-btn');
+            const explainerContentArea = document.getElementById('explainer-content-area');
+            // Gemini Features
+            const getSnapshotBtn = document.getElementById('get-snapshot-btn');
+            const locationInput = document.getElementById('location-input');
+            const aiSummaryBtn = document.getElementById('ai-summary-btn');
+            // Search Autocomplete
+            const searchInput = document.getElementById('main-search-input');
+            const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+            // Flowchart Modal Elements
+            const flowchartModal = document.getElementById('flowchart-modal');
+            const closeFlowchartModalBtn = document.getElementById('close-flowchart-modal-btn');
+            const flowchartModalTitle = document.getElementById('flowchart-modal-title');
+            const flowchartModalContent = document.getElementById('flowchart-modal-content');
+            // Map Modal Elements
+            const mapModal = document.getElementById('map-modal');
+            const closeMapModalBtn = document.getElementById('close-map-modal-btn');
+            const viewMapBtn = document.getElementById('mid-section-btn');
+            const backToIndiaBtn = document.getElementById('back-to-india-btn');
+            let mapInstance = null; // To hold the map instance
+            let nationalLayer = null;
+            let districtLayer = null;
+            // --- add near your other globals in the main script ---
+            let districtCache = new Map(); // keyed by canonical stateName (e.g., "Madhya Pradesh")
+
+
+            const stateNameToFile = {
+                "Andaman & Nicobar": "andaman_and_nicobar",
+                "Andhra Pradesh": "andhra_pradesh",
+                "Arunachal Pradesh": "arunachal_pradesh",
+                "Assam": "assam",
+                "Bihar": "bihar",
+                "Chandigarh": "chandigarh",
+                "Chhattisgarh": "chhattisgarh",
+                "Dadra & Nagar Haveli": "dadra_and_nagar_haveli",
+                "Daman & Diu": "daman_and_diu",
+                "Delhi": "delhi",
+                "Goa": "goa",
+                "Gujarat": "gujarat",
+                "Haryana": "haryana",
+                "Himachal Pradesh": "himachal_pradesh",
+                "Jammu & Kashmir": "jammu_and_kashmir",
+                "Jharkhand": "jharkhand",
+                "Karnataka": "karnataka",
+                "Kerala": "kerala",
+                "Lakshadweep": "lakshadweep",
+                "Madhya Pradesh": "madhya_pradesh",
+                "Maharashtra": "maharashtra",
+                "Manipur": "manipur",
+                "Meghalaya": "meghalaya",
+                "Mizoram": "mizoram",
+                "Nagaland": "nagaland",
+                "Orissa": "orissa",
+                "Puducherry": "puducherry",
+                "Punjab": "punjab",
+                "Rajasthan": "rajasthan",
+                "Sikkim": "sikkim",
+                "Tamil Nadu": "tamil_nadu",
+                "Tripura": "tripura",
+                "Uttar Pradesh": "uttar_pradesh",
+                "Uttarakhand": "uttarakhand",
+                "West Bengal": "west_bengal"
+            };
+
+
+            // --- AUTOCOMPLETE FEATURE ---
+            const debounce = (func, delay) => {
+                let timeoutId;
+                return (...args) => {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        func.apply(this, args);
+                    }, delay);
+                };
+            };
+
+            const fetchAutocompleteSuggestions = async (query) => {
+                if (!query) {
+                    suggestionsContainer.innerHTML = '';
+                    suggestionsContainer.classList.add('hidden');
+                    return;
+                }
+
+                suggestionsContainer.innerHTML = '<div class="p-4 text-gray-500">Loading...</div>';
+                suggestionsContainer.classList.remove('hidden');
+
+                if (!geminiApiKey) {
+                    console.warn("Gemini API key is not available. Using mock suggestions.");
+                    const mockSuggestions = ["Delhi", "Darbhanga", "Deoria", "Dhanbad", "Dhar", "Dholpur"];
+                    renderSuggestions(mockSuggestions.filter(s => s.toLowerCase().startsWith(query.toLowerCase())));
+                    return;
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                const prompt = `Based on the search query "${query}" for the PM-AJAY scheme in India, provide up to 5 relevant autocomplete suggestions. These can be states, districts, or villages in India. Return the result as a JSON array of strings.`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: { type: "STRING" }
+                        }
+                    }
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        const suggestions = JSON.parse(text);
+                        renderSuggestions(suggestions);
+                    } else {
+                        throw new Error("Invalid response from API");
+                    }
+                } catch (error) {
+                    console.error("Error fetching autocomplete suggestions:", error);
+                    suggestionsContainer.innerHTML = '<div class="p-4 text-red-500">Could not fetch suggestions.</div>';
+                }
+            };
+
+            const renderSuggestions = (suggestions) => {
+                if (!suggestions || suggestions.length === 0) {
+                    suggestionsContainer.classList.add('hidden');
+                    return;
+                }
+                suggestionsContainer.innerHTML = '';
+                suggestions.forEach(suggestion => {
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.textContent = suggestion;
+                    item.addEventListener('click', () => {
+                        searchInput.value = suggestion;
+                        suggestionsContainer.classList.add('hidden');
+                    });
+                    suggestionsContainer.appendChild(item);
+                });
+                suggestionsContainer.classList.remove('hidden');
+            };
+
+            const debouncedFetch = debounce(fetchAutocompleteSuggestions, 300);
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    debouncedFetch(e.target.value);
+                });
+            }
+
+            // --- ACCESSIBILITY FEATURES ---
+            const fontDecrease = document.getElementById('font-decrease');
+            const fontReset = document.getElementById('font-reset');
+            const fontIncrease = document.getElementById('font-increase');
+            const themeDark = document.getElementById('theme-dark');
+            const themeLight = document.getElementById('theme-light');
+            const htmlEl = document.documentElement;
+
+            if (fontDecrease) fontDecrease.addEventListener('click', () => { document.body.style.fontSize = '0.875rem'; });
+            if (fontReset) fontReset.addEventListener('click', () => { document.body.style.fontSize = '1rem'; });
+            if (fontIncrease) fontIncrease.addEventListener('click', () => { document.body.style.fontSize = '1.125rem'; });
+            if (themeDark) themeDark.addEventListener('click', () => { htmlEl.classList.add('dark'); });
+            if (themeLight) themeLight.addEventListener('click', () => { htmlEl.classList.remove('dark'); });
+
+            // --- UI EVENT LISTENERS ---
+            if (mobileMenuButton && mobileMenu) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            if (langToggle && langDropdown) langToggle.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('hidden'); });
+
+            // Modal Logic
+            const setupModal = (openBtn, modalEl, closeBtn) => {
+                if (openBtn && modalEl && closeBtn) {
+                    const openAction = () => {
+                        modalEl.classList.replace('hidden', 'flex');
+                        if (modalEl.id === 'map-modal' && !mapInstance) {
+                            setTimeout(initMap, 10);
+                        }
+                    };
+                    openBtn.addEventListener('click', (e) => { e.preventDefault(); openAction(); });
+                    closeBtn.addEventListener('click', () => modalEl.classList.replace('flex', 'hidden'));
+                    modalEl.addEventListener('click', (e) => { if (e.target === modalEl) modalEl.classList.replace('flex', 'hidden'); });
+                }
+            };
+
+            setupModal(advancedSearchBtn, modal, closeModalBtn);
+            setupModal(localSnapshotLink, localSnapshotModal, closeSnapshotModalBtn);
+            setupModal(grievanceLink, grievanceModal, closeGrievanceModalBtn);
+            setupModal(grievanceLinkMobile, grievanceModal, closeGrievanceModalBtn);
+            setupModal(viewMapBtn, mapModal, closeMapModalBtn);
+
+
+            document.addEventListener('click', (event) => {
+                if (langDropdown && !langDropdown.classList.contains('hidden') && !langDropdown.contains(event.target) && !langToggle.contains(event.target)) {
+                    langDropdown.classList.add('hidden');
+                }
+                if (suggestionsContainer && !suggestionsContainer.contains(event.target) && event.target !== searchInput) {
+                    suggestionsContainer.classList.add('hidden');
+                }
+            });
+
+            // --- SCHEME EXPLAINER LOGIC (STATIC CARDS) ---
+            const explainerContent = {
+                '1': `
+          <div class="explainer-flowchart">
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-search-location"></i></div>
+              <h3>Village Selection</h3>
+              <p>Villages with over 50% SC population are identified for holistic development.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-clipboard-list"></i></div>
+              <h3>Gap Analysis</h3>
+              <p>A committee assesses the village's needs for infrastructure, housing, and social services.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-hard-hat"></i></div>
+              <h3>Project Implementation</h3>
+              <p>Funds are released to execute projects like roads, water supply, and community centers.</p>
+            </div>
+          </div>
+        `,
+                '2': `
+          <div class="explainer-flowchart">
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
+              <h3>Proposal by Agency</h3>
+              <p>An eligible NGO or institution submits a project proposal for community development.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-stamp"></i></div>
+              <h3>District/State Approval</h3>
+              <p>The proposal is reviewed and approved by the relevant government authorities.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-users"></i></div>
+              <h3>Funds & Community Benefit</h3>
+              <p>Grant-in-Aid (GIA) is released to the agency to execute projects that directly benefit the SC community.</p>
+            </div>
+          </div>
+        `,
+                '3': `
+          <div class="explainer-flowchart">
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-map-marked-alt"></i></div>
+              <h3>State Proposal</h3>
+              <p>The State Government identifies the need for a hostel and provides the land.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-rupee-sign"></i></div>
+              <h3>Central Sanction</h3>
+              <p>The Central Government reviews the proposal and sanctions the funds for construction.</p>
+            </div>
+            <div class="explainer-arrow">&rarr;</div>
+            <div class="explainer-step">
+              <div class="icon-circle"><i class="fas fa-user-graduate"></i></div>
+              <h3>Construction & Occupancy</h3>
+              <p>The hostel is built and becomes available for students from the SC community.</p>
+            </div>
+          </div>
+        `
+            };
+
+            const updateExplainerContent = (contentId) => {
+                if (explainerContentArea) {
+                    explainerContentArea.innerHTML = explainerContent[contentId] || '';
+                }
+            };
+
+            if (explainerBtns.length > 0 && explainerContentArea) {
+                updateExplainerContent('1'); // Set initial content
+
+                explainerBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        explainerBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        const contentId = btn.id.split('-')[2];
+                        updateExplainerContent(contentId);
+                    });
+                });
+            }
+
+            // --- FLOWCHART MODAL LOGIC & GEMINI INTEGRATION ---
+
+            const openFlowchartModal = () => flowchartModal.classList.replace('hidden', 'flex');
+            const closeFlowchartModal = () => flowchartModal.classList.replace('flex', 'hidden');
+            if (closeFlowchartModalBtn) closeFlowchartModalBtn.addEventListener('click', closeFlowchartModal);
+            if (flowchartModal) flowchartModal.addEventListener('click', (e) => { if (e.target === flowchartModal) closeFlowchartModal(); });
+
+            const renderFlowchartDetail = (data) => {
+                const { explanation, flowchart } = data;
+                let flowchartHtml = `<p class="text-base mb-6 bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">${explanation || 'No explanation available.'}</p>`;
+
+                if (flowchart && flowchart.length > 0) {
+                    flowchartHtml += '<div class="space-y-4">';
+                    flowchart.forEach((step, index) => {
+                        flowchartHtml += `
+                      <div class="flex items-start">
+                          <div class="flex-shrink-0 bg-blue-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-4">${index + 1}</div>
+                          <p class="pt-1 text-gray-800">${step}</p>
+                      </div>
+                  `;
+                    });
+                    flowchartHtml += '</div>';
+                }
+                flowchartModalContent.innerHTML = flowchartHtml;
+            };
+
+            const fetchFlowchartDetail = async (topic) => {
+                if (!flowchartModal || !flowchartModalTitle || !flowchartModalContent) return;
+
+                flowchartModalTitle.textContent = topic;
+                flowchartModalContent.innerHTML = `<div class="text-center p-8">Generating explanation... <i class="fas fa-spinner fa-spin text-2xl text-blue-600"></i></div>`;
+                openFlowchartModal();
+
+                if (!geminiApiKey) {
+                    flowchartModalContent.innerHTML = `<div class="text-center p-8 text-red-500">AI features are currently disabled. API key is not configured.</div>`;
+                    return;
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                const prompt = `For the topic "${topic}" related to the PM-AJAY Indian government scheme, generate a detailed explanation and a simple step-by-step flowchart. Return a JSON object with two keys: "explanation" (a string with 2-3 sentences of detailed explanation) and "flowchart" (an array of strings, where each string is a single, clear step in the process).`;
+                const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "explanation": { "type": "STRING" }, "flowchart": { type: "ARRAY", items: { type: "STRING" } } }, required: ["explanation", "flowchart"] } } };
+
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        const data = JSON.parse(text);
+                        renderFlowchartDetail(data);
+                    } else {
+                        throw new Error("Invalid response from API");
+                    }
+                } catch (error) {
+                    console.error("Error fetching flowchart detail:", error);
+                    flowchartModalContent.innerHTML = `<div class="text-center p-8 text-red-500">Could not generate the explanation. Please try again later.</div>`;
+                }
+            };
+
+            if (explainerContentArea) {
+                explainerContentArea.addEventListener('click', (e) => {
+                    const card = e.target.closest('.explainer-step');
+                    if (card) {
+                        const title = card.querySelector('h3')?.textContent;
+                        if (title) {
+                            fetchFlowchartDetail(title);
+                        }
+                    }
+                });
+            }
+
+
+            // --- MAP LOGIC (LEAFLET) ---
+            const backToNationalView = () => {
+                if (districtLayer) mapInstance.removeLayer(districtLayer);
+                if (nationalLayer) mapInstance.addLayer(nationalLayer);
+                mapInstance.setView([22.5937, 78.9629], 4.5);
+                backToIndiaBtn.classList.add('hidden');
+            };
+
+            if (backToIndiaBtn) backToIndiaBtn.addEventListener('click', backToNationalView);
+
+            // Replace the old loadStateMap implementation with this robust version
+const loadStateMap = async (stateName, stateLayer) => {
+  // defensive: normalize keys used for caching/lookup
+  const canonicalName = (stateName || '').trim();
+
+  // remove national layer if present
+  if (typeof nationalLayer !== 'undefined' && nationalLayer && mapInstance.hasLayer && mapInstance.hasLayer(nationalLayer)) {
+    try { mapInstance.removeLayer(nationalLayer); } catch (e) { /* ignore */ }
+  }
+
+  // quick return if cached
+  if (districtCache.has(canonicalName)) {
+    console.info(`Using cached district data for ${canonicalName}`);
+    const cached = districtCache.get(canonicalName);
+    _addDistrictLayerToMap(cached, canonicalName, stateLayer);
+    return;
+  }
+
+  // helper to normalize names inside geojson properties for filtering
+  const normalize = (s) => ('' + s).toLowerCase().replace(/[\s\_\-]+/g, ' ').trim();
+
+  // candidate per-state filenames (some repos use slightly different names)
+  const fileName = stateNameToFile && stateNameToFile[canonicalName] ? stateNameToFile[canonicalName] : canonicalName.replace(/\s+/g, '_');
+  const candidates = [
+    `https://raw.githubusercontent.com/geohacker/india/master/district/${fileName}.geojson`,
+    `https://raw.githubusercontent.com/geohacker/india/master/district/${fileName}_district.geojson`,
+    `https://raw.githubusercontent.com/geohacker/india/master/district/${fileName}-district.geojson`,
+    `https://raw.githubusercontent.com/datameet/maps/master/Districts/${fileName}.geojson`,
+    `https://raw.githubusercontent.com/guneetnarula/India-State-Districts/master/${fileName}.geojson`,
+    `https://raw.githubusercontent.com/datameet/map/master/districts.json`, // big combined file
+    `https://raw.githubusercontent.com/rohanrao/IndiaGeoJSON/master/districts.json`, // big combined file
+    `https://raw.githubusercontent.com/geohacker/india/master/state/Districts.json` // other combined file
+  ];
+
+  // try per-candidate (prefer per-state, but accept combined files)
+  let foundGeojson = null;
+  let usedUrl = null;
+
+  for (const url of candidates) {
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        console.warn(`Failed to fetch ${url}: ${resp.status} ${resp.statusText}`);
+        continue;
+      }
+      const json = await resp.json();
+      if (!json || !json.features || !Array.isArray(json.features) || json.features.length === 0) {
+        // combined files sometimes wrap features differently; still handle below
+        // keep trying until we find something workable
+        console.warn(`Fetched ${url} but no usable features found.`);
+        // but still set as candidate if it's a combined file (we will filter)
+      }
+
+      // If the file looks like a per-state GeoJSON (features all belong to requested state)
+      // do a quick check: if any feature has a property with state name, accept
+      const anyMatch = (json.features || []).some(f => {
+        const props = f.properties || {};
+        // common keys in various sources:
+        const keysToCheck = ['state', 'STATE', 'st_nm', 'STATE_NAME', 'ST_NM', 'ST_NM_1', 'NAME_1', 'NAME_2', 'dist_name'];
+        return keysToCheck.some(k => normalize(props[k]) === normalize(canonicalName));
+      });
+
+      // If any feature includes the stateName as property or the url looks like per-state file, accept it
+      if ((json.features && json.features.length && anyMatch) || /district\/.+(geojson)$/i.test(url) && !/districts?\.json$/i.test(url)) {
+        foundGeojson = json;
+        usedUrl = url;
+        break;
+      }
+
+      // If it's a combined/giant file, still accept it and filter later (we will filter features matching state)
+      if (json.features && json.features.length && (/districts?\.json$/i.test(url) || /districts/i.test(url))) {
+        foundGeojson = json;
+        usedUrl = url + ' (combined, will filter)';
+        break;
+      }
+
+      // otherwise continue trying other candidates
+    } catch (err) {
+      console.warn(`Error fetching/parsing ${url}`, err);
+      continue;
+    }
+  }
+
+  if (!foundGeojson) {
+    console.error(`Could not find district data for ${canonicalName} after trying ${candidates.length} urls.`);
+    alert(`Could not load district data for ${canonicalName}. Please try again later or use a different data source.`);
+    // fallback to national view (assumes a function backToNationalView exists)
+    if (typeof backToNationalView === 'function') backToNationalView();
+    return;
+  }
+
+  // If combined file, filter features belonging to the state
+  let filteredGeo = foundGeojson;
+  if (foundGeojson.features && Array.isArray(foundGeojson.features)) {
+    // check if features appear to be for multiple states (look for different values in state props)
+    const stateMatches = foundGeojson.features.filter(f => {
+      const props = f.properties || {};
+      const vals = Object.values(props).map(v => (v === null || v === undefined) ? '' : String(v));
+      // prefer obvious property keys, else try any prop value match
+      const preferredKeys = ['state', 'STATE', 'st_nm', 'STATE_NAME', 'ST_NM', 'NAME_1', 'NAME_2'];
+      for (const k of preferredKeys) {
+        if (props[k] && normalize(props[k]) === normalize(canonicalName)) return true;
+      }
+      // fallback: check any property value contains the state name (loose check)
+      return vals.some(val => normalize(val).includes(normalize(canonicalName)));
+    });
+
+    if (stateMatches.length > 0 && stateMatches.length < foundGeojson.features.length) {
+      filteredGeo = { type: 'FeatureCollection', features: stateMatches };
+      console.info(`Filtered combined GeoJSON to ${stateMatches.length} features for ${canonicalName}`);
+    } else {
+      // If filtering didn't reduce anything, still attempt to use foundGeojson as-is.
+      // (Some per-state files may not have state prop; they are already per-state)
+      filteredGeo = foundGeojson;
+    }
+  }
+
+  // Cache it so subsequent clicks are fast
+  districtCache.set(canonicalName, filteredGeo);
+
+  // Add to map using a small helper below
+  _addDistrictLayerToMap(filteredGeo, canonicalName, stateLayer);
+};
+
+// helper to add a geojson to the map (keeps loadStateMap smaller)
+function _addDistrictLayerToMap(geojson, canonicalName, stateLayer) {
+  try {
+    // remove previous district layer if present
+    if (typeof districtLayer !== 'undefined' && districtLayer) {
+      try { mapInstance.removeLayer(districtLayer); } catch (e) { /* ignore */ }
+    }
+
+    const style = {
+      fillColor: '#fd8d3c',
+      weight: 1,
+      opacity: 1,
+      color: '#ffffff',
+      fillOpacity: 0.7
+    };
+
+    districtLayer = L.geoJson(geojson, {
+      style,
+      onEachFeature: function(feature, layer) {
+        layer.on('click', function(e) {
+          const props = feature.properties || {};
+          const dname = props.NAME_2 || props.DISTRICT || props.district || props.DISTRICT_N || props.NAME || 'Unknown District';
+          // your existing popup content or any fill-in data
+          const mockProjects = Math.floor(Math.random() * (150 - 20 + 1) + 20);
+          const mockFunds = (Math.random() * (50 - 5) + 5).toFixed(2);
+          const popup = `<div style="font-weight:700;margin-bottom:6px">${dname}</div>
+                         <div>Projects Completed: ${mockProjects}</div>
+                         <div>Funds Utilized: ₹${mockFunds} Cr</div>`;
+          L.popup().setLatLng(e.latlng).setContent(popup).openOn(mapInstance);
+        });
+      }
+    }).addTo(mapInstance);
+
+    // call fitBounds: prefer stateLayer bounds else district layer bounds
+    if (stateLayer && typeof stateLayer.getBounds === 'function') {
+      try { mapInstance.fitBounds(stateLayer.getBounds()); } catch (e) { console.warn('fitBounds(stateLayer) failed, trying districtLayer', e); }
+    } else if (districtLayer && typeof districtLayer.getBounds === 'function') {
+      try { mapInstance.fitBounds(districtLayer.getBounds()); } catch (e) { console.warn('fitBounds(districtLayer) failed', e); }
+    } else {
+      // fallback to a default India view
+      try { mapInstance.setView([22.5937, 78.9629], 5.5); } catch (e) { /* ignore */ }
+    }
+
+    // if you have a 'back to India' button to show when drilled down
+    if (typeof backToIndiaBtn !== 'undefined' && backToIndiaBtn && backToIndiaBtn.classList) {
+      backToIndiaBtn.classList.remove('hidden');
+    }
+
+    console.info(`Loaded district data for ${canonicalName}`);
+  } catch (err) {
+    console.error('Error adding district layer:', err);
+    if (typeof backToNationalView === 'function') backToNationalView();
+  }
+}
+
+
+
+            const initMap = async () => {
+                if (mapInstance) {
+                    mapInstance.invalidateSize();
+                    return;
+                }
+
+                mapInstance = L.map('map').setView([22.5937, 78.9629], 4.5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(mapInstance);
+
+                try {
+                    const response = await fetch('https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson');
+                    const statesData = await response.json();
+
+                    const style = (feature) => ({
+                        fillColor: '#3388ff', weight: 2, opacity: 1, color: 'white', dashArray: '3', fillOpacity: 0.6
+                    });
+
+                    const highlightFeature = (e) => {
+                        const layer = e.target;
+                        layer.setStyle({ weight: 4, color: '#0d6efd', dashArray: '', fillOpacity: 0.8 });
+                        layer.bringToFront();
+                    };
+
+                    const resetHighlight = (e) => {
+                        if (nationalLayer) nationalLayer.resetStyle(e.target);
+                    };
+
+                    const onEachFeature = (feature, layer) => {
+                        layer.on({
+                            mouseover: highlightFeature,
+                            mouseout: resetHighlight,
+                            click: () => {
+                                const stateName = feature.properties.NAME_1;
+                                loadStateMap(stateName, layer);
+                            }
+                        });
+                    };
+
+                    nationalLayer = L.geoJson(statesData, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
+                } catch (error) {
+                    console.error("Could not load map data:", error);
+                    document.getElementById('map').innerHTML = '<p class="text-center text-red-500 p-8">Could not load map data. Please try again later.</p>';
+                }
+            };
+
+
+            // --- CHART.JS INITIALIZATION ---
+            let charts = {};
+            const initCharts = () => {
+                const chartIds = ['funnelChart', 'donutChart', 'lineChart', 'barChart'];
+                chartIds.forEach(id => {
+                    const canvas = document.getElementById(id);
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        if (charts[id]) charts[id].destroy();
+                        const defaultData = { labels: [], datasets: [{ data: [] }] };
+                        let type = 'bar', options = { responsive: true };
+
+                        switch (id) {
+                            case 'funnelChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
+                            case 'donutChart': type = 'doughnut'; options = { responsive: true, plugins: { legend: { position: 'top' } } }; break;
+                            case 'lineChart': type = 'line'; options = { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }; break;
+                            case 'barChart': type = 'bar'; options = { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }; break;
+                        }
+                        charts[id] = new Chart(ctx, { type, data: defaultData, options });
+                    }
+                });
+            };
+            initCharts();
+
+            // --- MOCK DATA (FALLBACK) ---
+            const MOCK_DATA = {
+                nationalStats: { villagesCovered: 47511, beneficiariesImpacted: 4587553, fundsSanctioned: 109607, worksCompleted: 41496 },
+                funnelChart: [109607, 95200, 75600, 68900],
+                donutChart: { labels: ['Adarsh Gram', 'Grants-in-Aid', 'Hostels', 'Admin & M&E'], data: [50, 43, 2, 5] },
+                lineChart: [65, 70, 72, 78, 85],
+                barChart: {
+                    labels: ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'],
+                    data: [12000, 9500, 8200, 7100, 6500]
+                },
+                leaderboards: {
+                    top5: [{ state: "Andhra Pradesh", projects: 98, funds: 95 }, { state: "Gujarat", projects: 95, funds: 92 }, { state: "Karnataka", projects: 92, funds: 88 }, { state: "Tamil Nadu", projects: 91, funds: 85 }, { state: "Maharashtra", projects: 89, funds: 84 }],
+                    bottom5: [{ state: "Bihar", projects: 45, funds: 50 }, { state: "Jharkhand", projects: 48, funds: 52 }, { state: "Assam", projects: 51, funds: 55 }, { state: "Odisha", projects: 55, funds: 58 }, { state: "West Bengal", projects: 58, funds: 62 }]
+                }
+            };
+
+            // --- API CONFIGURATION ---
+            // IMPORTANT: Replace with your actual data.gov.in API key.
+            const DATA_GOV_API_KEY = 'YOUR_API_KEY_HERE';
+
+            // Replace with actual Resource IDs from data.gov.in for PM-AJAY scheme
+            const RESOURCE_IDS = {
+                funnel: 'c2f5a623-a212-4e73-b328-1be789431ab7', // Example ID for fund utilization
+                donut: 'e4b0942b-ea99-4f71-a8f2-8178263e7228',  // Example ID for component allocation
+                line: '9f23c6a4-7a5d-4a1b-853f-3a830957b44b',   // Example ID for completion trend
+                bar: '3b0f5b6d-3a4a-4e9a-9b87-5a67c5e5e3a3'     // Example ID for project types
+            };
+
+            // --- DATA FETCHING FUNCTIONS ---
+            const fetchFromDataGov = async (resourceId, mockData, processor) => {
+                if (!DATA_GOV_API_KEY || DATA_GOV_API_KEY === 'YOUR_API_KEY_HERE') {
+                    console.warn('data.gov.in API key is missing. Using mock data.');
+                    return mockData;
+                }
+                const apiUrl = `https://api.data.gov.in/resource/${resourceId}?api-key=${DATA_GOV_API_KEY}&format=json&limit=10`;
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const apiResult = await response.json();
+                    if (apiResult && apiResult.records) {
+                        return processor(apiResult.records);
+                    }
+                    console.warn(`Could not process API data for resource ${resourceId}. Using mock data.`);
+                    return mockData;
+                } catch (error) {
+                    console.error(`Error fetching from data.gov.in for resource ${resourceId}:`, error);
+                    return mockData;
+                }
+            };
+
+            const fetchNationalStats = async () => MOCK_DATA.nationalStats;
+
+            const fetchLocalData = async (district) => {
+                document.getElementById('modal-projects-stat').textContent = '...';
+                document.getElementById('modal-funds-stat').textContent = '...';
+                document.getElementById('modal-grievances-stat').textContent = '...';
+
+                if (!geminiApiKey) {
+                    console.error("Gemini API key not provided.");
+                    return { projectsUnderway: '12', fundsUtilized: '₹1.5 Cr', grievancesResolved: '8' };
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                const prompt = `You are a data provider for a government dashboard. For the district of "${district}", provide a realistic but consistent data snapshot for the PM-AJAY scheme. The numbers should be plausible and always the same for the same district name. Return a JSON object with three keys: "projectsUnderway" (a number as a string), "fundsUtilized" (a string like "₹X.X Cr"), and "grievancesResolved" (a number as a string).`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "projectsUnderway": { "type": "STRING" },
+                                "fundsUtilized": { "type": "STRING" },
+                                "grievancesResolved": { "type": "STRING" }
+                            },
+                            required: ["projectsUnderway", "fundsUtilized", "grievancesResolved"]
+                        }
+                    }
+                };
+
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        return JSON.parse(text);
+                    } else {
+                        throw new Error("Invalid response from API");
+                    }
+                } catch (error) {
+                    console.error("Error fetching local snapshot data:", error);
+                    return { projectsUnderway: '15', fundsUtilized: '₹2.1 Cr', grievancesResolved: '11' };
+                }
+            };
+
+            const fetchFunnelChartData = () => fetchFromDataGov(RESOURCE_IDS.funnel, MOCK_DATA.funnelChart, records => {
+                const record = records[0]; // Assuming funnel data is in a single record
+                return [
+                    parseInt(record.funds_sanctioned),
+                    parseInt(record.released_to_state),
+                    parseInt(record.released_to_district),
+                    parseInt(record.utilized)
+                ];
+            });
+
+            const fetchDonutChartData = () => fetchFromDataGov(RESOURCE_IDS.donut, MOCK_DATA.donutChart, records => ({
+                labels: records.map(r => r.scheme_component),
+                data: records.map(r => parseFloat(r.percentage_allocation))
+            }));
+
+            const fetchLineChartData = () => fetchFromDataGov(RESOURCE_IDS.line, MOCK_DATA.lineChart, records =>
+                records.map(r => parseFloat(r.completion_rate_percent))
+            );
+
+            const fetchBarChartData = () => fetchFromDataGov(RESOURCE_IDS.bar, MOCK_DATA.barChart, records => ({
+                labels: records.slice(0, 5).map(r => r.project_type),
+                data: records.slice(0, 5).map(r => parseInt(r.number_of_projects))
+            }));
+
+            const fetchLeaderboardData = async () => MOCK_DATA.leaderboards;
+
+            const fetchNationalSummary = async () => {
+                const outputContainer = document.getElementById('ai-summary-output');
+                if (aiSummaryBtn) aiSummaryBtn.textContent = 'Generating...';
+
+                if (!geminiApiKey) {
+                    console.error("Gemini API key not provided.");
+                    if (outputContainer) {
+                        outputContainer.textContent = "AI features are currently disabled. Please configure a backend proxy for the API key.";
+                        outputContainer.classList.remove('hidden');
+                    }
+                    if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
+                    return;
+                }
+
+                const stats = {
+                    villages: document.getElementById('villages-covered-stat').textContent,
+                    beneficiaries: document.getElementById('beneficiaries-impacted-stat').textContent,
+                    funds: document.getElementById('funds-sanctioned-stat').textContent,
+                    works: document.getElementById('works-completed-stat').textContent,
+                };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                const prompt = `The current national live status for the PM-AJAY scheme is as follows: Villages Covered: ${stats.villages}, Beneficiaries Impacted: ${stats.beneficiaries}, Funds Sanctioned: ${stats.funds}, Works Completed: ${stats.works}. As a helpful assistant, explain what these numbers mean to a citizen in a simple, encouraging, one-paragraph summary.`;
+
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    const result = await response.json();
+                    const summary = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (summary && outputContainer) {
+                        outputContainer.textContent = summary;
+                        outputContainer.classList.remove('hidden');
+                    } else { throw new Error("Invalid response from API"); }
+                } catch (error) {
+                    console.error("Error fetching national summary:", error);
+                    if (outputContainer) {
+                        outputContainer.textContent = "Could not generate AI summary at this time.";
+                        outputContainer.classList.remove('hidden');
+                    }
+                } finally {
+                    if (aiSummaryBtn) aiSummaryBtn.textContent = '✨ Get AI Summary';
+                }
+            };
+
+            // --- EVENT LISTENERS FOR AI & DYNAMIC FEATURES ---
+            if (getSnapshotBtn) {
+                getSnapshotBtn.addEventListener('click', async () => {
+                    const district = locationInput ? locationInput.value : '';
+                    if (district.trim()) {
+                        const data = await fetchLocalData(district.trim());
+                        updateLocalSnapshotWidget(data);
+                    } else {
+                        alert('Please enter a district name.');
+                    }
+                });
+            }
+
+            if (aiSummaryBtn) {
+                aiSummaryBtn.addEventListener('click', fetchNationalSummary);
+            }
+
+
+            // --- UI UPDATE FUNCTIONS ---
+            const updateNationalStats = (data) => {
+                if (!data) return;
+                const villagesEl = document.getElementById('villages-covered-stat');
+                const beneEl = document.getElementById('beneficiaries-impacted-stat');
+                const fundsEl = document.getElementById('funds-sanctioned-stat');
+                const worksEl = document.getElementById('works-completed-stat');
+                if (villagesEl) villagesEl.textContent = data.villagesCovered.toLocaleString('en-IN');
+                if (beneEl) beneEl.textContent = data.beneficiariesImpacted.toLocaleString('en-IN');
+                if (fundsEl) fundsEl.textContent = `₹${data.fundsSanctioned.toLocaleString('en-IN')} Cr`;
+                if (worksEl) worksEl.textContent = data.worksCompleted.toLocaleString('en-IN');
+            };
+
+            const updateLocalSnapshotWidget = (data) => {
+                const pStat = document.getElementById('modal-projects-stat');
+                const fStat = document.getElementById('modal-funds-stat');
+                const gStat = document.getElementById('modal-grievances-stat');
+                if (pStat && fStat && gStat && data) {
+                    pStat.textContent = data.projectsUnderway;
+                    fStat.textContent = data.fundsUtilized;
+                    gStat.textContent = data.grievancesResolved;
+                }
+            };
+
+            const updateFunnelChart = (data) => {
+                if (charts.funnelChart && data) {
+                    charts.funnelChart.data = { labels: ['Sanctioned', 'Released to State', 'Released to District', 'Utilized'], datasets: [{ data, backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(153, 102, 255, 0.6)'] }] };
+                    charts.funnelChart.update();
+                }
+            };
+
+            const updateDonutChart = (data) => {
+                if (charts.donutChart && data) {
+                    charts.donutChart.data = { labels: data.labels || [], datasets: [{ data: data.data || [], backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#9E9E9E'] }] };
+                    charts.donutChart.update();
+                }
+            };
+
+            const updateLineChart = (data) => {
+                if (charts.lineChart && data) {
+                    const currentYear = new Date().getFullYear();
+                    const labels = [`Q3 ${currentYear - 1}`, `Q4 ${currentYear - 1}`, `Q1 ${currentYear}`, `Q2 ${currentYear}`, `Q3 ${currentYear}`];
+                    charts.lineChart.data = { labels: labels, datasets: [{ label: '% Projects Completed', data, fill: false, borderColor: 'rgb(75, 192, 192)', tension: 0.1 }] };
+                    charts.lineChart.update();
+                }
+            };
+
+            const updateBarChart = (data) => {
+                if (charts.barChart && data) {
+                    charts.barChart.data = {
+                        labels: data.labels || ['Rural Roads', 'Skill Training', 'Hostel Construction', 'Community Halls', 'Irrigation'],
+                        datasets: [{
+                            label: 'Number of Projects',
+                            data: data.data || data, // API returns object, mock returns array
+                            backgroundColor: '#FF6384'
+                        }]
+                    };
+                    charts.barChart.update();
+                }
+            };
+
+            const updateLeaderboards = (data) => {
+                const top5Body = document.getElementById('top-5-table-body');
+                const bottom5Body = document.getElementById('bottom-5-table-body');
+                if (top5Body && bottom5Body && data) {
+                    top5Body.innerHTML = data.top5.map(row => `
+            <tr class="border-b"><td class="p-3">${row.state}</td><td class="p-3 text-center">${row.projects}% <i class="fas fa-arrow-up text-green-500"></i></td><td class="p-3 text-center">${row.funds}% <i class="fas fa-arrow-up text-green-500"></i></td></tr>`).join('');
+                    bottom5Body.innerHTML = data.bottom5.map(row => `
+            <tr class="border-b"><td class="p-3">${row.state}</td><td class="p-3 text-center">${row.projects}% <i class="fas fa-arrow-down text-red-500"></i></td><td class="p-3 text-center">${row.funds}% <i class="fas fa-arrow-down text-red-500"></i></td></tr>`).join('');
+                }
+            };
+
+
+            // --- INITIAL PAGE LOAD ---
+            const loadDashboard = async () => {
+                try {
+                    console.log("Loading dashboard data...");
+                    const [
+                        nationalStats,
+                        funnelData,
+                        donutData,
+                        lineData,
+                        barData,
+                        leaderboardData
+                    ] = await Promise.all([
+                        fetchNationalStats(),
+                        fetchFunnelChartData(),
+                        fetchDonutChartData(),
+                        fetchLineChartData(),
+                        fetchBarChartData(),
+                        fetchLeaderboardData()
+                    ]);
+
+                    updateNationalStats(nationalStats);
+                    updateFunnelChart(funnelData);
+                    updateDonutChart(donutData);
+                    updateLineChart(lineData);
+                    updateBarChart(barData);
+                    updateLeaderboards(leaderboardData);
+                    console.log("Dashboard loaded successfully.");
+                } catch (err) {
+                    console.error('Error loading dashboard:', err);
+                }
+            };
+
+            loadDashboard();
+        });
+    </script>
+
+</body>
+
+</html>
