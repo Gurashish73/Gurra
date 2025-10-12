@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDO Dashboard | PM-AJAY</title>
+    <title>District Command Center | PM-AJAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Configure Tailwind to use the 'dark' class for dark mode
@@ -13,7 +13,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display-swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -32,401 +32,1796 @@
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
         }
         /* Dark mode specific card styles */
+        .dark .sidebar,
         .dark .card {
-            background-color: #1c1b1a;
+            background-color: #1c1b1a; /* A slightly off-black for cards and sidebar */
             border: 1px solid #374151; /* gray-700 */
             box-shadow: none;
         }
         .dark .card:hover {
             background-color: #2c2b2a;
         }
+
+        /* Add transition to nav links for smooth animation */
+        .nav-link {
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+
+        /* Sidebar active link style - UPDATED */
+        #sidebar-nav .nav-link.active {
+            background-color: #ffffff; /* White background */
+            color: #1f2937; /* Dark text for high contrast */
+            font-weight: 600;
+            /* Optional: Add a subtle shadow to make it pop */
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .dark #sidebar-nav .nav-link.active {
+            background-color: #374151; /* Maintained dark mode style */
+            color: #f3f4f6;
+            box-shadow: none; /* No shadow needed in dark mode */
+        }
+        .nav-link.active i {
+            color: #4f46e5; /* Equivalent to text-indigo-600 */
+        }
+        .dark .nav-link.active i {
+            color: #818cf8; /* Equivalent to text-indigo-400 */
+        }
+        /* Active tab style for various pages */
+        .triage-tab.active, .financials-tab.active, .integrity-tab.active {
+            border-color: #4f46e5; /* Equivalent to border-indigo-600 */
+            color: #4f46e5; /* Equivalent to text-indigo-600 */
+            font-weight: 600;
+        }
+        .triage-tab.active .badge {
+             background-color: #e0e7ff; /* Equivalent to bg-indigo-100 */
+             color: #4f46e5; /* Equivalent to text-indigo-600 */
+        }
+        .dark .triage-tab.active, .dark .financials-tab.active, .dark .integrity-tab.active {
+             border-color: #818cf8; /* Equivalent to border-indigo-400 */
+             color: #818cf8; /* Equivalent to text-indigo-400 */
+        }
+         .dark .triage-tab.active .badge {
+             background-color: rgba(99, 102, 241, 0.1); /* Equivalent to bg-indigo-500/10 */
+             color: #818cf8; /* Equivalent to text-indigo-400 */
+        }
+
+        /* Flowchart button styles */
+        .flowchart-btn {
+            transform: skew(-20deg);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .flowchart-btn:hover {
+            transform: skew(-20deg) scale(1.05);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .dark .flowchart-btn {
+             box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .dark .flowchart-btn:hover {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .flowchart-btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: skew(20deg);
+            padding: 0.5rem 1.25rem; /* Adjusted padding for visual balance */
+            font-weight: 600;
+            font-size: 0.875rem; /* text-sm */
+        }
+        /* Custom scrollbar for Kanban view and tab bars */
+        .horizontal-scrollbar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .horizontal-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .horizontal-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .horizontal-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+        .horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark .horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        /* Custom scrollbar for Kanban view */
+        .kanban-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .kanban-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .dark .kanban-container::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        .kanban-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .kanban-container::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+        .kanban-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark .kanban-container::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
     </style>
 </head>
-<body class="flex min-h-screen bg-[#fdfaf6] dark:bg-black">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar w-64 flex-shrink-0 border-r border-slate-200 dark:border-gray-700 flex flex-col dark:bg-[#1c1b1a]">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" />
-                </svg>
-                PM-AJAY
-            </h1>
-        </div>
-        <nav class="flex-1 px-4 py-2">
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-700 bg-indigo-50 dark:bg-white dark:text-slate-900 rounded-lg font-semibold">
-                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-indigo-600 dark:text-indigo-600"></i>
-                Dashboard
-            </a>
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
-                <i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i>
-                Projects
-            </a>
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
-                <i data-lucide="building" class="w-5 h-5 mr-3"></i>
-                Agencies
-            </a>
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
-                <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
-                Fund Flow
-            </a>
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
-                <i data-lucide="settings" class="w-5 h-5 mr-3"></i>
-                Settings
-            </a>
-        </nav>
-        <div class="p-4 mt-auto">
-             <div class="bg-slate-100 dark:bg-gray-800 rounded-lg p-4 text-center">
-                <i data-lucide="help-circle" class="w-10 h-10 mx-auto text-slate-500 dark:text-gray-400"></i>
-                <p class="text-sm text-slate-600 dark:text-gray-300 mt-2">Need help with the portal?</p>
-                <button class="mt-3 w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-500">Contact Support</button>
-            </div>
-            <a href="#" class="flex items-center px-4 py-4 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-4 font-medium">
-                <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
-                Sign Out
-            </a>
-        </div>
-    </aside>
+<body class="bg-[#fdfaf6] dark:bg-black">
+    <div class="relative min-h-screen md:flex">
+        <!-- Mobile menu overlay -->
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 lg:p-8">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Block Level Dashboard</h2>
-                <p class="text-slate-500 dark:text-gray-400 mt-1">Real-time overview of PM-AJAY components</p>
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 flex-shrink-0 border-r border-slate-200 dark:border-gray-700 flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" />
+                    </svg>
+                    PM-AJAY
+                </h1>
             </div>
-            <div class="flex items-center mt-4 sm:mt-0">
-                 <div class="flex items-center space-x-4">
-                    <button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
-                        <i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
-                    </button>
-                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
-                        <i data-lucide="sun" id="theme-toggle-light-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
-                        <i data-lucide="moon" id="theme-toggle-dark-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400 hidden"></i>
-                    </button>
-                </div>
-                <div class="flex items-center ml-6">
-                    <img src="https://placehold.co/40x40/E2E8F0/475569?text=BDO" alt="BDO" class="w-10 h-10 rounded-full">
-                    <div class="ml-3">
-                        <p class="font-semibold text-slate-800 dark:text-gray-100">Mr. Alok Verma</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400">BDO, Pusa Block</p>
-                    </div>
-                </div>
+            <nav id="sidebar-nav" class="flex-1 px-4 py-2">
+                <a href="#" class="nav-link active flex items-center px-4 py-2.5 rounded-lg text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 font-medium" data-target="dashboard-content">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="inbox-content">
+                    <i data-lucide="inbox" class="w-5 h-5 mr-3"></i> Inbox (Appraisals)
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="projects-content">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i> Projects
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="blocks-content">
+                    <i data-lucide="layout-grid" class="w-5 h-5 mr-3"></i> Blocks
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="agencies-content">
+                    <i data-lucide="building" class="w-5 h-5 mr-3"></i> Agencies
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="financials-content">
+                    <i data-lucide="banknote" class="w-5 h-5 mr-3"></i> Financials
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="grievances-content">
+                    <i data-lucide="shield-alert" class="w-5 h-5 mr-3"></i> Grievances
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="integrity-content">
+                    <i data-lucide="shield-check" class="w-5 h-5 mr-3"></i> System Integrity
+                </a>
+                <a href="#" class="nav-link flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium" data-target="reports-content">
+                    <i data-lucide="file-text" class="w-5 h-5 mr-3"></i> Reports
+                </a>
+            </nav>
+            <div class="p-4 mt-auto">
+                <a href="#" class="flex items-center px-4 py-4 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-4 font-medium">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                    Sign Out
+                </a>
             </div>
-        </div>
+        </aside>
 
-        <!-- KPI Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Total Projects -->
-            <div class="card p-5">
-                <div class="flex justify-between items-start">
-                    <h3 class="text-slate-500 dark:text-gray-400 font-medium">Total Projects</h3>
-                    <div class="p-2 bg-indigo-100 dark:bg-indigo-500/10 rounded-md">
-                        <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i>
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-8 min-w-0"> <!-- Added min-w-0 for flexbox overflow prevention -->
+            <!-- Dashboard Content -->
+            <div id="dashboard-content" class="page-content">
+                <!-- Header -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+                    <div class="flex items-center flex-grow min-w-0"> <!-- Added flex-grow and min-w-0 -->
+                        <button id="menu-toggle" class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-gray-700 md:hidden mr-3">
+                             <i data-lucide="menu" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+                        </button>
+                        <div class="min-w-0"> <!-- Added min-w-0 -->
+                            <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 truncate">District Command Center</h2>
+                            <p class="text-slate-500 dark:text-gray-400 mt-1 truncate">Strategic overview of Pusa District</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center flex-wrap justify-start lg:justify-end gap-3 w-full lg:w-auto">
+                        <button class="flowchart-btn bg-white border border-slate-300 hover:bg-slate-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-gray-500">
+                            <span class="flowchart-btn-content text-slate-700 dark:text-gray-200">
+                                <i data-lucide="file-check-2" class="w-4 h-4 mr-2"></i> Review AAP Submission
+                            </span>
+                        </button>
+                         <button class="flowchart-btn bg-gradient-to-br from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <span class="flowchart-btn-content text-white">
+                                <i data-lucide="send" class="w-4 h-4 mr-2"></i> Authorize Fund Release
+                            </span>
+                         </button>
+                         <div class="flex items-center space-x-2 sm:space-x-4 border-l border-slate-200 dark:border-gray-700 pl-3">
+                            <button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700 relative">
+                                <i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                                <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                            </button>
+                             <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                                <i data-lucide="sun" id="theme-toggle-light-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                                <i data-lucide="moon" id="theme-toggle-dark-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400 hidden"></i>
+                            </button>
+                            <div class="flex items-center">
+                                <img src="https://placehold.co/40x40/E2E8F0/475569?text=RS" alt="DM" class="w-10 h-10 rounded-full">
+                                <div class="ml-3 hidden xl:block">
+                                    <p class="font-semibold text-slate-800 dark:text-gray-100">Smt. Ritu Sharma</p>
+                                    <p class="text-sm text-slate-500 dark:text-gray-400">DM, Pusa District</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">201</p>
-                <p class="text-sm text-green-600 flex items-center mt-1">
-                    <i data-lucide="arrow-up" class="w-4 h-4 mr-1"></i>
-                    <span>8.2%</span> <span class="text-slate-500 dark:text-gray-400 ml-1">vs last month</span>
-                </p>
-            </div>
-            <!-- Approved Projects -->
-            <div class="card p-5">
-                 <div class="flex justify-between items-start">
-                    <h3 class="text-slate-500 dark:text-gray-400 font-medium">Approved Projects</h3>
-                    <div class="p-2 bg-green-100 dark:bg-green-500/10 rounded-md">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+
+                <!-- KPI Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card p-5">
+                        <h3 class="text-slate-500 dark:text-gray-400 font-medium">District Performance Score</h3>
+                        <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">85<span class="text-2xl text-slate-500 dark:text-gray-400">/100</span></p>
+                    </div>
+                    <div class="card p-5">
+                        <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Utilized (%)</h3>
+                        <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">78.2<span class="text-2xl">%</span></p>
+                    </div>
+                    <div class="card p-5 border-2 border-red-500/50 dark:border-red-500/70 bg-red-50/50 dark:bg-red-500/5">
+                        <h3 class="text-red-600 dark:text-red-400 font-medium">Projects at High Risk</h3>
+                        <p class="text-4xl font-bold text-red-600 dark:text-red-400 mt-2">9</p>
+                    </div>
+                     <div class="card p-5">
+                        <h3 class="text-slate-500 dark:text-gray-400 font-medium">Grievances (Open)</h3>
+                        <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">32</p>
                     </div>
                 </div>
-                <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">136</p>
-                <p class="text-sm text-green-600 flex items-center mt-1">
-                    <i data-lucide="arrow-up" class="w-4 h-4 mr-1"></i>
-                    <span>10.5%</span> <span class="text-slate-500 dark:text-gray-400 ml-1">vs last month</span>
-                </p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="card lg:col-span-2 p-5">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Block Performance Scorecard</h3>
+                        <div class="h-96"><canvas id="blockPerformanceChart"></canvas></div>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">District Fund Flow</h3>
+                            <div class="relative mt-2">
+                                <div class="absolute left-5 top-5 h-full w-0.5 bg-slate-200 dark:bg-gray-600" style="height: calc(100% - 2.5rem);"></div>
+                                <div class="space-y-10">
+                                    <!-- Node 1: Received from State -->
+                                    <div class="relative flex items-center">
+                                        <div class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white shadow-md">
+                                            <i data-lucide="shield" class="h-5 w-5"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <p class="text-sm text-slate-500 dark:text-gray-400">Received from State</p>
+                                            <p class="font-bold text-slate-800 dark:text-gray-200 text-lg">₹12.5 Cr</p>
+                                        </div>
+                                    </div>
+                                    <!-- Node 2: Available at District -->
+                                    <div class="relative flex items-center">
+                                         <div class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-white shadow-md">
+                                            <i data-lucide="building-2" class="h-5 w-5"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <p class="text-sm text-slate-500 dark:text-gray-400">Available at District</p>
+                                            <p class="font-bold text-slate-800 dark:text-gray-200 text-lg">₹10.2 Cr</p>
+                                        </div>
+                                    </div>
+                                    <!-- Node 3: Disbursed to Agencies -->
+                                    <div class="relative flex items-center">
+                                         <div class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500 text-white shadow-md">
+                                            <i data-lucide="users" class="h-5 w-5"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <p class="text-sm text-slate-500 dark:text-gray-400">Disbursed to Agencies</p>
+                                            <p class="font-bold text-slate-800 dark:text-gray-200 text-lg">₹9.8 Cr</p>
+                                        </div>
+                                    </div>
+                                    <!-- Node 4: Reported as Utilized -->
+                                    <div class="relative flex items-center">
+                                        <div class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white shadow-md">
+                                            <i data-lucide="check-check" class="h-5 w-5"></i>
+                                        </div>
+                                        <div class="ml-6">
+                                            <p class="text-sm text-slate-500 dark:text-gray-400">Reported as Utilized</p>
+                                            <p class="font-bold text-green-600 dark:text-green-400 text-lg">₹9.77 Cr</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="mt-6 w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">Manage Funds &rarr;</button>
+                         </div>
+                         <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-2">Grievance Hotspots</h3>
+                            <img src="https://placehold.co/600x400/f1f5f9/475569?text=District+Map+Heatmap" alt="Grievance Heatmap" class="rounded-md border dark:border-gray-700">
+                            <p class="text-sm text-slate-600 dark:text-gray-300 mt-2">
+                                <span class="font-semibold text-red-600 dark:text-red-400">Top Concern:</span> Poor road quality in Pusa Block.
+                            </p>
+                             <button class="mt-2 w-full text-sm font-semibold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">Manage Grievances &rarr;</button>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="card mt-6 p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Inbox: Proposals Awaiting DLPACC Appraisal</h3>
+                        <button class="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
+                            View All <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </button>
+                    </div>
+                     <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Proposal Type</th>
+                                    <th scope="col" class="px-6 py-3">Block</th>
+                                    <th scope="col" class="px-6 py-3">Est. Budget</th>
+                                    <th scope="col" class="px-6 py-3 font-bold">AI Risk Score</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Adarsh Gram VDP</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">Pusa Block</td>
+                                    <td class="px-6 py-4 font-medium dark:text-gray-200">₹20 Lakh</td>
+                                    <td class="px-6 py-4"><span class="font-bold text-green-600">Low (15%)</span></td>
+                                    <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                               <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">GIA Livelihood</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">Kalyanpur</td>
+                                    <td class="px-6 py-4 font-medium dark:text-gray-200">₹1.5 Cr</td>
+                                    <td class="px-6 py-4"><span class="font-bold text-red-500">High (75%)</span></td>
+                                    <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-[#1c1b1a] dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                   <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Hostel Construction</td>
+                                   <td class="px-6 py-4 dark:text-gray-300">Pusa Block</td>
+                                   <td class="px-6 py-4 font-medium dark:text-gray-200">₹3 Cr</td>
+                                   <td class="px-6 py-4"><span class="font-bold text-yellow-500">Medium (45%)</span></td>
+                                   <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-             <!-- Executing Agencies -->
-            <div class="card p-5">
-                <div class="flex justify-between items-center">
+
+            <!-- Inbox Content -->
+            <div id="inbox-content" class="page-content hidden">
+                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Inbox</h2>
+                <p class="text-slate-500 dark:text-gray-400 mb-6">Triage Hub for Proposals, Grievances, and Alerts</p>
+
+                <!-- Triage Hub -->
+                <div class="w-full overflow-x-auto horizontal-scrollbar">
+                    <div class="flex border-b border-slate-200 dark:border-gray-700 mb-6 min-w-max">
+                        <button class="triage-tab active flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap">
+                            Proposals for Appraisal <span class="badge ml-2 bg-slate-200 text-slate-600 text-xs font-semibold px-2 py-0.5 rounded-full">12</span>
+                        </button>
+                        <button class="triage-tab flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap">
+                            Public Grievances <span class="badge ml-2 bg-slate-200 text-slate-600 text-xs font-semibold px-2 py-0.5 rounded-full">45</span>
+                        </button>
+                        <button class="triage-tab flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap">
+                            Escalated Issues <span class="badge ml-2 bg-slate-200 text-slate-600 text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
+                        </button>
+                        <button class="triage-tab flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap">
+                            System Alerts <span class="badge ml-2 bg-slate-200 text-slate-600 text-xs font-semibold px-2 py-0.5 rounded-full">9</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Appraisal Queue Table -->
+                <div class="card">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 font-bold">AI Risk Score</th>
+                                    <th scope="col" class="px-6 py-3">Proposal</th>
+                                    <th scope="col" class="px-6 py-3">Est. Budget</th>
+                                    <th scope="col" class="px-6 py-3">Submitted By</th>
+                                    <th scope="col" class="px-6 py-3">Date Received</th>
+                                    <th scope="col" class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                    <td class="px-6 py-4"><span class="font-bold text-red-500 text-base">High (75%)</span></td>
+                                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">GIA Livelihood: Pusa Block</td>
+                                    <td class="px-6 py-4 font-medium dark:text-gray-200">₹1.5 Cr</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">Mr. Alok Verma</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">10 Oct 2025</td>
+                                    <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                    <td class="px-6 py-4"><span class="font-bold text-yellow-500 text-base">Medium (45%)</span></td>
+                                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Hostel Construction: Kalyanpur</td>
+                                    <td class="px-6 py-4 font-medium dark:text-gray-200">₹3 Cr</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">Ms. Priya Singh</td>
+                                    <td class="px-6 py-4 dark:text-gray-300">09 Oct 2025</td>
+                                    <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                                <tr class="bg-white dark:bg-[#1c1b1a] dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50">
+                                   <td class="px-6 py-4"><span class="font-bold text-green-600 text-base">Low (15%)</span></td>
+                                   <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Adarsh Gram VDP: Mohiuddin Nagar</td>
+                                   <td class="px-6 py-4 font-medium dark:text-gray-200">₹20 Lakh</td>
+                                   <td class="px-6 py-4 dark:text-gray-300">Mr. Raj Kumar</td>
+                                   <td class="px-6 py-4 dark:text-gray-300">09 Oct 2025</td>
+                                   <td class="px-6 py-4 text-center"><button class="appraise-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Appraise</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Content -->
+            <div id="projects-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Project Portfolio</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">Interrogate the entire district project portfolio</p>
+
+                 <!-- Control Panel -->
+                 <div class="card p-4 mb-6">
+                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Projects</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">450</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                             <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">Projects at High Risk</h4>
+                             <p class="text-2xl font-bold text-red-600 dark:text-red-400">9</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Completed (Pending UC)</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">35</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Budget vs. Actuals</h4>
+                             <p class="text-xl font-bold text-slate-800 dark:text-gray-100">₹85 Cr <span class="text-base text-slate-500">/ ₹150 Cr</span></p>
+                         </div>
+                     </div>
+                     <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow">
+                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                             <input type="text" placeholder="Search by Project Name, Agency, or ID..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <select class="border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>All Blocks</option>
+                        </select>
+                        <select class="border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>All Components</option>
+                        </select>
+                         <select class="border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>All Statuses</option>
+                        </select>
+                        <div class="flex items-center space-x-2 pl-2">
+                             <label for="ai-risk-toggle" class="text-sm font-medium text-slate-600 dark:text-gray-300">Show only AI-Flagged Risks</label>
+                             <button id="ai-risk-toggle" class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors bg-slate-300 dark:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform translate-x-1"></span>
+                             </button>
+                        </div>
+                     </div>
+                 </div>
+
+                 <!-- View Selector -->
+                 <div class="w-full overflow-x-auto horizontal-scrollbar">
+                    <div class="inline-flex rounded-lg shadow-sm mb-6">
+                        <button class="portfolio-view-btn active py-2 px-4 text-sm font-semibold bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-slate-200 dark:border-gray-600 rounded-l-lg" data-view="master-list-view">Master List</button>
+                        <button class="portfolio-view-btn py-2 px-4 text-sm font-medium bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 border-t border-b border-slate-200 dark:border-gray-600" data-view="kanban-view">Kanban View</button>
+                        <button class="portfolio-view-btn py-2 px-4 text-sm font-medium bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-600 rounded-r-lg" data-view="map-view">Map View</button>
+                    </div>
+                 </div>
+
+                 <!-- Main Views -->
+                 <div id="master-list-view" class="portfolio-view">
+                    <div class="card">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Project Name & ID</th>
+                                        <th scope="col" class="px-6 py-3">Agency (Risk)</th>
+                                        <th scope="col" class="px-6 py-3">Budget</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3">AI Risk Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="project-dossier-trigger bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 cursor-pointer">
+                                        <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Hostel, Pusa<br><span class="text-xs text-slate-500">ID: PJ2025-001</span></td>
+                                        <td class="px-6 py-4">State PWD <span class="text-xs text-green-600">(Low)</span></td>
+                                        <td class="px-6 py-4">₹3 Cr</td>
+                                        <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Tendering</span></td>
+                                        <td class="px-6 py-4 font-bold text-yellow-500">Medium (45%)</td>
+                                    </tr>
+                                     <tr class="project-dossier-trigger bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 cursor-pointer">
+                                        <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">GIA Livelihood, Kalyanpur<br><span class="text-xs text-slate-500">ID: PJ2025-002</span></td>
+                                        <td class="px-6 py-4">Pratham NGO <span class="text-xs text-red-500">(High)</span></td>
+                                        <td class="px-6 py-4">₹1.5 Cr</td>
+                                        <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded-full">In Progress</span></td>
+                                        <td class="px-6 py-4 font-bold text-red-500">High (75%)</td>
+                                    </tr>
+                                    <tr class="project-dossier-trigger bg-white dark:bg-[#1c1b1a] dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 cursor-pointer">
+                                        <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Adarsh Gram, Samastipur<br><span class="text-xs text-slate-500">ID: PJ2025-003</span></td>
+                                        <td class="px-6 py-4">Block Panchayat <span class="text-xs text-green-600">(Low)</span></td>
+                                        <td class="px-6 py-4">₹50 Lakh</td>
+                                        <td class="px-6 py-4"><span class="bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400 text-xs font-medium px-2.5 py-0.5 rounded-full">On Track</span></td>
+                                        <td class="px-6 py-4 font-bold text-green-600">Low (15%)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                 </div>
+                 <div id="kanban-view" class="portfolio-view hidden">
+                    <div class="kanban-container w-full overflow-x-auto pb-4">
+                        <div class="flex space-x-6">
+                            <!-- Kanban Columns -->
+                            <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">Appraisal Pending (3)</h3>
+                                <div class="space-y-3">
+                                    <div class="card p-3 cursor-pointer"><p class="text-sm font-medium">Community Hall, Tajpur</p><span class="text-xs text-yellow-500">Risk: Medium</span></div>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">Approved (5)</h3>
+                                <div class="space-y-3">
+                                     <div class="card p-3 cursor-pointer"><p class="text-sm font-medium">Skill Center, Warisnagar</p><span class="text-xs text-green-600">Risk: Low</span></div>
+                                </div>
+                            </div>
+                             <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">Tendering (2)</h3>
+                                <div class="space-y-3">
+                                     <div class="card p-3 cursor-pointer"><p class="text-sm font-medium">Hostel, Pusa</p><span class="text-xs text-yellow-500">Risk: Medium</span></div>
+                                </div>
+                            </div>
+                             <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">In Progress (8)</h3>
+                                <div class="space-y-3">
+                                    <div class="card p-3 cursor-pointer border-l-4 border-red-500"><p class="text-sm font-medium">GIA Livelihood, Kalyanpur</p><span class="text-xs text-red-500">Risk: High</span></div>
+                                     <div class="card p-3 cursor-pointer"><p class="text-sm font-medium">Adarsh Gram, Samastipur</p><span class="text-xs text-green-600">Risk: Low</span></div>
+                                </div>
+                            </div>
+                             <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">Completed (4)</h3>
+                            </div>
+                             <div class="flex-shrink-0 w-72 bg-slate-100 dark:bg-gray-800 rounded-lg p-3">
+                                <h3 class="font-semibold mb-3 text-slate-700 dark:text-gray-200">UC Submitted (1)</h3>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                 <div id="map-view" class="portfolio-view hidden">
+                    <div class="card p-2 h-[600px]">
+                        <img src="https://placehold.co/1200x600/e2e8f0/475569?text=Interactive+District+Map+View" alt="Map of Projects" class="w-full h-full object-cover rounded-md">
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Blocks Content -->
+            <div id="blocks-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Block Command</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">Comparative performance and strategic deep dive into blocks</p>
+                
+                 <!-- Control Panel -->
+                 <div class="card p-4 mb-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">District-Wide Data Quality</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">89%</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Avg. VDP Approval Time</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">14 Days</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Avg. Grievance Resolution</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">9 Days</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                             <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">Blocks in Critical Status</h4>
+                             <p class="text-2xl font-bold text-red-600 dark:text-red-400">2</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                         <div class="relative flex-grow">
+                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                             <input type="text" placeholder="Search for a block..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-4 py-2 text-sm font-semibold bg-indigo-100 text-indigo-700 rounded-lg">All</button>
+                            <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Top Performers</button>
+                            <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Needs Intervention</button>
+                        </div>
+                        <select class="border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>Sort by: Overall Performance</option>
+                            <option>Sort by: Data Quality</option>
+                            <option>Sort by: Financial Utilization</option>
+                        </select>
+                    </div>
+                 </div>
+
+                 <!-- Block Leaderboard -->
+                 <div class="card">
+                     <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th class="px-6 py-3">Rank & Block Name</th>
+                                    <th class="px-6 py-3 text-center">Perf. Score</th>
+                                    <th class="px-6 py-3">Key KPIs</th>
+                                    <th class="px-6 py-3">AI Command Insight</th>
+                                    <th class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-lg text-slate-800 dark:text-gray-100">1. Pusa Block</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">BDO: Alok Verma</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="text-2xl font-bold text-green-600">92<span class="text-base text-slate-500">/100</span></div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <span>Data Quality: <span class="font-semibold text-green-600">98%</span></span>
+                                            <span>Workflow Speed: <span class="font-semibold text-green-600">A+</span></span>
+                                            <span>Public Sat.: <span class="font-semibold text-green-600">95%</span></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-gray-300">
+                                        <div class="flex items-start">
+                                            <i data-lucide="sparkles" class="w-4 h-4 mr-2 mt-0.5 text-indigo-500 flex-shrink-0"></i>
+                                            <span>Excels in VDP approval speed. <strong class="text-indigo-600 dark:text-indigo-400">Best Practice identified.</strong></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="view-dossier-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">View Dossier</button>
+                                    </td>
+                               </tr>
+                               <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-lg text-slate-800 dark:text-gray-100">2. Kalyanpur Block</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">BDO: Priya Singh</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="text-2xl font-bold text-yellow-500">78<span class="text-base text-slate-500">/100</span></div>
+                                    </td>
+                                     <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <span>Data Quality: <span class="font-semibold text-red-500">75%</span></span>
+                                            <span>Workflow Speed: <span class="font-semibold text-yellow-500">B</span></span>
+                                            <span>Public Sat.: <span class="font-semibold text-green-600">91%</span></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-gray-300">
+                                         <div class="flex items-start">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0"></i>
+                                            <span>Low Data Quality score dragging performance. <strong class="text-red-600 dark:text-red-400">Root cause: High error rate from 2 field officers.</strong></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="view-dossier-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">View Dossier</button>
+                                    </td>
+                               </tr>
+                            </tbody>
+                        </table>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Agencies Content -->
+            <div id="agencies-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Agency Command</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">360-degree performance and risk scorecard for all agencies</p>
+
+                 <!-- Control Panel -->
+                 <div class="card p-4 mb-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Active Agencies</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">45</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                             <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">Agencies on Watchlist</h4>
+                             <p class="text-2xl font-bold text-red-600 dark:text-red-400">6</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Contracts Awarded (YTD)</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">120</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                            <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Contract Value</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">₹250 Cr</p>
+                         </div>
+                    </div>
+                     <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow">
+                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                             <input type="text" placeholder="Search for an agency..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                             <button class="px-4 py-2 text-sm font-semibold bg-indigo-100 text-indigo-700 rounded-lg">All</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">High-Risk</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Top Performers</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Blacklisted</button>
+                        </div>
+                        <select class="border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>Filter by Type</option>
+                            <option>Contractor</option>
+                            <option>NGO</option>
+                            <option>Govt. Dept.</option>
+                        </select>
+                     </div>
+                 </div>
+
+                 <!-- Agency Scorecard -->
+                 <div class="card">
+                     <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                           <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th class="px-6 py-3">Rank & Agency Name</th>
+                                    <th class="px-6 py-3 text-center">Perf. Score</th>
+                                    <th class="px-6 py-3">Key KPIs</th>
+                                    <th class="px-6 py-3">AI Command Insight</th>
+                                    <th class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                               <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-slate-800 dark:text-gray-100">1. ABC Infra Pvt. Ltd.</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="text-2xl font-bold text-green-600">95<span class="text-base text-slate-500">/100</span></div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <span>On-Time Delivery: <span class="font-semibold text-green-600">98%</span></span>
+                                            <span>Quality Score: <span class="font-semibold text-green-600">A+</span></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-gray-300">
+                                         <div class="flex items-start">
+                                            <i data-lucide="sparkles" class="w-4 h-4 mr-2 mt-0.5 text-indigo-500 flex-shrink-0"></i>
+                                            <span>Top performer in on-time delivery for rural road projects.</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="view-agency-dossier-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">View Dossier</button>
+                                    </td>
+                               </tr>
+                               <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold text-slate-800 dark:text-gray-100">2. Pratham NGO</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="text-2xl font-bold text-red-500">62<span class="text-base text-slate-500">/100</span></div>
+                                    </td>
+                                     <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <span>On-Time Delivery: <span class="font-semibold text-red-500">55%</span></span>
+                                            <span>Quality Score: <span class="font-semibold text-yellow-500">B</span></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600 dark:text-gray-300">
+                                        <div class="flex items-start">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0"></i>
+                                            <span>Responsible for 3 of the 5 most delayed projects. High volume of public complaints.</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="view-agency-dossier-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">View Dossier</button>
+                                    </td>
+                               </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                 </div>
+            </div>
+
+             <!-- Financials Content -->
+            <div id="financials-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Financial Command</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">Real-time financial vitals, UC management, and convergence tracking</p>
+                
+                 <!-- Control Panel -->
+                 <div class="card p-4 mb-6">
+                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Funds Received</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">₹250 Cr</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Funds Disbursed</h4>
+                             <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">₹180 Cr</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-green-50 dark:bg-green-500/10">
+                             <h4 class="text-sm text-green-700 dark:text-green-400 font-medium">Total Funds Utilized</h4>
+                             <p class="text-2xl font-bold text-green-700 dark:text-green-400">₹150 Cr</p>
+                         </div>
+                          <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                             <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">UCs Pending Submission</h4>
+                             <p class="text-2xl font-bold text-red-600 dark:text-red-400">12</p>
+                         </div>
+                     </div>
+                      <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow">
+                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                             <input type="text" placeholder="Search by Project ID, Agency, or Sanction Order..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                             <button class="px-4 py-2 text-sm font-semibold bg-indigo-100 text-indigo-700 rounded-lg">All</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Pending Disbursement</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">UC Ready</button>
+                             <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Convergence Lag</button>
+                        </div>
+                     </div>
+                 </div>
+
+                 <!-- View Selector -->
+                <div class="w-full overflow-x-auto horizontal-scrollbar">
+                    <div class="flex border-b border-slate-200 dark:border-gray-700 mb-6 min-w-max">
+                        <button class="financials-tab active flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap" data-view="fund-flow-view">
+                            District Fund Flow
+                        </button>
+                        <button class="financials-tab flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap" data-view="uc-management-view">
+                            Smart UC Management
+                        </button>
+                        <button class="financials-tab flex items-center py-3 px-4 text-slate-600 dark:text-gray-400 border-b-2 border-transparent hover:text-indigo-600 whitespace-nowrap" data-view="convergence-command-view">
+                            Convergence Command
+                        </button>
+                    </div>
+                </div>
+
+                 <!-- Financial Views -->
+                 <div id="fund-flow-view" class="financials-view">
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">The Money Trail</h3>
+                        <div class="h-80"></div>
+                    </div>
+                     <div class="card">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 p-6">Disbursement Queue</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                               <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                   <tr>
+                                       <th class="px-6 py-3">Project Name</th>
+                                       <th class="px-6 py-3">Agency</th>
+                                       <th class="px-6 py-3">Amount</th>
+                                       <th class="px-6 py-3 text-center">Action</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                        <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Community Hall, Tajpur</td>
+                                        <td class="px-6 py-4">Zila Parishad</td>
+                                        <td class="px-6 py-4 font-medium">₹40 Lakh</td>
+                                        <td class="px-6 py-4 text-center">
+                                            <button class="text-sm font-semibold bg-indigo-600 text-white py-1.5 px-3 rounded-lg hover:bg-indigo-700 flex items-center mx-auto"><i data-lucide="lock" class="w-3.5 h-3.5 mr-2"></i>Authorize Release</button>
+                                        </td>
+                                   </tr>
+                               </tbody>
+                            </table>
+                        </div>
+                     </div>
+                 </div>
+                 <div id="uc-management-view" class="financials-view hidden">
+                    <div class="bg-indigo-50 dark:bg-indigo-500/10 border-l-4 border-indigo-500 p-4 rounded-r-lg mb-6">
+                        <p class="text-sm text-indigo-800 dark:text-indigo-200">
+                            <strong class="font-semibold">AI Insight:</strong> 8 UCs are blocked pending final milestone photos from <strong>Pratham NGO</strong>. Automating a reminder could expedite submission.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 p-6">UC Readiness Dashboard</h3>
+                        <div class="overflow-x-auto">
+                           <table class="w-full text-left text-sm">
+                                <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                   <tr>
+                                       <th class="px-6 py-3">Project</th>
+                                       <th class="px-6 py-3 text-center">Final Photo</th>
+                                       <th class="px-6 py-3 text-center">Final Payment</th>
+                                       <th class="px-6 py-3 text-center">Agency UC</th>
+                                       <th class="px-6 py-3 text-center">Action</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                       <td class="px-6 py-4 font-medium">Hostel, Pusa Block</td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center">
+                                           <button class="text-sm font-semibold bg-green-600 text-white py-1.5 px-3 rounded-lg hover:bg-green-700">Auto-Generate & Submit</button>
+                                       </td>
+                                   </tr>
+                                    <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                       <td class="px-6 py-4 font-medium">Adarsh Gram, Samastipur</td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="x-circle" class="w-5 h-5 text-red-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center">
+                                            <span class="text-xs text-slate-500">Pending Agency UC</span>
+                                       </td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                 </div>
+                 <div id="convergence-command-view" class="financials-view hidden">
+                    <div class="card">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 p-6">Convergence Scorecard</h3>
+                        <div class="overflow-x-auto">
+                           <table class="w-full text-left text-sm">
+                               <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                   <tr>
+                                       <th class="px-6 py-3">Department</th>
+                                       <th class="px-6 py-3">Total Funds Committed</th>
+                                       <th class="px-6 py-3">Total Funds Released</th>
+                                       <th class="px-6 py-3">Performance Status</th>
+                                       <th class="px-6 py-3 text-center">Action</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                       <td class="px-6 py-4 font-medium">Public Works Department (PWD)</td>
+                                       <td class="px-6 py-4">₹5 Cr</td>
+                                       <td class="px-6 py-4">₹1.5 Cr</td>
+                                       <td class="px-6 py-4"><span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Delayed</span></td>
+                                       <td class="px-6 py-4 text-center">
+                                           <button class="text-sm font-semibold text-red-600 hover:text-red-800">Escalate to State</button>
+                                       </td>
+                                   </tr>
+                                   <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                       <td class="px-6 py-4 font-medium">Rural Development</td>
+                                       <td class="px-6 py-4">₹10 Cr</td>
+                                       <td class="px-6 py-4">₹8 Cr</td>
+                                       <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">On Track</span></td>
+                                       <td class="px-6 py-4 text-center">-</td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Grievances Content -->
+            <div id="grievances-content" class="page-content hidden">
+                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">Grievance Command Center</h2>
+                <p class="text-slate-500 dark:text-gray-400 mb-6">AI-powered intelligence briefing on public sentiment</p>
+
+                <!-- Control Panel -->
+                <div class="card p-4 mb-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                            <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Total Open Grievances</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">45</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                            <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Avg. Resolution Time</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">9 Days <i data-lucide="trending-down" class="w-5 h-5 ml-2 text-green-500"></i></p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                            <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">Overdue Grievances</h4>
+                            <p class="text-2xl font-bold text-red-600 dark:text-red-400">8</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                            <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Citizen Satisfaction Score</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">65%</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="relative flex-grow">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                            <input type="text" placeholder="Search by Grievance ID, Village, or Keyword..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-4 py-2 text-sm font-semibold bg-indigo-100 text-indigo-700 rounded-lg">All</button>
+                            <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">New</button>
+                            <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Overdue</button>
+                            <button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">High Priority</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intelligence Briefing -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="card p-4">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-2">Grievance Heatmap</h3>
+                        <img src="https://placehold.co/600x400/f1f5f9/475569?text=District+Map+Heatmap" alt="Grievance Heatmap" class="rounded-md border dark:border-gray-700">
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">AI Grievance Cluster Analysis</h3>
+                        <div class="card p-4 border-l-4 border-red-500">
+                            <p class="font-semibold text-slate-800 dark:text-gray-100">Cluster Identified: Poor Road Quality (Pusa Block)</p>
+                            <p class="text-sm text-slate-600 dark:text-gray-300 mt-1">25 new grievances in the last 7 days mention 'potholes,' 'cracks,' and 'ABC Infra Pvt. Ltd.'</p>
+                        </div>
+                        <div class="card p-4 border-l-4 border-yellow-500">
+                            <p class="font-semibold text-slate-800 dark:text-gray-100">Cluster Identified: GIA Subsidy Delays (Kalyanpur Block)</p>
+                            <p class="text-sm text-slate-600 dark:text-gray-300 mt-1">15 grievances mention 'payment not received' and 'BDO office.'</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Queue -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 p-6">Action Queue</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th class="px-6 py-3 text-center">AI Priority</th>
+                                    <th class="px-6 py-3">Grievance ID & Summary</th>
+                                    <th class="px-6 py-3">Assigned To</th>
+                                    <th class="px-6 py-3 text-center">Days Pending</th>
+                                    <th class="px-6 py-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
+                                    <td class="px-6 py-4 text-center"><i data-lucide="shield-alert" class="w-6 h-6 text-red-500 mx-auto"></i></td>
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-slate-800 dark:text-gray-100">GRV-1024 - Road damaged</div>
+                                        <p class="text-xs text-slate-500">AI Summary: Citizen reports poor quality of newly built road in Rampur village...</p>
+                                    </td>
+                                    <td class="px-6 py-4">Unassigned</td>
+                                    <td class="px-6 py-4 text-center font-semibold text-red-600">15</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="take-command-btn text-sm font-semibold text-indigo-600 hover:text-indigo-800">Take Command</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- System Integrity Content -->
+            <div id="integrity-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">System Integrity</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">Health, compliance, and audit logs for the entire system</p>
+                 
+                 <!-- Control Panel -->
+                 <div class="card p-4 mb-6">
+                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                         <div class="p-3 rounded-lg bg-slate-100 dark:bg-gray-800">
+                             <h4 class="text-sm text-slate-500 dark:text-gray-400 font-medium">Overall Data Integrity</h4>
+                             <p class="text-2xl font-bold text-green-600 dark:text-green-400">98.5%</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-red-50 dark:bg-red-500/10">
+                             <h4 class="text-sm text-red-600 dark:text-red-400 font-medium">Active Red Flags (AI)</h4>
+                             <p class="text-2xl font-bold text-red-600 dark:text-red-400">6</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-green-50 dark:bg-green-500/10">
+                             <h4 class="text-sm text-green-700 dark:text-green-400 font-medium">DPDP Act Compliance</h4>
+                             <p class="text-2xl font-bold text-green-700 dark:text-green-400">100%</p>
+                         </div>
+                         <div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-500/10">
+                             <h4 class="text-sm text-yellow-600 dark:text-yellow-400 font-medium">Verification Mismatches</h4>
+                             <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">4</p>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- View Selector -->
+                 <div class="w-full overflow-x-auto horizontal-scrollbar">
+                    <div class="flex border-b border-slate-200 dark:border-gray-700 mb-6 min-w-max">
+                        <button class="integrity-tab active flex items-center py-3 px-4" data-view="anomaly-detection-view">AI Anomaly Detection</button>
+                        <button class="integrity-tab flex items-center py-3 px-4" data-view="verification-hub-view">Verification Hub</button>
+                        <button class="integrity-tab flex items-center py-3 px-4" data-view="compliance-privacy-view">Compliance & Privacy</button>
+                        <button class="integrity-tab flex items-center py-3 px-4" data-view="audit-log-view">Command Audit Log</button>
+                    </div>
+                 </div>
+
+                 <!-- Integrity Views -->
+                 <div id="anomaly-detection-view" class="integrity-view">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card p-4 border-l-4 border-red-500">
+                             <h4 class="font-semibold text-slate-800 dark:text-gray-100">Financial Anomaly</h4>
+                             <p class="text-sm text-slate-600 dark:text-gray-300 mt-1">Project #12345: Budget is 10x the average for a community hall. <strong class="dark:text-red-400">AI Confidence: 95%</strong></p>
+                             <button class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 mt-2">Flag for Financial Audit</button>
+                        </div>
+                        <div class="card p-4 border-l-4 border-yellow-500">
+                             <h4 class="font-semibold text-slate-800 dark:text-gray-100">Progress Anomaly</h4>
+                             <p class="text-sm text-slate-600 dark:text-gray-300 mt-1">'Roof Complete' photo for Project #67890 is 98% similar to 'Walls Built' photo. <strong class="dark:text-yellow-400">AI Confidence: 92%</strong></p>
+                              <button class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 mt-2">Trigger Manual Verification</button>
+                        </div>
+                         <div class="card p-4 border-l-4 border-yellow-500">
+                             <h4 class="font-semibold text-slate-800 dark:text-gray-100">User Behavior Anomaly</h4>
+                             <p class="text-sm text-slate-600 dark:text-gray-300 mt-1">F.O. Sunil Kumar: Average time to complete a survey dropped from 45 mins to 5 mins. <strong class="dark:text-yellow-400">AI Confidence: 88%</strong></p>
+                              <button class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 mt-2">Review User Activity Log</button>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div id="verification-hub-view" class="integrity-view hidden">
+                    <div class="card">
+                         <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                               <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                   <tr>
+                                       <th class="px-6 py-3">Project</th>
+                                       <th class="px-6 py-3 text-center">Official Proof</th>
+                                       <th class="px-6 py-3 text-center">Community Proof</th>
+                                       <th class="px-6 py-3 text-center">Beneficiary Proof</th>
+                                       <th class="px-6 py-3">Status</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr class="bg-red-50 dark:bg-red-500/10 border-b dark:border-gray-700">
+                                       <td class="px-6 py-4 font-medium">Community Hall, Rampur</td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4 text-center"><i data-lucide="x-circle" class="w-5 h-5 text-red-500 mx-auto"></i></td>
+                                       <td class="px-6 py-4"><button class="text-sm font-semibold text-red-600 hover:text-red-800">Initiate Inquiry</button></td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div id="compliance-privacy-view" class="integrity-view hidden">
+                    <div class="card p-6">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-slate-100 dark:bg-gray-800 rounded-lg">
+                                <p class="font-medium text-slate-700 dark:text-gray-200">Beneficiary Consent Logs (DPDP Act)</p>
+                                <span class="font-semibold text-green-600 dark:text-green-400">100% Archived</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-slate-100 dark:bg-gray-800 rounded-lg">
+                                <p class="font-medium text-slate-700 dark:text-gray-200">Data Sharing Agreements (Inter-Dept)</p>
+                                <span class="font-semibold text-slate-600 dark:text-gray-300">All Logged & Active</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-slate-100 dark:bg-gray-800 rounded-lg">
+                                <p class="font-medium text-slate-700 dark:text-gray-200">Data Protection Officer</p>
+                                <span class="font-semibold text-slate-600 dark:text-gray-300">Shri. Ashok Kumar, IAS</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-slate-100 dark:bg-gray-800 rounded-lg">
+                                <p class="font-medium text-slate-700 dark:text-gray-200">Last Independent Data Audit</p>
+                                <span class="font-semibold text-slate-600 dark:text-gray-300">15-Sep-2025</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div id="audit-log-view" class="integrity-view hidden">
+                    <div class="card p-6">
+                        <div class="relative mb-4">
+                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                             <input type="text" placeholder="Search by User, Project ID, or Action Type..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="check-circle" class="w-4 h-4 mr-3 text-green-500"></i>
+                                <span class="text-slate-500 dark:text-gray-400">Oct 12, 4:15 PM</span>
+                                <p class="ml-2 text-slate-700 dark:text-gray-300"><span class="font-semibold">DM Ritu Sharma</span> <span class="text-green-600 dark:text-green-400">[Approved]</span> Project #12345 with comment: "High priority."</p>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="send" class="w-4 h-4 mr-3 text-blue-500"></i>
+                                <span class="text-slate-500 dark:text-gray-400">Oct 12, 4:16 PM</span>
+                                <p class="ml-2 text-slate-700 dark:text-gray-300"><span class="font-semibold">DM Ritu Sharma</span> <span class="text-blue-600 dark:text-blue-400">[Authorized Fund Release]</span> of ₹5 Cr for Project #12345.</p>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="gavel" class="w-4 h-4 mr-3 text-red-500"></i>
+                                 <span class="text-slate-500 dark:text-gray-400">Oct 11, 2:30 PM</span>
+                                <p class="ml-2 text-slate-700 dark:text-gray-300"><span class="font-semibold">DM Ritu Sharma</span> <span class="text-red-600 dark:text-red-400">[Recommended for Blacklisting]</span> Agency 'XYZ Infra' with evidence package #E-9876.</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Reports Content -->
+            <div id="reports-content" class="page-content hidden">
+                 <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100 mb-1">One-Click Briefings</h2>
+                 <p class="text-slate-500 dark:text-gray-400 mb-6">Generate mission-oriented reports for State-level reviews and internal command.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1: Weekly District Performance Review -->
+                    <div class="card flex flex-col">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Weekly District Performance Review</h3>
+                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">A data-rich summary of the district's overall performance, achievements, and financial health for the past 7 days.</p>
+                        </div>
+                        <div class="px-6 pb-6 flex-grow">
+                            <div class="aspect-video bg-slate-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                                <img src="https://placehold.co/400x225/e2e8f0/475569?text=Report+Preview" alt="Report Preview Thumbnail" class="object-cover rounded-md">
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700 rounded-b-lg">
+                            <button class="w-full font-semibold bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                                <i data-lucide="download" class="w-4 h-4 mr-2"></i>Generate PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Red Flag Report -->
+                    <div class="card flex flex-col">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Red Flag Report</h3>
+                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">An immediate, unfiltered view of every critical delay, high-risk project, and unresolved public issue in the district.</p>
+                        </div>
+                        <div class="px-6 pb-6 flex-grow">
+                            <div class="aspect-video bg-slate-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                                <img src="https://placehold.co/400x225/fee2e2/b91c1c?text=Red+Flag+Preview" alt="Red Flag Report Preview Thumbnail" class="object-cover rounded-md">
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700 rounded-b-lg">
+                            <button class="w-full font-semibold bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 flex items-center justify-center">
+                                <i data-lucide="download" class="w-4 h-4 mr-2"></i>Generate PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: Project Evidence Package -->
+                    <div class="card flex flex-col">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Project Evidence Package</h3>
+                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">A complete, forensic-level dossier for a single project, compiling all digital evidence into one document.</p>
+                        </div>
+                        <div class="px-6 pb-6 flex-grow">
+                            <div class="aspect-video bg-slate-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                                <img src="https://placehold.co/400x225/e0e7ff/4338ca?text=Dossier+Preview" alt="Dossier Preview Thumbnail" class="object-cover rounded-md">
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700 rounded-b-lg">
+                            <button id="generate-dossier-btn" class="w-full font-semibold bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                                <i data-lucide="folder-down" class="w-4 h-4 mr-2"></i>Generate Package
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Custom Data Export -->
+                    <div class="card flex flex-col">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Custom Data Export</h3>
+                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">A flexible tool to export raw, structured data for deep-dive analysis, research, or specific queries.</p>
+                        </div>
+                        <div class="p-6 flex-grow space-y-4">
+                            <div>
+                                <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Data Type</label>
+                                <select class="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600">
+                                    <option>Projects</option>
+                                    <option>Grievances</option>
+                                    <option>Financials</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Date Range</label>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <input type="date" class="w-full p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600">
+                                    <span>to</span>
+                                    <input type="date" class="w-full p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700 rounded-b-lg">
+                            <button class="w-full font-semibold bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center">
+                                <i data-lucide="sheet" class="w-4 h-4 mr-2"></i>Export CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Appraisal Dossier Modal -->
+    <div id="appraisal-modal" class="fixed inset-0 bg-black bg-opacity-60 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1c1b1a] rounded-lg shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col relative transform transition-all duration-300 scale-95 opacity-0" id="modal-panel">
+            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 z-10">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+            <div class="p-6 sm:p-8 flex-1 overflow-y-auto">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-gray-100">AI-Powered Appraisal Dossier</h2>
+                <p class="text-slate-500 dark:text-gray-400">GIA Livelihood: Pusa Block</p>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-slate-500 dark:text-gray-400 font-medium">Executing Agencies</h3>
-                        <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">28</p>
+                        <h3 class="font-semibold text-slate-700 dark:text-gray-200 mb-2">AI Executive Summary</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-gray-300 text-sm">
+                            <li>To establish a skills development center for 200 women in Pusa Block, focusing on tailoring and handicrafts.</li>
+                            <li>Project aims to increase household income for beneficiaries by an estimated 40% within two years.</li>
+                            <li>Includes procurement of 50 sewing machines, raw materials, and a 12-month training program.</li>
+                        </ul>
                     </div>
-                    <div class="w-20 h-20">
-                        <canvas id="agenciesChart"></canvas>
+                    <div>
+                        <h3 class="font-semibold text-slate-700 dark:text-gray-200 mb-2">AI Risk Analysis</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start"><i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-red-500 mt-0.5 flex-shrink-0"></i><span class="font-semibold text-red-500 mr-1">High:</span> Proposed timeline (6 months) is 50% shorter than the average for similar GIA projects.</li>
+                            <li class="flex items-start"><i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-yellow-500 mt-0.5 flex-shrink-0"></i><span class="font-semibold text-yellow-500 mr-1">Medium:</span> Convergence with PWD for road access is a critical dependency but is not formally confirmed.</li>
+                            <li class="flex items-start"><i data-lucide="check-circle-2" class="w-4 h-4 mr-2 text-green-500 mt-0.5 flex-shrink-0"></i><span class="font-semibold text-green-500 mr-1">Low:</span> Budget allocation is consistent with similar projects. BDO has a 98% first-pass approval rate.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="font-semibold text-slate-700 dark:text-gray-200 mb-3">Evidence Locker</h3>
+                    <div class="flex border-b border-slate-200 dark:border-gray-700">
+                        <button class="py-2 px-4 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600">Full DPR</button>
+                        <button class="py-2 px-4 text-sm font-medium text-slate-500 hover:text-indigo-600">BDO Verification Notes</button>
+                        <button class="py-2 px-4 text-sm font-medium text-slate-500 hover:text-indigo-600">Survey Data & Photos</button>
+                    </div>
+                    <div class="p-4 border border-t-0 rounded-b-md border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800/50 h-48 overflow-y-auto">
+                        <p class="text-sm text-slate-600 dark:text-gray-300">Document preview of the Detailed Project Report (DPR) would be embedded here...</p>
                     </div>
                 </div>
             </div>
-             <!-- Villages Covered -->
-            <div class="card p-5">
-                 <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="text-slate-500 dark:text-gray-400 font-medium">Villages Covered</h3>
-                        <p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">78</p>
+
+            <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700">
+                <h3 class="font-semibold text-slate-700 dark:text-gray-200 mb-3">Decision & Accountability Log</h3>
+                <textarea class="w-full p-2 border rounded-md text-sm bg-white dark:bg-gray-900 dark:border-gray-600" rows="3" placeholder="Record the reason for your decision..."></textarea>
+                <div class="flex justify-end gap-3 mt-3">
+                    <button class="text-sm font-semibold bg-white text-slate-700 py-2 px-4 rounded-lg border border-slate-300 hover:bg-slate-100 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">Return with Comments</button>
+                    <button class="text-sm font-semibold bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">Reject</button>
+                    <button class="text-sm font-semibold bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Dossier Modal -->
+    <div id="project-dossier-modal" class="fixed inset-0 bg-black bg-opacity-60 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1c1b1a] rounded-lg shadow-2xl w-full max-w-6xl h-[95vh] flex flex-col relative transform transition-all duration-300 scale-95 opacity-0" id="dossier-modal-panel">
+            <button id="close-dossier-modal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 z-10">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+            <div class="p-6 border-b border-slate-200 dark:border-gray-700">
+                 <h2 class="text-2xl font-bold text-slate-800 dark:text-gray-100">Hostel Construction, Pusa Block</h2>
+                 <div class="flex items-center space-x-6 text-sm text-slate-500 dark:text-gray-400 mt-2">
+                     <span>ID: PJ2025-001</span>
+                     <span>Agency: State PWD <span class="font-semibold text-green-600">(Perf. Score: 92)</span></span>
+                     <span>Budget: ₹3 Cr</span>
+                 </div>
+            </div>
+            <div class="flex flex-1 overflow-hidden">
+                <nav class="w-48 border-r border-slate-200 dark:border-gray-700 p-4">
+                     <a href="#" class="dossier-tab active flex items-center px-3 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 rounded-md"><i data-lucide="info" class="w-4 h-4 mr-2"></i>Overview</a>
+                     <a href="#" class="dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="camera" class="w-4 h-4 mr-2"></i>Live Visual Report</a>
+                     <a href="#" class="dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="banknote" class="w-4 h-4 mr-2"></i>Financials</a>
+                     <a href="#" class="dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="workflow" class="w-4 h-4 mr-2"></i>Convergence</a>
+                     <a href="#" class="dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="history" class="w-4 h-4 mr-2"></i>Audit Trail</a>
+                     <a href="#" class="dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="shield-alert" class="w-4 h-4 mr-2"></i>Grievances</a>
+                </nav>
+                <div class="flex-1 p-6 overflow-y-auto min-w-0">
+                    <!-- This would be where the content for each tab is dynamically loaded -->
+                    <h3 class="text-lg font-semibold mb-4 text-slate-800 dark:text-gray-100">Overview</h3>
+                    <p>Content for the selected tab (e.g., Overview) goes here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block Dossier Modal -->
+    <div id="block-dossier-modal" class="fixed inset-0 bg-black bg-opacity-60 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1c1b1a] rounded-lg shadow-2xl w-full max-w-6xl h-[95vh] flex flex-col relative transform transition-all duration-300 scale-95 opacity-0" id="block-dossier-panel">
+             <button id="close-block-dossier-modal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 z-10">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+            <div class="p-6 border-b border-slate-200 dark:border-gray-700 flex items-center space-x-4">
+                 <img src="https://placehold.co/64x64/E2E8F0/475569?text=AV" alt="BDO Photo" class="w-16 h-16 rounded-full">
+                 <div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-gray-100">Pusa Block Dossier</h2>
+                    <p class="text-slate-500 dark:text-gray-400">BDO: Mr. Alok Verma | Contact: +91-98XXXXXX01</p>
+                 </div>
+            </div>
+             <div class="flex flex-1 overflow-hidden">
+                <nav class="w-56 border-r border-slate-200 dark:border-gray-700 p-4">
+                     <a href="#" class="block-dossier-tab active flex items-center px-3 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 rounded-md"><i data-lucide="bar-chart-2" class="w-4 h-4 mr-2"></i>Performance Deep Dive</a>
+                     <a href="#" class="block-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="award" class="w-4 h-4 mr-2"></i>Best Practices & Challenges</a>
+                     <a href="#" class="block-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="map" class="w-4 h-4 mr-2"></i>Project & Village Snapshot</a>
+                     <a href="#" class="block-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="message-square" class="w-4 h-4 mr-2"></i>Communication & Directives</a>
+                </nav>
+                 <div class="flex-1 p-6 overflow-y-auto bg-slate-50 dark:bg-gray-900/50 min-w-0">
+                     <h3 class="text-lg font-semibold mb-4 text-slate-800 dark:text-gray-100">Performance Trend Lines (Last 6 Months)</h3>
+                     <div class="h-64 card p-4 mb-6">
+                        <img src="https://placehold.co/800x300/ffffff/475569?text=Performance+Chart+Goes+Here" alt="Performance Chart" class="w-full h-full object-contain rounded-md">
+                     </div>
+
+                     <h3 class="text-lg font-semibold mb-2 text-slate-800 dark:text-gray-100">AI-Powered Root Cause Analysis</h3>
+                     <div class="bg-indigo-50 dark:bg-indigo-500/10 border-l-4 border-indigo-500 p-4 rounded-r-lg">
+                        <p class="text-sm text-indigo-800 dark:text-indigo-200">
+                           <strong class="font-semibold">AI Analysis:</strong> "Pusa Block's 'Workflow Speed' has dropped by 20% in the last quarter. This correlates with a 30% increase in 'Pending at Gram Sabha' statuses for VDPs. The bottleneck is not with the BDO, but with local approvals."
+                        </p>
+                        <hr class="my-2 border-indigo-200 dark:border-indigo-500/30">
+                         <p class="text-sm text-indigo-800 dark:text-indigo-200">
+                           <strong class="font-semibold">Recommendation:</strong> Schedule a joint review meeting with the BDO and the Sarpanchs of the delayed villages.
+                        </p>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+    <!-- Agency Dossier Modal -->
+    <div id="agency-dossier-modal" class="fixed inset-0 bg-black bg-opacity-60 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1c1b1a] rounded-lg shadow-2xl w-full max-w-6xl h-[95vh] flex flex-col relative transform transition-all duration-300 scale-95 opacity-0" id="agency-dossier-panel">
+             <button id="close-agency-dossier-modal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 z-10">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+            <div class="p-6 border-b border-slate-200 dark:border-gray-700">
+                 <h2 class="text-2xl font-bold text-slate-800 dark:text-gray-100">Agency Dossier: ABC Infra Pvt. Ltd.</h2>
+                 <div class="flex items-center space-x-6 text-sm text-slate-500 dark:text-gray-400 mt-2">
+                     <span>GeM ID: 12345XYZ</span>
+                     <span>Contact: Mr. Sharma, +91-99XXXXXX02</span>
+                     <span class="flex items-center">Performance: 
+                        <strong class="text-green-600 ml-1.5">95/100</strong>
+                        <i data-lucide="trending-up" class="w-4 h-4 ml-1 text-green-600"></i>
+                     </span>
+                 </div>
+            </div>
+            <div class="flex flex-1 overflow-hidden">
+                <nav class="w-56 border-r border-slate-200 dark:border-gray-700 p-4">
+                    <a href="#" class="agency-dossier-tab active flex items-center px-3 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 rounded-md"><i data-lucide="bar-chart-2" class="w-4 h-4 mr-2"></i>Performance Deep Dive</a>
+                    <a href="#" class="agency-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="shield-check" class="w-4 h-4 mr-2"></i>AI Risk & Compliance</a>
+                    <a href="#" class="agency-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="file-text" class="w-4 h-4 mr-2"></i>Financials & Contracts</a>
+                    <a href="#" class="agency-dossier-tab flex items-center px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-md mt-1"><i data-lucide="gavel" class="w-4 h-4 mr-2"></i>Command Actions</a>
+                </nav>
+                <div class="flex-1 p-6 overflow-y-auto bg-slate-50 dark:bg-gray-900/50 min-w-0">
+                    <!-- Agency Dossier Content will go here -->
+                    <div class="agency-dossier-content">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Project History</h3>
+                        <!-- Placeholder for Project History Table -->
+                        <div class="card p-4">Project history table...</div>
                     </div>
-                    <div class="w-20 h-20">
-                        <canvas id="villagesChart"></canvas>
+                    <div class="agency-dossier-content hidden">
+                        <h3 class="text-lg font-semibold mb-2 text-slate-800 dark:text-gray-100">AI-Powered Risk Analysis</h3>
+                        <div class="bg-yellow-50 dark:bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-6">
+                           <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                              <strong class="font-semibold">AI Analysis:</strong> "ABC Infra has a 75% probability of delaying projects that involve inter-departmental convergence, based on past performance. They consistently underestimate timelines for projects requiring forest clearances."
+                           </p>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Compliance Record</h3>
+                        <!-- Placeholder for Compliance Checklist -->
+                         <div class="card p-4">Compliance checklist...</div>
+                    </div>
+                     <div class="agency-dossier-content hidden">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Financials & Contracts</h3>
+                        <!-- Placeholder for Contracts list -->
+                        <div class="card p-4">Contracts list...</div>
+                    </div>
+                    <div class="agency-dossier-content hidden">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Command Actions</h3>
+                        <div class="space-y-4">
+                           <button class="w-full text-left p-3 bg-white dark:bg-gray-800 rounded-lg shadow hover:bg-slate-50 dark:hover:bg-gray-700">
+                               <div class="font-semibold text-slate-700 dark:text-gray-200">Initiate Performance Review</div>
+                               <p class="text-sm text-slate-500 dark:text-gray-400">Schedule a formal review meeting and create a trackable agenda.</p>
+                           </button>
+                           <button class="w-full text-left p-3 bg-white dark:bg-gray-800 rounded-lg shadow hover:bg-slate-50 dark:hover:bg-gray-700">
+                               <div class="font-semibold text-slate-700 dark:text-gray-200">Issue Formal Warning</div>
+                               <p class="text-sm text-slate-500 dark:text-gray-400">Log an official, timestamped warning for poor performance.</p>
+                           </button>
+                           <button class="w-full text-left p-3 bg-red-50 dark:bg-red-500/10 rounded-lg shadow hover:bg-red-100 dark:hover:bg-red-500/20 border border-red-200 dark:border-red-500/30">
+                               <div class="font-semibold text-red-700 dark:text-red-300">Recommend for Blacklisting</div>
+                               <p class="text-sm text-red-600 dark:text-red-400">Initiate the formal process to debar agency from future tenders.</p>
+                           </button>
+                        </div>
+                    </div>
+
+                </div>
+             </div>
+        </div>
+    </div>
+    
+    <!-- Grievance Command Pane -->
+    <div id="grievance-command-pane" class="fixed inset-y-0 right-0 bg-white dark:bg-[#1c1b1a] w-full max-w-lg shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-40 flex flex-col">
+        <div class="p-6 border-b border-slate-200 dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-gray-100">Command & Delegate</h2>
+            <button id="close-grievance-pane" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+        </div>
+        <div class="flex-1 p-6 overflow-y-auto">
+            <h3 class="font-semibold text-slate-700 dark:text-gray-200">Grievance Details (GRV-1024)</h3>
+            <p class="text-sm text-slate-600 dark:text-gray-300 mt-2 p-3 bg-slate-50 dark:bg-gray-800 rounded-md">"The new road built in Rampur village by ABC Infra Pvt. Ltd. is already cracking. This is unacceptable quality. I have attached photos. Please take immediate action before an accident happens."</p>
+            <img src="https://placehold.co/400x200/f1f5f9/475569?text=Photo+of+cracked+road" alt="Cracked road" class="mt-2 rounded-md w-full">
+            
+            <div class="mt-6 bg-indigo-50 dark:bg-indigo-500/10 border-l-4 border-indigo-500 p-4 rounded-r-lg">
+                <h3 class="font-semibold text-indigo-800 dark:text-indigo-200 mb-2 flex items-center"><i data-lucide="lightbulb" class="w-4 h-4 mr-2"></i>AI-Powered Triage</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><strong>Summary:</strong> Citizen reports poor quality of a newly built road in Rampur village, with photos attached.</li>
+                    <li><strong>Category:</strong> Quality of Work (Roads) | <strong>Sentiment:</strong> Highly Negative</li>
+                    <li class="font-semibold text-indigo-700 dark:text-indigo-300"><strong>Recommendation:</strong> Assign to Executive Engineer, PWD. (Avg. Resolution Time: 12 days).</li>
+                </ul>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="font-semibold text-slate-700 dark:text-gray-200 mb-3">Command Form</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm font-medium">Assign Officer</label>
+                        <select class="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600">
+                            <option>Executive Engineer, PWD</option>
+                            <option>Block Development Officer, Pusa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium">Set Deadline</label>
+                        <input type="date" class="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600">
+                    </div>
+                    <div>
+                         <label class="text-sm font-medium">Add Directive</label>
+                         <textarea class="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600" rows="4" placeholder="e.g., Conduct site visit and submit a formal report..."></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Charts and Financials -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-            <!-- Project Status Dynamics -->
-            <div class="card lg:col-span-2 p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Project Status Dynamics</h3>
-                     <select class="border border-slate-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded-md text-sm px-2 py-1">
-                        <option>2024-25</option>
-                        <option>2023-24</option>
+        <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700">
+            <button class="w-full text-sm font-semibold bg-indigo-600 text-white py-2.5 px-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                <i data-lucide="send" class="w-4 h-4 mr-2"></i>Assign & Track
+            </button>
+        </div>
+    </div>
+
+    <!-- Project Evidence Package Modal -->
+    <div id="evidence-package-modal" class="fixed inset-0 bg-black bg-opacity-60 z-40 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1c1b1a] rounded-lg shadow-2xl w-full max-w-lg relative transform transition-all duration-300 scale-95 opacity-0" id="evidence-package-panel">
+            <button id="close-evidence-package-modal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 z-10">
+                <i data-lucide="x" class="w-6 h-6 text-slate-600 dark:text-gray-400"></i>
+            </button>
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-slate-800 dark:text-gray-100">Generate Project Evidence Package</h2>
+                <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Select a project to compile its complete forensic dossier.</p>
+                <div class="mt-4">
+                    <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Select Project</label>
+                    <select class="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option>PJ2025-001 - Hostel, Pusa</option>
+                        <option>PJ2025-002 - GIA Livelihood, Kalyanpur</option>
+                        <option>PJ2025-003 - Adarsh Gram, Samastipur</option>
                     </select>
                 </div>
-                <div style="height: 300px;">
-                    <canvas id="projectStatusChart"></canvas>
-                </div>
             </div>
-            <!-- Financial Overview -->
-            <div class="flex flex-col gap-6">
-                 <div class="card p-5">
-                     <div class="flex items-start justify-between">
-                         <div>
-                            <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Allocated</h3>
-                            <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹4.52 Cr</p>
-                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
-                         </div>
-                         <div class="relative w-16 h-16">
-                             <svg class="w-full h-full" viewBox="0 0 36 36">
-                                <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                                <path class="text-indigo-600" stroke-width="3" stroke-dasharray="85, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                             </svg>
-                             <div class="absolute inset-0 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">85%</div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="card p-5">
-                      <div class="flex items-start justify-between">
-                         <div>
-                            <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Utilized</h3>
-                            <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹3.84 Cr</p>
-                             <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
-                         </div>
-                         <div class="relative w-16 h-16">
-                             <svg class="w-full h-full" viewBox="0 0 36 36">
-                                <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                                <path class="text-green-600" stroke-width="3" stroke-dasharray="75, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                             </svg>
-                              <div class="absolute inset-0 flex items-center justify-center text-green-600 dark:text-green-400 font-bold">75%</div>
-                         </div>
-                     </div>
-                 </div>
-            </div>
-        </div>
-
-        <!-- Recent Activity Table -->
-        <div class="card mt-6 p-5">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Agency Work Allocation</h3>
-                <button class="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
-                    View All <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+            <div class="p-6 bg-slate-50 dark:bg-gray-800/50 border-t border-slate-200 dark:border-gray-700 rounded-b-lg flex justify-end">
+                <button class="font-semibold bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                    <i data-lucide="folder-down" class="w-4 h-4 mr-2"></i>Generate Package
                 </button>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Project Name</th>
-                            <th scope="col" class="px-6 py-3">Executing Agency</th>
-                            <th scope="col" class="px-6 py-3">Start Date</th>
-                            <th scope="col" class="px-6 py-3">Status</th>
-                            <th scope="col" class="px-6 py-3">Budget</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
-                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Hostel Construction, Rampur</td>
-                            <td class="px-6 py-4 dark:text-gray-300">State PWD</td>
-                            <td class="px-6 py-4 dark:text-gray-300">22.08.2024</td>
-                            <td class="px-6 py-4"><span class="bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Completed</span></td>
-                            <td class="px-6 py-4 font-medium dark:text-gray-200">₹90 Lakh</td>
-                        </tr>
-                        <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
-                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Adarsh Gram Infra, Mohanpur</td>
-                            <td class="px-6 py-4 dark:text-gray-300">Block Panchayat</td>
-                            <td class="px-6 py-4 dark:text-gray-300">15.06.2024</td>
-                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">In Progress</span></td>
-                            <td class="px-6 py-4 font-medium dark:text-gray-200">₹1.2 Cr</td>
-                        </tr>
-                        <tr class="bg-white dark:bg-[#1c1b1a] border-b dark:border-gray-700">
-                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Skill Dev Center (GIA)</td>
-                            <td class="px-6 py-4 dark:text-gray-300">Pratham NGO</td>
-                            <td class="px-6 py-4 dark:text-gray-300">01.09.2024</td>
-                            <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Initiated</span></td>
-                            <td class="px-6 py-4 font-medium dark:text-gray-200">₹25 Lakh</td>
-                        </tr>
-                        <tr class="bg-white dark:bg-[#1c1b1a] dark:border-gray-700">
-                           <td class="px-6 py-4 font-medium text-slate-900 dark:text-gray-100">Community Hall, Sitapur</td>
-                            <td class="px-6 py-4 dark:text-gray-300">Zila Parishad</td>
-                            <td class="px-6 py-4 dark:text-gray-300">10.05.2024</td>
-                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Delayed</span></td>
-                            <td class="px-6 py-4 font-medium dark:text-gray-200">₹40 Lakh</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-    </main>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Call this once to convert all data-lucide attributes to SVG icons
             lucide.createIcons();
 
             const themeToggleBtn = document.getElementById('theme-toggle');
             const lightIcon = document.getElementById('theme-toggle-light-icon');
             const darkIcon = document.getElementById('theme-toggle-dark-icon');
-            let charts = {};
+            let blockPerformanceChart;
+
+            // --- Page Navigation Logic ---
+            const navLinks = document.querySelectorAll('#sidebar-nav .nav-link');
+            const pageContents = document.querySelectorAll('.page-content');
+
+            navLinks.forEach(clickedLink => {
+                clickedLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+            
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    clickedLink.classList.add('active');
+            
+                    const targetId = clickedLink.getAttribute('data-target');
+                    pageContents.forEach(content => {
+                        content.classList.toggle('hidden', content.id !== targetId);
+                    });
+
+                    if(document.getElementById('sidebar') && window.innerWidth < 768) {
+                        document.getElementById('sidebar').classList.add('-translate-x-full');
+                        document.getElementById('overlay').classList.add('hidden');
+                    }
+                });
+            });
+
+            // --- Tab Logic for various pages ---
+            const setupTabSystem = (tabSelector, viewSelector) => {
+                 const tabs = document.querySelectorAll(tabSelector);
+                 const views = document.querySelectorAll(viewSelector);
+                 tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        const viewId = tab.dataset.view;
+                        if (!viewId) return;
+                        views.forEach(view => {
+                            view.classList.toggle('hidden', view.id !== viewId);
+                        });
+                    });
+                });
+            };
+
+            setupTabSystem('.triage-tab', '.triage-view');
+            setupTabSystem('.financials-tab', '.financials-view');
+            setupTabSystem('.integrity-tab', '.integrity-view');
+            
+            // --- AI Risk Toggle Logic ---
+            const aiRiskToggle = document.getElementById('ai-risk-toggle');
+            if (aiRiskToggle) {
+                aiRiskToggle.addEventListener('click', () => {
+                    const circle = aiRiskToggle.querySelector('span');
+                    if (aiRiskToggle.classList.contains('bg-indigo-600')) {
+                        aiRiskToggle.classList.remove('bg-indigo-600');
+                        aiRiskToggle.classList.add('bg-slate-300', 'dark:bg-gray-600');
+                        circle.classList.remove('translate-x-5');
+                        circle.classList.add('translate-x-1');
+                    } else {
+                        aiRiskToggle.classList.add('bg-indigo-600');
+                        aiRiskToggle.classList.remove('bg-slate-300', 'dark:bg-gray-600');
+                        circle.classList.add('translate-x-5');
+                        circle.classList.remove('translate-x-1');
+                    }
+                });
+            }
+            
+            // --- Project Portfolio View Logic ---
+            const viewBtns = document.querySelectorAll('.portfolio-view-btn');
+            const portfolioViews = document.querySelectorAll('.portfolio-view');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    viewBtns.forEach(b => {
+                        b.classList.remove('active', 'text-indigo-600', 'dark:text-indigo-400');
+                        b.classList.add('text-slate-600', 'dark:text-gray-400');
+                    });
+                    btn.classList.add('active', 'text-indigo-600', 'dark:text-indigo-400');
+                    
+                    const viewId = btn.dataset.view;
+                    portfolioViews.forEach(view => {
+                        view.classList.toggle('hidden', view.id !== viewId);
+                    });
+                });
+            });
+
+            // --- Generic Modal/Pane Logic ---
+            const openModal = (modal, panel) => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => panel.classList.remove('scale-95', 'opacity-0'), 50);
+            };
+
+            const closeModal = (modal, panel) => {
+                panel.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 200);
+            };
+            
+            const openPane = (pane, overlay) => {
+                overlay.classList.remove('hidden');
+                pane.classList.remove('translate-x-full');
+            };
+            
+            const closePane = (pane, overlay) => {
+                overlay.classList.add('hidden');
+                pane.classList.add('translate-x-full');
+            };
+
+
+            // --- Modal/Pane Instances ---
+            const appraisalModal = document.getElementById('appraisal-modal');
+            const modalPanel = document.getElementById('modal-panel');
+            document.querySelectorAll('.appraise-btn').forEach(btn => btn.addEventListener('click', () => openModal(appraisalModal, modalPanel)));
+            document.getElementById('close-modal').addEventListener('click', () => closeModal(appraisalModal, modalPanel));
+            appraisalModal.addEventListener('click', (e) => e.target === appraisalModal && closeModal(appraisalModal, modalPanel));
+
+            const dossierModal = document.getElementById('project-dossier-modal');
+            const dossierPanel = document.getElementById('dossier-modal-panel');
+            document.querySelectorAll('.project-dossier-trigger').forEach(trigger => trigger.addEventListener('click', () => openModal(dossierModal, dossierPanel)));
+            document.getElementById('close-dossier-modal').addEventListener('click', () => closeModal(dossierModal, dossierPanel));
+            dossierModal.addEventListener('click', (e) => e.target === dossierModal && closeModal(dossierModal, dossierPanel));
+            
+            const blockDossierModal = document.getElementById('block-dossier-modal');
+            const blockDossierPanel = document.getElementById('block-dossier-panel');
+            document.querySelectorAll('.view-dossier-btn').forEach(trigger => trigger.addEventListener('click', () => openModal(blockDossierModal, blockDossierPanel)));
+            document.getElementById('close-block-dossier-modal').addEventListener('click', () => closeModal(blockDossierModal, blockDossierPanel));
+            blockDossierModal.addEventListener('click', (e) => e.target === blockDossierModal && closeModal(blockDossierModal, blockDossierPanel));
+
+            const agencyDossierModal = document.getElementById('agency-dossier-modal');
+            const agencyDossierPanel = document.getElementById('agency-dossier-panel');
+            document.querySelectorAll('.view-agency-dossier-btn').forEach(trigger => trigger.addEventListener('click', () => openModal(agencyDossierModal, agencyDossierPanel)));
+            document.getElementById('close-agency-dossier-modal').addEventListener('click', () => closeModal(agencyDossierModal, agencyDossierPanel));
+            agencyDossierModal.addEventListener('click', (e) => e.target === agencyDossierModal && closeModal(agencyDossierModal, agencyDossierPanel));
+            
+            const grievancePane = document.getElementById('grievance-command-pane');
+            const grievanceOverlay = document.getElementById('overlay'); // Reuse existing overlay
+            document.querySelectorAll('.take-command-btn').forEach(btn => btn.addEventListener('click', () => openPane(grievancePane, grievanceOverlay)));
+            document.getElementById('close-grievance-pane').addEventListener('click', () => closePane(grievancePane, grievanceOverlay));
+
+            const evidencePackageModal = document.getElementById('evidence-package-modal');
+            const evidencePackagePanel = document.getElementById('evidence-package-panel');
+            document.getElementById('generate-dossier-btn').addEventListener('click', () => openModal(evidencePackageModal, evidencePackagePanel));
+            document.getElementById('close-evidence-package-modal').addEventListener('click', () => closeModal(evidencePackageModal, evidencePackagePanel));
+            evidencePackageModal.addEventListener('click', (e) => e.target === evidencePackageModal && closeModal(evidencePackageModal, evidencePackagePanel));
+
+
+            // --- Dossier Tab Systems ---
+             const setupDossierTabs = (modalId, tabSelector, contentSelector) => {
+                const modal = document.getElementById(modalId);
+                if (!modal) return;
+                
+                const tabs = modal.querySelectorAll(tabSelector);
+                const contents = modal.querySelectorAll(contentSelector);
+
+                tabs.forEach((tab, index) => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        tabs.forEach(t => t.classList.remove('active', 'text-indigo-600', 'bg-indigo-50', 'dark:bg-indigo-500/10'));
+                        tab.classList.add('active', 'text-indigo-600', 'bg-indigo-50', 'dark:bg-indigo-500/10');
+                        contents.forEach((content, contentIndex) => {
+                            content.classList.toggle('hidden', index !== contentIndex);
+                        });
+                    });
+                });
+            };
+            
+            setupDossierTabs('project-dossier-modal', '.dossier-tab', '.dossier-content');
+            setupDossierTabs('block-dossier-modal', '.block-dossier-tab', '.block-dossier-content');
+            setupDossierTabs('agency-dossier-modal', '.agency-dossier-tab', '.agency-dossier-content');
+
+
+            // Mobile menu toggle
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const overlay = document.getElementById('overlay');
+            if (menuToggle) menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+            if (overlay) overlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                 closePane(document.getElementById('grievance-command-pane'), overlay);
+            });
+
 
             const getChartOptions = (isDark) => {
                 const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '#e2e8f0';
-                const textColor = isDark ? '#9ca3af' : '#64748b'; /* gray-400 : slate-500 */
+                const textColor = isDark ? '#9ca3af' : '#64748b';
                 return {
-                     doughnut: {
+                     horizontalBar: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        cutout: '70%',
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: true }
-                        }
-                    },
-                    bar: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { 
-                                beginAtZero: true,
-                                grid: { color: gridColor },
-                                ticks: { color: textColor }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { color: textColor }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: { color: textColor }
-                            }
-                        },
-                        interaction: {
-                            intersect: false,
-                            mode: 'index',
-                        },
+                        scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor }, suggestedMax: 100, title: { display: true, text: 'Performance Score', color: textColor } }, y: { grid: { display: false }, ticks: { color: textColor } } },
+                        plugins: { legend: { display: false } },
                     }
                 };
             };
             
             function createCharts(isDark) {
-                const options = getChartOptions(isDark);
-                // Chart for Executing Agencies
-                const agenciesCtx = document.getElementById('agenciesChart').getContext('2d');
-                charts.agencies = new Chart(agenciesCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['PWD', 'Panchayat', 'NGOs'],
-                        datasets: [{
-                            data: [12, 9, 7],
-                            backgroundColor: ['#4f46e5', '#34d399', '#f59e0b'],
-                            borderWidth: 0,
-                        }]
-                    },
-                    options: options.doughnut
-                });
-
-                // Chart for Villages Covered
-                const villagesCtx = document.getElementById('villagesChart').getContext('2d');
-                charts.villages = new Chart(villagesCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Adarsh Gram', 'GIA Scheme', 'Hostel Scheme'],
-                        datasets: [{
-                            data: [30, 28, 20],
-                            backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6'],
-                            borderWidth: 0,
-                        }]
-                    },
-                    options: options.doughnut
-                });
-
-                // Bar Chart for Project Status
-                const projectStatusCtx = document.getElementById('projectStatusChart').getContext('2d');
-                charts.projectStatus = new Chart(projectStatusCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                        datasets: [
-                            {
-                                label: 'Completed',
-                                data: [5, 7, 10, 8, 12, 15, 13, 16, 18, 20],
-                                backgroundColor: '#34d399',
-                                borderRadius: 4
-                            },
-                            {
-                                label: 'In Progress',
-                                data: [12, 11, 14, 15, 13, 10, 11, 9, 7, 6],
-                                backgroundColor: '#60a5fa',
-                                borderRadius: 4
-                            }
-                        ]
-                    },
-                    options: options.bar
-                });
+                if(document.getElementById('blockPerformanceChart')) {
+                    const options = getChartOptions(isDark);
+                    const ctx = document.getElementById('blockPerformanceChart').getContext('2d');
+                    if (blockPerformanceChart) blockPerformanceChart.destroy();
+                    blockPerformanceChart = new Chart(ctx, { type: 'bar', data: { labels: ['Kalyanpur Block', 'Mohiuddin Nagar Block', 'Pusa Block', 'Samastipur Block', 'Tajpur Block', 'Warisnagar Block'], datasets: [{ label: 'Performance Score', data: [92, 88, 85, 78, 72, 65], backgroundColor: ['rgba(79, 70, 229, 0.8)','rgba(79, 70, 229, 0.7)','rgba(79, 70, 229, 0.6)','rgba(245, 158, 11, 0.7)','rgba(245, 158, 11, 0.6)','rgba(239, 68, 68, 0.6)'], borderWidth: 1, borderRadius: 4 }] }, options: options.horizontalBar });
+                }
             }
             
-            function updateAllChartsTheme(isDark) {
-                if (charts.agencies) charts.agencies.destroy();
-                if (charts.villages) charts.villages.destroy();
-                if (charts.projectStatus) charts.projectStatus.destroy();
+            function updateChartTheme(isDark) {
+                // This will re-create the chart with new colors
                 createCharts(isDark);
             }
 
-            // Function to set theme
             const setTheme = (isDark) => {
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    lightIcon.classList.add('hidden');
-                    darkIcon.classList.remove('hidden');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    lightIcon.classList.remove('hidden');
-                    darkIcon.classList.add('hidden');
-                    localStorage.setItem('theme', 'light');
-                }
-                // No need to re-create icons, just update charts
-                updateAllChartsTheme(isDark);
+                document.documentElement.classList.toggle('dark', isDark);
+                lightIcon.classList.toggle('hidden', isDark);
+                darkIcon.classList.toggle('hidden', !isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateChartTheme(isDark);
             };
 
-            // Initial theme setup
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const savedTheme = localStorage.getItem('theme');
-            const isDarkMode = savedTheme === 'dark' || (savedTheme === null && prefersDark);
-            
-            setTheme(isDarkMode);
+            setTheme(savedTheme === 'dark' || (savedTheme === null && prefersDark));
 
-            themeToggleBtn.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.contains('dark');
-                setTheme(!isDark);
-            });
+            themeToggleBtn.addEventListener('click', () => setTheme(!document.documentElement.classList.contains('dark')));
         });
     </script>
 </body>
 </html>
-
-
-
 
