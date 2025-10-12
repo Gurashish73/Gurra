@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PM-AJAY SAARTHI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { background-color: #ffffff; }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .dark .sidebar, .dark .card {
+            background-color: #1c1b1a;
+            border: 1px solid #374151;
+            box-shadow: none;
+        }
+        /* --- INTERACTIVE MAP STYLES --- */
+        #map-container { position: relative; }
+        .state {
+            stroke: #ffffff;
+            stroke-width: 0.7;
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .dark .state { stroke: #1c1b1a; }
+        .state:hover { opacity: 0.8; transform: translateY(-1px); }
+        .high-utilization { fill: #16a34a; }
+        .medium-utilization { fill: #f59e0b; }
+        .low-utilization { fill: #dc2626; }
+        .no-data { fill: #d1d5db; }
+        .dark .no-data { fill: #4b5563; }
+        #tooltip {
+            position: absolute; display: none; background-color: rgba(17, 24, 39, 0.9);
+            color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem;
+            font-size: 0.875rem; pointer-events: none; white-space: nowrap;
+            z-index: 10; transition: opacity 0.2s;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-[#fdfaf6] dark:bg-black">
+    <aside class="sidebar w-64 flex-shrink-0 border-r border-slate-200 dark:border-gray-700 flex flex-col">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-indigo-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" /></svg>
+                PM-AJAY
+            </h1>
+        </div>
+        <nav class="flex-1 px-4 py-2">
+            <a href="#" id="nav-dashboard" class="flex items-center px-4 py-2.5 text-slate-700 bg-indigo-50 dark:bg-white dark:text-slate-900 rounded-lg font-semibold"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-indigo-600"></i>Dashboard</a>
+            <a href="#" id="nav-state-performance" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i>State Performance</a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="landmark" class="w-5 h-5 mr-3"></i>Fund Management</a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="brain-circuit" class="w-5 h-5 mr-3"></i>Policy Analytics</a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="check-square" class="w-5 h-5 mr-3"></i>Approvals</a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="settings" class="w-5 h-5 mr-3"></i>Settings</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+        
+        <div id="national-dashboard-view">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">National Dashboard</h2>
+                    <p class="text-slate-500 dark:text-gray-400 mt-1">Nation-wide performance and fund flow overview</p>
+                </div>
+                <div class="flex items-center mt-4 sm:mt-0">
+                     <div class="flex items-center space-x-4">
+                         <button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700 relative"><i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i><span class="absolute top-1 right-1.5 h-2 w-2 rounded-full bg-red-500"></span></button>
+                         <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700"><i data-lucide="sun" id="theme-toggle-light-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i><i data-lucide="moon" id="theme-toggle-dark-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400 hidden"></i></button>
+                     </div>
+                     <div class="flex items-center ml-6">
+                         <img src="https://placehold.co/40x40/E2E8F0/475569?text=AS" alt="Ministry Secretary" class="w-10 h-10 rounded-full">
+                         <div class="ml-3"><p class="font-semibold text-slate-800 dark:text-gray-100">Dr. Anjali Sharma</p><p class="text-sm text-slate-500 dark:text-gray-400">Secretary, MoSJE</p></div>
+                     </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card p-5"><div class="flex justify-between items-start"><h3 class="text-slate-500 dark:text-gray-400 font-medium">Total Funds Disbursed</h3><div class="p-2 bg-blue-100 dark:bg-blue-500/10 rounded-md"><i data-lucide="indian-rupee" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i></div></div><p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹1.25 Lakh Cr</p><p class="text-sm text-slate-500 dark:text-gray-400 mt-1">FY 2024-25 Target: ₹2 Lakh Cr</p></div>
+                <div class="card p-5"><div class="flex justify-between items-start"><h3 class="text-slate-500 dark:text-gray-400 font-medium">Overall Fund Utilization</h3><div class="p-2 bg-green-100 dark:bg-green-500/10 rounded-md"><i data-lucide="pie-chart" class="w-5 h-5 text-green-600 dark:text-green-400"></i></div></div><p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">62.5%</p><p class="text-sm text-green-600 flex items-center mt-1"><i data-lucide="arrow-up" class="w-4 h-4 mr-1"></i><span>2.1%</span> <span class="text-slate-500 dark:text-gray-400 ml-1">vs last quarter</span></p></div>
+                <div class="card p-5"><div class="flex justify-between items-start"><h3 class="text-slate-500 dark:text-gray-400 font-medium">UCs Pending (Value)</h3><div class="p-2 bg-amber-100 dark:bg-amber-500/10 rounded-md"><i data-lucide="file-clock" class="w-5 h-5 text-amber-600 dark:text-amber-400"></i></div></div><p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹5.1 Lakh Cr</p><p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Across 15,230 projects</p></div>
+                <div class="card p-5"><div class="flex justify-between items-start"><h3 class="text-slate-500 dark:text-gray-400 font-medium">High-Risk Projects (AI)</h3><div class="p-2 bg-red-100 dark:bg-red-500/10 rounded-md"><i data-lucide="shield-alert" class="w-5 h-5 text-red-600 dark:text-red-400"></i></div></div><p class="text-4xl font-bold text-slate-800 dark:text-gray-100 mt-2">842</p><p class="text-sm text-red-600 flex items-center mt-1"><i data-lucide="trending-up" class="w-4 h-4 mr-1"></i><span>12 new</span> <span class="text-slate-500 dark:text-gray-400 ml-1"> flagged today</span></p></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                <div class="card lg:col-span-2 p-5" id="map-container">
+                     <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-2">National Fund Utilization Heatmap</h3>
+                     <div id="tooltip"></div>
+                     <svg id="india-map-svg" viewBox="0 0 570 630" xmlns="http://www.w3.org/2000/svg">
+                         <path id="IN-AP" class="state" data-name="Andhra Pradesh" d="m216,423l-3,11l-12,1l-4,11l-10,3l1-13l-10-3l-10,14l-4,1l-15-2l2-16l-5-1l-3,6l-8-6l-3-11l3-10l-3-8l11-13l21-1l2,4l10,1l2-7l12-1l7,9l5,2l6,11z"/>
+                         <path id="IN-AR" class="state" data-name="Arunachal Pradesh" d="m507,173l-12-5l-14-17l-18-4l-10-1l-11,13l-1,7l-13-1l-2,6l-13,6l-11-2l-10,1l-3,11l20,18l1,9l11,8l13-13l10-1l12,11l21,5l2,14l12,1l-1-12l4-2l1-6l7-13l-4-15z"/>
+                         <path id="IN-AS" class="state" data-name="Assam" d="m496,211l-20-18l-1-9l-11-8l-13,13l-10,1l-12-11l-21-5l-2-14l-12-1l1-6l-7,2l-9-15l-11-1l-1,9l-11,10l-2,8l-12-1l-1,6l-8-2l-15,1l-4,7l-1,9l9,13l6,1l3-6l18-4l6,5l22-3l11,12l8-2l6-4l3-9l5-1l9,6z"/>
+                         <path id="IN-BR" class="state" data-name="Bihar" d="m362,231l-10-17l-15-2l-12-1l-17,4l-11,21l-13-2l-13,9l-11-2l-1,8l-6-2l-2,11l4,6l10-2l6,10l12,1l23-10l1,11l15,3l11,16l9-1l6-11l4-1l-1-15l-4-9l11-1l8-4l1,8h11l-2-13z"/>
+                         <path id="IN-CT" class="state" data-name="Chhattisgarh" d="m278,348l-9-10l-2-12l-14-6l-3,9l-11,1l-12,21l-9,1l-11-14l-23,1l-6,11l2,8l13,6l2,6l-3,10l20,7l10-1l1,5l13,3l11,11l13-1l-2-10l10,3l11-12l2-14l-14-12z"/>
+                         <path id="IN-GA" class="state" data-name="Goa" d="m112,448l-5-1l-2,5l3,2l4-6z"/>
+                         <path id="IN-GJ" class="state" data-name="Gujarat" d="M37,285l-4-15l-4-1l-11-22l-1-12l-4-1l-1-10l22-1l2,3l12,1l4-6l-1-13l-15-2l-1,4l-12,2l-3-9l-10-1l-3,5l-8,3l1,8l4,1l-2,12l-11,2l-1-4l-12-2l-1,6l5,1l-2,5l10-1l1,14l-3-1l-1,5l13,1l-2-6l4-1l-1,14l7,1l3-4l-3-12l7-2l11,1l15-13l18-12l10,13l6-1l7,11l-3,14l-14,14l-1,8l-12,2l-17-15l-10,2z"/>
+                         <path id="IN-HR" class="state" data-name="Haryana" d="m142,165l-10,13l-7,2l-12,15l-10,2l-1,5l10,11l12,1l14-12l16-2l-1-9l4-8l2-4l-3-1l-1,3l-9,1l-7-10z"/>
+                         <path id="IN-HP" class="state" data-name="Himachal Pradesh" d="m173,129l-11,1l-12,12l-4,10l-14,7l-2,8l10,13l7-2l10-10l11,1l1-11l5-1l3-7l-4-10l-3-6z"/>
+                         <path id="IN-JH" class="state" data-name="Jharkhand" d="m343,284l-23-10l-12-1l-6-10l-10,2l-4-6l-6,6l-8,17l-13,6l-2,12l9,10l14,6l2-9l14,12l16,2l10-1l12-11l-6-13z"/>
+                         <path id="IN-JK" class="state" data-name="Jammu and Kashmir" d="m109,69l-3-7l-12-3l-1,8l-10,1l-2,7l-15,1l-3-6l-14,1l-2,10l-13,1l-2,6l6,11l-2,11l7,2l4-7l11,1l2,6l10,3l9-2l2-11l12,1l12-12l11-1l2-11l-1-9l13-9l-3-9l-11-2l-9,11z"/>
+                         <path id="IN-KA" class="state" data-name="Karnataka" d="m146,478l-3-14l-9-1l-10-12l-12-1l-2-5l-5,1l-4,6l-3-2l2-5l-3-2l-4,6h-5l-2-12l-7-2l-3,6l-8-6l-3-11l3-10l-3-8l11-13l21-1l-2,7l13,10l10-2l6,6l1,12l12-1l10-14l10,3l-1,13l10,3l4-11l12-1l3-11l-11,2l-2-8l12-8l15,1l-1,8l7,3l-2,14l-11,12l-8,24z"/>
+                         <path id="IN-KL" class="state" data-name="Kerala" d="m144,534l-3-10l-10-4l-1-12l-11-5l-2-12l-3-1l-1-10l-4-2l-3,10l-12,30l-1,9l11,8l11,3l12-12l1,10l12-1l3-7z"/>
+                         <path id="IN-MP" class="state" data-name="Madhya Pradesh" d="m244,248l-15-13l-18-12l-10,13l-6-1l-7,11l-3,14l-14,14l-1,8l-12,2l-17-15l-10,2l-1-7l-8-3l-7,2l-11-1l-12,12l-2,11l-13,6l-3,7l1,8l11,14l9-1l12-21l11-1l3-9l14,6l2,12l9,10l-2,14l11-2l12,8l-2,10l13-1l11-11l13-3l1-5l10,1l20-7l-3-10l2-6l13-6l2-8l-6-11l-23-1l-11,14z"/>
+                         <path id="IN-MH" class="state" data-name="Maharashtra" d="m191,399l-2-16l-5-1l-3,6l-8-6l-7-2l-11-1l-12-12l-2-11l-13-6l-3,7l-1,8l-11-14l-9,1l-1,7l-8,3l-7-2l-11,1l-12-12l-2-11l-11,2l-7,2l-1-8l-14-14l-3-14l7-11l10-1l11,14l15,1l2-8l23,1l6-11l-2-8l23,1l11,14l-9,1l12,21l11-1l3-9l14,6l2,12l9,10l-2,14l11-2l12,8l-1,8l-15-1l-12,8l-3,10z"/>
+                         <path id="IN-MN" class="state" data-name="Manipur" d="m510,265l-9-13l-6-1l-3,6l-18-4l-6,5l-1,10l12,13l1,10l9,5l13,2l-2-16l2-14z"/>
+                         <path id="IN-ML" class="state" data-name="Meghalaya" d="m443,251l-15,1l-4,7l-1,9l9,13l6,1l3-6l18-4l6,5l-11-22z"/>
+                         <path id="IN-MZ" class="state" data-name="Mizoram" d="m484,286l-1-10l-12-13l-1-10l-9-5l-1,12l-12,12l-1,16l14,14l12-2l10-11l-3-13z"/>
+                         <path id="IN-NL" class="state" data-name="Nagaland" d="m522,232l-22-3l-11,12l-8-2l-6-4l-3-9l5-1l9,6l1,10l12-13l1,10l9,5l13,2l-2-13z"/>
+                         <path id="IN-OR" class="state" data-name="Odisha" d="m327,370l-16-2l-14-12l-2,9l-6-13l-12-11l-10,1l-12,11l-13,1l2,10l-10-3l-11,12l-2,14l14,12l-9,10l-2,8l11,8l11-2l11,2l10-1l11-11l1,10l13-2l2-11l11,2l10-10l2-10z"/>
+                         <path id="IN-PB" class="state" data-name="Punjab" d="m123,124l-2,10l-13,1l-2,6l6,11l-2,11l7,2l4-7l11,1l2,6l10,3l9-2l-2-12l-12-15l-10-2l-1-5l10-11z"/>
+                         <path id="IN-RJ" class="state" data-name="Rajasthan" d="M129,298l-17-15l-10,2l-1-7l-8-3l-7,2l-11-1l-12-12l-2-11l-11-2l-7-2l-1-8l-14-14l-3-14l7-11l10-1l11,14l15,1l2-8l10-1l12,12l10,1l1,9l7-2l12-1l14-12l16-2l-1-9l4-8l2-4l-3-1l-1,3l-9,1l-7-10l1,5l10,2l12,15l7-2l10-13l15,13l18,12z"/>
+                         <path id="IN-SK" class="state" data-name="Sikkim" d="m403,195l-11-16l-15-3l-1-11l11-8l12,7l2,13l2,10z"/>
+                         <path id="IN-TN" class="state" data-name="Tamil Nadu" d="m197,515l-11-12l-8,24l-11,2l-3-6l-7-3l-2,14l-11,12l-8,24l-12-30l-3-10l4,2l1,10l3,1l2,12l11,5l1,12l10,4l3,10l-3,11l12,9l12,1l1,10l11-2l10,2l7-11l2-12l-2-10l11-13z"/>
+                         <path id="IN-TR" class="state" data-name="Tripura" d="m471,288l-14-14l-1,16l-12,12l-1,16l20-1l11-8l-3-21z"/>
+                         <path id="IN-TG" class="state" data-name="Telangana" d="M194,394l-10,-14l-10,3l-1,13l10,3l-2,7l13,10l10,-2l6,-6l1,-12l12,-1l-7,-9l-12,1z"/>
+                         <path id="IN-UA" class="state" data-name="Uttarakhand" d="m194,158l-11-1l-1-11l-5-1l-3-7l4,10l3,6l-13,11l-10-13l-7,2l-10-10l-11,1l1,11l15,2l14,12l2,4l3,1l-2-3l9-1l7,10l-1-5l10-11z"/>
+                         <path id="IN-UP" class="state" data-name="Uttar Pradesh" d="m278,211l-1-5l-10,1l-20,7l-3-10l2-6l-13,6l-2,8l-6,11l-23,1l-11,14l-1-8l-11,2l-13-9l-13,2l-11-21l-17-4l-12,1l-15,2l-10,17l-1,8l2-11l6,2l-1-8l11,2l-4,6l-10-11l12,1l14-12l2,4l3,1l-2-3l9-1l7,10l-1-5l10-11l-10-13l-7,2l-10,10l10,11l-12-1l-10-11l1,5l-10-2l-12-15l-7,2l-10,13l15,13l18,12z"/>
+                         <path id="IN-WB" class="state" data-name="West Bengal" d="m392,308l-6-13l-12,11l-10,1l-16-2l-14-12l-2-9l13-6l-8-17l-6-6l4-6l2,11l6-2l1,8l11-2l-1-8l8,4l11,1l4,9l1,15l-4,1l-6,11l-9,1l-1-9l11-8l12,7l2,13l2,10l11-8l-2-13l-11-7l1,11l15-3l-1,11l-11,11l2,10l11,2l10-1l-11-8l3-8l12-1z"/>
+                     </svg>
+                     <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-2 text-xs text-slate-600 dark:text-gray-300">
+                         <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-green-600 mr-2"></span> &gt; 90% (High)</div>
+                         <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span> 60-90% (Medium)</div>
+                         <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-600 mr-2"></span> &lt; 60% (Low)</div>
+                         <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mr-2"></span> No Data</div>
+                     </div>
+                </div>
+                <div class="card p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">State Performance Ranking</h3>
+                        <a href="#" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">View All</a>
+                    </div>
+                    <div>
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                                <tr>
+                                    <th class="w-3/4 px-4 py-3">State</th>
+                                    <th class="w-1/4 px-4 py-3 text-right">Utilization %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="dark:text-gray-300 divide-y dark:divide-gray-700">
+                                <tr class="font-medium"><td class="px-4 py-3">1. Gujarat</td><td class="px-4 py-3 text-right text-green-600 dark:text-green-400">94.2%</td></tr>
+                                <tr><td class="px-4 py-3">2. Tamil Nadu</td><td class="px-4 py-3 text-right text-green-600 dark:text-green-400">93.5%</td></tr>
+                                <tr><td class="px-4 py-3">3. Kerala</td><td class="px-4 py-3 text-right text-green-600 dark:text-green-400">92.1%</td></tr>
+                                <tr><td class="px-4 py-3">4. Maharashtra</td><td class="px-4 py-3 text-right text-green-600 dark:text-green-400">91.8%</td></tr>
+                                <tr><td colspan="2" class="py-1 text-center text-slate-400">...</td></tr>
+                                <tr><td class="px-4 py-3">26. West Bengal</td><td class="px-4 py-3 text-right text-red-600 dark:text-red-400">45.1%</td></tr>
+                                <tr><td class="px-4 py-3">27. Bihar</td><td class="px-4 py-3 text-right text-red-600 dark:text-red-400">42.7%</td></tr>
+                                <tr><td class="px-4 py-3">28. Jharkhand</td><td class="px-4 py-3 text-right text-red-600 dark:text-red-400">38.9%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                <div class="card p-5"><h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Action Plan Approvals</h3><div class="space-y-3"><div class="bg-slate-50 dark:bg-gray-800/50 p-3 rounded-lg"><p class="font-semibold text-slate-700 dark:text-gray-200">Maharashtra AAP FY25</p><p class="text-sm text-slate-500 dark:text-gray-400">Submitted: 10 Oct 2025 | Value: ₹12,500 Cr</p><div class="flex space-x-2 mt-2"><button class="w-full bg-indigo-600 text-white py-1.5 rounded-md text-sm font-semibold hover:bg-indigo-700">Approve</button><button class="w-full bg-slate-200 dark:bg-gray-600 text-slate-800 dark:text-gray-200 py-1.5 rounded-md text-sm font-semibold hover:bg-slate-300">Review</button></div></div><div class="bg-slate-50 dark:bg-gray-800/50 p-3 rounded-lg"><p class="font-semibold text-slate-700 dark:text-gray-200">Uttar Pradesh AAP FY25</p><p class="text-sm text-slate-500 dark:text-gray-400">Submitted: 08 Oct 2025 | Value: ₹18,200 Cr</p><div class="flex space-x-2 mt-2"><button class="w-full bg-indigo-600 text-white py-1.5 rounded-md text-sm font-semibold hover:bg-indigo-700">Approve</button><button class="w-full bg-slate-200 dark:bg-gray-600 text-slate-800 dark:text-gray-200 py-1.5 rounded-md text-sm font-semibold hover:bg-slate-300">Review</button></div></div><p class="text-sm text-center text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">View All 5 Pending Approvals</p></div></div>
+                <div class="card p-5"><h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Fund Management</h3><div class="bg-slate-50 dark:bg-gray-800/50 p-4 rounded-lg text-center"><p class="text-slate-500 dark:text-gray-400 font-medium">Unallocated / Excess Funds</p><p class="text-4xl font-bold text-slate-800 dark:text-gray-100 my-2">₹850 Cr</p><p class="text-xs text-slate-500 dark:text-gray-400">Available for redistribution from low-performing states.</p><button class="mt-3 w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700">Initiate Redistribution</button></div><div class="mt-4"><h4 class="font-semibold text-slate-600 dark:text-gray-300">Recent Fund Flow</h4><p class="text-sm text-slate-500 dark:text-gray-400 mt-1">₹500 Cr released to Rajasthan for Adarsh Gram component.</p></div></div>
+                <div class="card p-5"><h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Policy Analytics Engine</h3><div class="bg-slate-50 dark:bg-gray-800/50 p-4 rounded-lg"><div class="flex items-start space-x-3"><i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-500 mt-1 flex-shrink-0"></i><div><h4 class="font-semibold text-slate-700 dark:text-gray-200">AI-Powered Insights</h4><p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Simulate policy changes, analyze fund convergence opportunities, and forecast scheme outcomes.</p></div></div><button class="mt-4 w-full bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-200">Launch Analytics Suite</button></div></div>
+            </div>
+        </div>
+
+        <div id="state-performance-view" class="hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                <div>
+                    <button id="back-to-national" class="flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-gray-200 mb-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        Back to National View
+                    </button>
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Performance Dashboard: <span id="state-name-title" class="text-indigo-600"></span></h2>
+                    <p class="text-slate-500 dark:text-gray-400 mt-1">Detailed operational and financial overview</p>
+                </div>
+            </div>
+             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <select id="state-selector-dropdown" class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
+                    <option>Maharashtra</option>
+                    <option>Gujarat</option>
+                    <option>Uttar Pradesh</option>
+                    <option>Bihar</option>
+                </select>
+                <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300"><option>All Districts</option><option>Nagpur</option><option>Pune</option></select>
+                <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300"><option>FY 2024-25</option><option>FY 2023-24</option></select>
+                <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300"><option>All Components</option><option>Adarsh Gram</option><option>GIA</option><option>Hostel</option></select>
+            </div>
+            <div class="card p-5 mb-6">
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">"Treasury Tracker" - Fund Flow</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div id="treasury-received" class="bg-slate-50 dark:bg-gray-800/50 p-4 rounded-lg">
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Received from Center</p>
+                        <p class="text-2xl font-bold text-slate-800 dark:text-gray-100 mt-1"></p>
+                        <p class="text-xs text-slate-400 dark:text-gray-500"></p>
+                    </div>
+                    <div id="treasury-pending" class="p-4 rounded-lg">
+                        <p class="text-sm font-medium">Time in State Treasury</p>
+                        <p class="text-2xl font-bold mt-1"></p>
+                        <p class="text-xs"></p>
+                    </div>
+                    <div id="treasury-released" class="bg-slate-50 dark:bg-gray-800/50 p-4 rounded-lg">
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Released to Districts</p>
+                        <p class="text-2xl font-bold text-slate-800 dark:text-gray-100 mt-1"></p>
+                        <p class="text-xs text-slate-400 dark:text-gray-500"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="card p-5"><h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Smart UC Generation Funnel</h3><div class="h-64"><canvas id="ucFunnelChart"></canvas></div></div>
+                <div class="card p-5">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Triangulation of Verification Health</h3>
+                    <div class="space-y-4 pt-2">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Official (Photos)</span><span id="verify-official-perc" class="text-slate-500 dark:text-gray-400"></span></div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="verify-official-bar" class="bg-blue-600 h-2.5 rounded-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Beneficiary (IVR)</span><span id="verify-beneficiary-perc" class="text-slate-500 dark:text-gray-400"></span></div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="verify-beneficiary-bar" class="bg-green-600 h-2.5 rounded-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Community (Social Audit)</span><span id="verify-community-perc" class="text-slate-500 dark:text-gray-400"></span></div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="verify-community-bar" class="bg-amber-500 h-2.5 rounded-full"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <div class="card p-5">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-2">Predictive Risk Alerts</h3>
+                        <div id="risk-alert-card" class="text-sm p-2 rounded"></div>
+                    </div>
+                    <div class="card p-5">
+                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-2">AI Convergence Opportunity</h3>
+                        <div id="convergence-card" class="text-sm p-2 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-5">
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">District-wise Performance</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-xs text-slate-500 dark:text-gray-400 uppercase bg-slate-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-4 py-3">District</th>
+                                <th class="px-4 py-3 text-center">Fund Release Velocity (Days)</th>
+                                <th class="px-4 py-3 text-center">UC Submission %</th>
+                                <th class="px-4 py-3 text-center">On-Time Completion %</th>
+                                <th class="px-4 py-3 text-center">Data Quality Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="districts-table-body" class="dark:text-gray-300 divide-y dark:divide-gray-700">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+            const nationalView = document.getElementById('national-dashboard-view');
+            const stateView = document.getElementById('state-performance-view');
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navStatePerformance = document.getElementById('nav-state-performance');
+            const backToNationalBtn = document.getElementById('back-to-national');
+            
+            const showView = (viewToShow) => {
+                nationalView.classList.add('hidden');
+                stateView.classList.add('hidden');
+                document.querySelectorAll('nav a').forEach(el => el.classList.remove('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold'));
+                
+                if (viewToShow === 'national') {
+                    nationalView.classList.remove('hidden');
+                    navDashboard.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
+                } else {
+                    stateView.classList.remove('hidden');
+                    navStatePerformance.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
+                }
+            };
+            
+            navDashboard.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
+            navStatePerformance.addEventListener('click', (e) => { e.preventDefault(); showView('state'); updateStateView('Maharashtra'); });
+            backToNationalBtn.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
+
+            // --- Theme Toggling Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+            const setTheme = (isDark) => {
+                document.documentElement.classList.toggle('dark', isDark);
+                lightIcon.classList.toggle('hidden', isDark);
+                darkIcon.classList.toggle('hidden', !isDark);
+            };
+
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme') === 'dark';
+            setTheme(savedTheme || prefersDark);
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                setTheme(isDark);
+            });
+
+            // --- INTERACTIVE HEATMAP LOGIC ---
+            const stateUtilizationData = {'IN-GJ': 94.2,'IN-MH': 91.8,'IN-KA': 89.5,'IN-AP': 88.0,'IN-TN': 93.5,'IN-KL': 92.1,'IN-TG': 85.3,'IN-HR': 90.5,'IN-MP': 81.1,'IN-RJ': 72.3,'IN-UP': 65.0,'IN-PB': 78.9,'IN-WB': 45.1,'IN-BR': 42.7,'IN-JH': 38.9,'IN-OR': 55.4,'IN-CT': 61.2,'IN-AS': 58.0,'IN-HP': 75.5,'IN-UA': 71.0,'IN-JK': 68.2,'IN-AR': 52.3,'IN-SK': 82.0};
+            const map = document.getElementById('india-map-svg');
+            const tooltip = document.getElementById('tooltip');
+            const states = document.querySelectorAll('#india-map-svg .state');
+            
+            function colorMap() {
+                states.forEach(state => {
+                    const utilization = stateUtilizationData[state.id];
+                    state.classList.remove('high-utilization', 'medium-utilization', 'low-utilization', 'no-data');
+                    if (utilization === undefined) state.classList.add('no-data');
+                    else if (utilization > 90) state.classList.add('high-utilization');
+                    else if (utilization >= 60) state.classList.add('medium-utilization');
+                    else state.classList.add('low-utilization');
+                });
+            }
+
+            states.forEach(state => {
+                state.addEventListener('click', function() {
+                    const stateName = state.dataset.name;
+                    // Check if we have data for this state before switching
+                    if(mockStateData[stateName]) {
+                        updateStateView(stateName);
+                        showView('state');
+                    } else {
+                        // Optional: show a message for states without data
+                        alert(`No detailed data available for ${stateName} in this demo.`);
+                    }
+                });
+                state.addEventListener('mouseover', (event) => {
+                    const stateName = state.dataset.name;
+                    const utilization = stateUtilizationData[state.id];
+                    tooltip.innerHTML = utilization !== undefined ? `<strong>${stateName}</strong><br>Utilization: ${utilization}%` : `<strong>${stateName}</strong><br>No Data`;
+                    tooltip.style.display = 'block';
+                });
+                state.addEventListener('mousemove', (event) => {
+                    const rect = document.getElementById('map-container').getBoundingClientRect();
+                    tooltip.style.left = (event.clientX - rect.left + 15) + 'px';
+                    tooltip.style.top = (event.clientY - rect.top + 15) + 'px';
+                });
+                state.addEventListener('mouseout', () => { tooltip.style.display = 'none'; });
+            });
+            colorMap();
+
+            // --- UC Funnel Chart ---
+            const ucFunnelCtx = document.getElementById('ucFunnelChart').getContext('2d');
+            const ucFunnelChart = new Chart(ucFunnelCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Projects Completed', 'Photo Proof Submitted', 'UCs Auto-Generated', 'UCs Approved'],
+                    datasets: [{ label: 'Count', data: [], backgroundColor: ['rgba(79, 70, 229, 0.7)','rgba(5, 150, 105, 0.7)','rgba(2, 132, 199, 0.7)','rgba(217, 70, 239, 0.7)'], borderWidth: 0, barPercentage: 1.0, categoryPercentage: 0.7 }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: () => document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.1)' : '#e5e7eb' }, ticks: { color: () => document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' } },
+                        y: { grid: { display: false }, ticks: { color: () => document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => ` ${context.raw} projects` } } }
+                }
+            });
+            
+            // --- NEW: STATE DATA AND UPDATE LOGIC ---
+            const stateSelector = document.getElementById('state-selector-dropdown');
+            stateSelector.addEventListener('change', function() {
+                updateStateView(this.value);
+            });
+            
+            const mockStateData = {
+                'Maharashtra': {
+                    treasury: { received: '₹12,500 Cr', receivedDate: 'on 01 Oct 2025', time: 22, sla: 15, released: '₹11,800 Cr', releasedDate: 'on 23 Oct 2025'},
+                    ucFunnel: [1200, 1150, 1100, 1050],
+                    verification: { official: 95, beneficiary: 88, community: 75 },
+                    riskAlert: { type: 'high', text: '<strong>High Risk:</strong> Hostel, Nagpur. Procurement delay predicted.' },
+                    convergence: { text: '<strong>15 projects</strong> in Yavatmal overlap with PMGSY. Est. saving: <strong>₹12 Cr</strong>.' },
+                    districts: [
+                        { name: 'Pune', velocity: 12, uc: 99, completion: 92, quality: 98 },
+                        { name: 'Nagpur', velocity: 20, uc: 85, completion: 81, quality: 95 },
+                        { name: 'Nashik', velocity: 14, uc: 96, completion: 89, quality: 88 },
+                        { name: 'Yavatmal', velocity: 35, uc: 65, completion: 70, quality: 75 },
+                    ]
+                },
+                'Gujarat': {
+                    treasury: { received: '₹15,000 Cr', receivedDate: 'on 28 Sep 2025', time: 10, sla: 15, released: '₹15,000 Cr', releasedDate: 'on 08 Oct 2025'},
+                    ucFunnel: [1800, 1790, 1785, 1780],
+                    verification: { official: 99, beneficiary: 96, community: 92 },
+                    riskAlert: { type: 'low', text: '<strong>Low Risk:</strong> All projects on track. No significant delays predicted.' },
+                    convergence: { text: '<strong>8 projects</strong> in Ahmedabad overlap with NREGA. Est. saving: <strong>₹8 Cr</strong>.' },
+                    districts: [
+                        { name: 'Ahmedabad', velocity: 8, uc: 99, completion: 98, quality: 99 },
+                        { name: 'Surat', velocity: 10, uc: 98, completion: 97, quality: 98 },
+                        { name: 'Vadodara', velocity: 11, uc: 97, completion: 96, quality: 97 },
+                        { name: 'Rajkot', velocity: 12, uc: 96, completion: 95, quality: 96 },
+                    ]
+                },
+                'Uttar Pradesh': {
+                    treasury: { received: '₹18,200 Cr', receivedDate: 'on 01 Oct 2025', time: 28, sla: 15, released: '₹15,000 Cr', releasedDate: 'on 29 Oct 2025'},
+                    ucFunnel: [2500, 2300, 2000, 1850],
+                    verification: { official: 85, beneficiary: 78, community: 65 },
+                    riskAlert: { type: 'high', text: '<strong>High Risk:</strong> Adarsh Gram, Lucknow. Land acquisition issues predicted.' },
+                    convergence: { text: '<strong>45 projects</strong> across 5 districts overlap with PMAY. Est. saving: <strong>₹35 Cr</strong>.' },
+                    districts: [
+                        { name: 'Lucknow', velocity: 25, uc: 75, completion: 72, quality: 80 },
+                        { name: 'Kanpur', velocity: 28, uc: 70, completion: 68, quality: 75 },
+                        { name: 'Varanasi', velocity: 22, uc: 80, completion: 78, quality: 85 },
+                        { name: 'Ghaziabad', velocity: 32, uc: 65, completion: 60, quality: 70 },
+                    ]
+                },
+                'Bihar': {
+                    treasury: { received: '₹9,800 Cr', receivedDate: 'on 05 Oct 2025', time: 45, sla: 15, released: '₹7,000 Cr', releasedDate: 'on 19 Nov 2025'},
+                    ucFunnel: [900, 750, 500, 410],
+                    verification: { official: 70, beneficiary: 62, community: 55 },
+                    riskAlert: { type: 'high', text: '<strong>Critical Risk:</strong> Multiple projects show signs of fund diversion. Immediate audit recommended.' },
+                    convergence: { text: '<strong>Low convergence</strong> identified. Opportunity to train officials on scheme integration.' },
+                     districts: [
+                        { name: 'Patna', velocity: 40, uc: 60, completion: 55, quality: 65 },
+                        { name: 'Gaya', velocity: 48, uc: 55, completion: 50, quality: 60 },
+                        { name: 'Muzaffarpur', velocity: 52, uc: 50, completion: 45, quality: 58 },
+                        { name: 'Bhagalpur', velocity: 45, uc: 58, completion: 52, quality: 62 },
+                    ]
+                }
+            };
+
+            function updateStateView(stateName) {
+                const data = mockStateData[stateName];
+                if (!data) return;
+
+                // Update dropdown and title
+                document.getElementById('state-name-title').textContent = stateName;
+                stateSelector.value = stateName;
+
+                // Treasury Tracker
+                const treasuryReceived = document.querySelector('#treasury-received p:nth-child(2)');
+                const treasuryReceivedDate = document.querySelector('#treasury-received p:nth-child(3)');
+                const treasuryPending = document.getElementById('treasury-pending');
+                const treasuryPendingTime = document.querySelector('#treasury-pending p:nth-child(2)');
+                const treasuryPendingSLA = document.querySelector('#treasury-pending p:nth-child(3)');
+                const treasuryReleased = document.querySelector('#treasury-released p:nth-child(2)');
+                const treasuryReleasedDate = document.querySelector('#treasury-released p:nth-child(3)');
+                
+                treasuryReceived.textContent = data.treasury.received;
+                treasuryReceivedDate.textContent = data.treasury.receivedDate;
+                treasuryReleased.textContent = data.treasury.released;
+                treasuryReleasedDate.textContent = data.treasury.releasedDate;
+                treasuryPendingTime.textContent = `${data.treasury.time} Days`;
+                treasuryPendingSLA.textContent = `SLA: ${data.treasury.sla} Days`;
+
+                treasuryPending.className = 'p-4 rounded-lg'; // reset classes
+                if (data.treasury.time > data.treasury.sla) {
+                    treasuryPending.classList.add('bg-red-50', 'dark:bg-red-900/20', 'border', 'border-red-500/50');
+                    document.querySelector('#treasury-pending p:nth-child(1)').className = 'text-sm font-medium text-red-600 dark:text-red-400';
+                    treasuryPendingTime.className = 'text-2xl font-bold mt-1 text-red-700 dark:text-red-300';
+                    treasuryPendingSLA.className = 'text-xs text-red-500 dark:text-red-500';
+                } else {
+                    treasuryPending.classList.add('bg-slate-50', 'dark:bg-gray-800/50');
+                    document.querySelector('#treasury-pending p:nth-child(1)').className = 'text-sm font-medium text-slate-500 dark:text-gray-400';
+                    treasuryPendingTime.className = 'text-2xl font-bold mt-1 text-slate-800 dark:text-gray-100';
+                    treasuryPendingSLA.className = 'text-xs text-slate-400 dark:text-gray-500';
+                }
+
+                // UC Funnel Chart
+                ucFunnelChart.data.datasets[0].data = data.ucFunnel;
+                ucFunnelChart.update();
+
+                // Verification Health
+                document.getElementById('verify-official-perc').textContent = `${data.verification.official}%`;
+                document.getElementById('verify-official-bar').style.width = `${data.verification.official}%`;
+                document.getElementById('verify-beneficiary-perc').textContent = `${data.verification.beneficiary}%`;
+                document.getElementById('verify-beneficiary-bar').style.width = `${data.verification.beneficiary}%`;
+                document.getElementById('verify-community-perc').textContent = `${data.verification.community}%`;
+                document.getElementById('verify-community-bar').style.width = `${data.verification.community}%`;
+                
+                // AI Cards
+                const riskCard = document.getElementById('risk-alert-card');
+                const convergenceCard = document.getElementById('convergence-card');
+                riskCard.innerHTML = data.riskAlert.text;
+                convergenceCard.innerHTML = data.convergence.text;
+                riskCard.className = 'text-sm p-2 rounded'; // reset classes
+                if (data.riskAlert.type === 'high') riskCard.classList.add('text-red-600', 'dark:text-red-400', 'bg-red-50', 'dark:bg-red-900/20');
+                else riskCard.classList.add('text-green-700', 'dark:text-green-300', 'bg-green-50', 'dark:bg-green-900/20');
+                convergenceCard.classList.add('bg-green-50', 'dark:bg-green-900/20', 'text-green-700', 'dark:text-green-300');
+                
+                // Districts Table
+                const tableBody = document.getElementById('districts-table-body');
+                tableBody.innerHTML = '';
+                const colorClass = (value, highGood = true) => {
+                    if (highGood) {
+                        if (value > 90) return 'text-green-600 dark:text-green-400';
+                        if (value > 75) return 'text-amber-600 dark:text-amber-400';
+                        return 'text-red-600 dark:text-red-400';
+                    } else { // Lower is better (e.g., velocity)
+                        if (value < 15) return 'text-green-600 dark:text-green-400';
+                        if (value < 30) return 'text-amber-600 dark:text-amber-400';
+                        return 'text-red-600 dark:text-red-400';
+                    }
+                };
+                data.districts.forEach(district => {
+                    const row = `
+                        <tr>
+                            <td class="px-4 py-3 font-medium">${district.name}</td>
+                            <td class="px-4 py-3 text-center ${colorClass(district.velocity, false)}">${district.velocity}</td>
+                            <td class="px-4 py-3 text-center ${colorClass(district.uc)}">${district.uc}%</td>
+                            <td class="px-4 py-3 text-center ${colorClass(district.completion)}">${district.completion}%</td>
+                            <td class="px-4 py-3 text-center ${colorClass(district.quality)}">${district.quality}%</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            }
+            
+            // Initialize with default state
+            updateStateView('Maharashtra');
+        });
+    </script>
+</body>
+</html>
