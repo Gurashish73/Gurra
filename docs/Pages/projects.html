@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | PM-AJAY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to use the 'class' for dark mode
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar {
+            background-color: #ffffff;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        /* Dark mode specific card styles */
+        .dark .sidebar, .dark .card {
+            background-color: #1c1b1a;
+            border: 1px solid #374151; /* gray-700 */
+            box-shadow: none;
+        }
+        .dark .card:hover {
+            background-color: #2c2b2a;
+        }
+        /* Custom scrollbar for modal */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark .modal-body::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark .modal-body::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-[#fdfaf6] dark:bg-black">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex-shrink-0 border-r border-slate-200 dark:border-gray-700 flex flex-col">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" />
+                </svg>
+                PM-AJAY
+            </h1>
+        </div>
+        <nav class="flex-1 px-4 py-2">
+            <a href="state.html" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
+                Dashboard
+            </a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-700 bg-indigo-50 dark:bg-white dark:text-slate-900 rounded-lg font-semibold">
+                <i data-lucide="clipboard-list" class="w-5 h-5 mr-3 text-indigo-600 dark:text-indigo-600"></i>
+                Projects
+            </a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
+                <i data-lucide="building" class="w-5 h-5 mr-3"></i>
+                Agencies
+            </a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
+                <i data-lucide="landmark" class="w-5 h-5 mr-3"></i>
+                Fund Flow
+            </a>
+            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
+                <i data-lucide="settings" class="w-5 h-5 mr-3"></i>
+                Settings
+            </a>
+        </nav>
+        <div class="p-4 mt-auto">
+             <div class="bg-slate-100 dark:bg-gray-800 rounded-lg p-4 text-center">
+                <i data-lucide="help-circle" class="w-10 h-10 mx-auto text-slate-500 dark:text-gray-400"></i>
+                <p class="text-sm text-slate-600 dark:text-gray-300 mt-2">Need help with the portal?</p>
+                <button class="mt-3 w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-500">Contact Support</button>
+            </div>
+            <a href="#" class="flex items-center px-4 py-4 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-4 font-medium">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                Sign Out
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Project Monitoring</h2>
+                <p class="text-slate-500 dark:text-gray-400 mt-1">Track, filter, and review all ongoing and completed projects.</p>
+            </div>
+            <div class="flex items-center mt-4 sm:mt-0">
+                 <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                        <i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                    </button>
+                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                        <i data-lucide="sun" id="theme-toggle-light-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                        <i data-lucide="moon" id="theme-toggle-dark-icon" class="w-5 h-5 text-slate-600 dark:text-gray-400 hidden"></i>
+                    </button>
+                </div>
+                <div class="flex items-center ml-6">
+                    <img src="https://placehold.co/40x40/E2E8F0/475569?text=BDO" alt="BDO" class="w-10 h-10 rounded-full">
+                    <div class="ml-3">
+                        <p class="font-semibold text-slate-800 dark:text-gray-100">Mr. Alok Verma</p>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">BDO, Pusa Block</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters and Controls -->
+        <div class="card mb-6 p-4">
+             <div class="flex flex-wrap items-center justify-between gap-4">
+                 <div class="flex flex-wrap gap-4 flex-grow">
+                     <select id="state-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                         <option value="">Select State</option>
+                     </select>
+                     <select id="district-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+                         <option value="">Select District</option>
+                     </select>
+                     <select id="project-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+                         <option value="">Select Project</option>
+                     </select>
+                 </div>
+                 <div class="flex flex-wrap gap-4">
+                      <button id="reset-filters-btn" class="bg-slate-200 text-slate-800 dark:bg-gray-600 dark:text-gray-200 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 dark:hover:bg-gray-500 flex items-center">
+                         <i data-lucide="rotate-cw" class="w-5 h-5 mr-2"></i>Reset
+                     </button>
+                     <button class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-indigo-700 flex items-center">
+                         <i data-lucide="plus" class="w-5 h-5 mr-2"></i>Add Project
+                     </button>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Project Grid -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Project cards will be dynamically populated or filtered here -->
+            <!-- Project Card 1: North Delhi -->
+            <div class="card p-5 flex flex-col project-card" data-state="Delhi" data-district="North Delhi" data-project="North Delhi Infra Grant">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">North Delhi Infra Grant</h4>
+                         <span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded-full">In Progress</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: State PWD</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-yellow-600 dark:text-yellow-400">75%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹60L</span> / ₹80L Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (12)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project Card 2: West Delhi -->
+            <div class="card p-5 flex flex-col project-card" data-state="Delhi" data-district="West Delhi" data-project="West Delhi Skill Center">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">West Delhi Skill Center</h4>
+                         <span class="bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Completed</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: Pratham NGO</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%;"></div>
+                    </div>
+                </div>
+                 <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹25L</span> / ₹25L Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (8)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project Card 3: East Delhi -->
+             <div class="card p-5 flex flex-col project-card" data-state="Delhi" data-district="East Delhi" data-project="East Delhi Adarsh Gram">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">East Delhi Adarsh Gram</h4>
+                         <span class="bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Delayed</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: Block Panchayat</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-red-600 dark:text-red-400">35%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 35%;"></div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹40L</span> / ₹1.2Cr Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (3)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Project Card 4: Bihar -->
+            <div class="card p-5 flex flex-col project-card" data-state="Bihar" data-district="Patna" data-project="Patna Metro Project">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">Patna Metro Project</h4>
+                         <span class="bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Initiated</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: DMRC</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-blue-600 dark:text-blue-400">15%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-blue-500 h-2.5 rounded-full" style="width: 15%;"></div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹150Cr</span> / ₹13.3kCr Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (21)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Project Card 5: Rajasthan -->
+            <div class="card p-5 flex flex-col project-card" data-state="Rajasthan" data-district="Jaipur" data-project="Jaipur Walled City Restoration">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">Jaipur Walled City Restoration</h4>
+                         <span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded-full">In Progress</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: Archaeological Survey</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-yellow-600 dark:text-yellow-400">60%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 60%;"></div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹90Cr</span> / ₹150Cr Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (45)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Project Card 6: Maharashtra -->
+            <div class="card p-5 flex flex-col project-card" data-state="Maharashtra" data-district="Mumbai" data-project="Mumbai Coastal Road Project">
+                <div>
+                    <div class="flex justify-between items-start">
+                         <h4 class="font-semibold text-slate-800 dark:text-gray-100">Mumbai Coastal Road Project</h4>
+                         <span class="bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Completed</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: MCGM</p>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                        <span class="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                     <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹12.7kCr</span> / ₹12.7kCr Utilized</p>
+                </div>
+                <div class="mt-auto pt-4">
+                    <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                        View Public Feedback (150)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="card w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-5 border-b border-slate-200 dark:border-gray-700 flex-shrink-0">
+                <div>
+                    <h3 id="feedback-modal-title" class="text-lg font-semibold text-slate-800 dark:text-gray-100">Public Feedback</h3>
+                    <p id="feedback-modal-subtitle" class="text-sm text-slate-500 dark:text-gray-400">Project: North Delhi Infra Grant</p>
+                </div>
+                <button id="close-feedback-modal-btn" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                    <i data-lucide="x" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto modal-body space-y-5">
+                <!-- Feedback content will be dynamically updated if needed, static for demo -->
+                <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                             <p class="font-semibold text-slate-800 dark:text-gray-100">Ravi Kumar</p>
+                             <p class="text-xs text-slate-500 dark:text-gray-400">10 Oct, 2025</p>
+                        </div>
+                        <div class="flex items-center text-yellow-500">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i>
+                            <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(4/5)</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-gray-300">The construction work is progressing well, but the material storage is causing some traffic issues in the evening.</p>
+                </div>
+                <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                             <p class="font-semibold text-slate-800 dark:text-gray-100">Sunita Devi</p>
+                             <p class="text-xs text-slate-500 dark:text-gray-400">08 Oct, 2025</p>
+                        </div>
+                        <div class="flex items-center text-yellow-500">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(5/5)</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-gray-300">Very happy with the quality of the road being built. The engineers are professional and listen to our concerns.</p>
+                </div>
+                 <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                             <p class="font-semibold text-slate-800 dark:text-gray-100">Anonymous</p>
+                             <p class="text-xs text-slate-500 dark:text-gray-400">05 Oct, 2025</p>
+                        </div>
+                        <div class="flex items-center text-yellow-500">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i><i data-lucide="star" class="w-4 h-4"></i><i data-lucide="star" class="w-4 h-4"></i>
+                            <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(2/5)</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-gray-300">Work is very slow and often stops for days. We were told it would be faster.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+
+            // --- THEME ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const setTheme = (isDark) => {
+                document.documentElement.classList.toggle('dark', isDark);
+                lightIcon.classList.toggle('hidden', isDark);
+                darkIcon.classList.toggle('hidden', !isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            };
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+            setTheme(savedTheme === 'dark' || (savedTheme === null && prefersDark));
+            themeToggleBtn.addEventListener('click', () => setTheme(!document.documentElement.classList.contains('dark')));
+
+            // --- FILTERING LOGIC ---
+            const stateSelect = document.getElementById('state-select');
+            const districtSelect = document.getElementById('district-select');
+            const projectSelect = document.getElementById('project-select');
+            const allProjectCards = document.querySelectorAll('.project-card');
+            const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+            // Mock data representing the hierarchy
+            const projectData = {
+                "Andhra Pradesh": {
+                    "Visakhapatnam": ["Vizag Port Expansion"],
+                    "Guntur": ["Guntur Chili Market Modernization"]
+                },
+                "Arunachal Pradesh": {
+                    "Tawang": ["Tawang Monastery Beautification"],
+                    "Itanagar": ["Itanagar Smart City Initiative"]
+                },
+                "Assam": {
+                    "Guwahati": ["Guwahati Riverfront Development"],
+                    "Dibrugarh": ["Dibrugarh Tea Park"]
+                },
+                "Bihar": {
+                    "Patna": ["Patna Metro Project"],
+                    "Gaya": ["Gaya beautification Project"]
+                },
+                "Chhattisgarh": {
+                    "Raipur": ["Naya Raipur Green City Project"],
+                    "Bastar": ["Bastar Handicrafts Hub"]
+                },
+                "Goa": {
+                    "North Goa": ["North Goa Coastal Road"],
+                    "South Goa": ["South Goa Eco-Tourism Project"]
+                },
+                "Gujarat": {
+                    "Ahmedabad": ["Ahmedabad Smart City Phase 2"],
+                    "Surat": ["Surat Diamond Bourse Connectivity"]
+                },
+                "Haryana": {
+                    "Gurugram": ["Gurugram Water Supply Upgrade"],
+                    "Faridabad": ["Faridabad Industrial Area Revamp"]
+                },
+                "Himachal Pradesh": {
+                    "Shimla": ["Shimla Ropeway Project"],
+                    "Kullu": ["Kullu Valley Wellness Centers"]
+                },
+                "Jharkhand": {
+                    "Ranchi": ["Ranchi Ring Road Completion"],
+                    "Jamshedpur": ["Jamshedpur Steel Plant Modernization"]
+                },
+                "Karnataka": {
+                    "Bengaluru": ["Bengaluru Suburban Rail Project"],
+                    "Mysuru": ["Mysuru Palace Restoration"]
+                },
+                "Kerala": {
+                    "Kochi": ["Kochi Water Metro Expansion"],
+                    "Thiruvananthapuram": ["Technopark Phase IV Development"]
+                },
+                "Madhya Pradesh": {
+                    "Bhopal": ["Bhopal Lake Conservation"],
+                    "Indore": ["Indore Waste Management Plant"]
+                },
+                "Maharashtra": {
+                    "Mumbai": ["Mumbai Coastal Road Project"],
+                    "Pune": ["Pune Metro Line 3"]
+                },
+                "Manipur": {
+                    "Imphal": ["Imphal Smart City Mission"],
+                    "Churachandpur": ["Churachandpur Medical College"]
+                },
+                "Meghalaya": {
+                    "Shillong": ["Shillong IT Park"],
+                    "Cherrapunji": ["Cherrapunji Eco-Resort Development"]
+                },
+                "Mizoram": {
+                    "Aizawl": ["Aizawl Sports Complex"],
+                    "Lunglei": ["Lunglei Border Haat"]
+                },
+                "Nagaland": {
+                    "Kohima": ["Kohima Smart City Plan"],
+                    "Dimapur": ["Dimapur Airport Upgrade"]
+                },
+                "Odisha": {
+                    "Bhubaneswar": ["Bhubaneswar Temple City Heritage Project"],
+                    "Puri": ["Puri Beachfront Development"]
+                },
+                "Punjab": {
+                    "Amritsar": ["Amritsar Heritage Village Project"],
+                    "Ludhiana": ["Ludhiana Industrial Hub"]
+                },
+                "Rajasthan": {
+                    "Jaipur": ["Jaipur Walled City Restoration"],
+                    "Jodhpur": ["Jodhpur Water Canal Project"]
+                },
+                "Sikkim": {
+                    "Gangtok": ["Gangtok Cable Car Network"],
+                    "Namchi": ["Namchi Cultural Centre"]
+                },
+                "Tamil Nadu": {
+                    "Chennai": ["Chennai Metro Phase II"],
+                    "Coimbatore": ["Coimbatore Defence Corridor"]
+                },
+                "Telangana": {
+                    "Hyderabad": ["Hyderabad Pharma City"],
+                    "Warangal": ["Warangal Textile Park"]
+                },
+                "Tripura": {
+                    "Agartala": ["Agartala-Akhaura Rail Link"],
+                    "Udaipur": ["Udaipur Tourism Circuit"]
+                },
+                "Uttar Pradesh": {
+                    "Lucknow": ["Lucknow Smart City"],
+                    "Agra": ["Taj Corridor Project"],
+                    "Varanasi": ["Kashi Vishwanath Corridor Expansion"]
+                },
+                "Uttarakhand": {
+                    "Dehradun": ["Dehradun-Mussoorie Ropeway"],
+                    "Haridwar": ["Har-ki-Pauri Redevelopment"]
+                },
+                "West Bengal": {
+                    "Kolkata": ["Kolkata East-West Metro"],
+                    "Darjeeling": ["Darjeeling Himalayan Railway Upgrade"]
+                },
+                "Delhi": {
+                    "North Delhi": ["North Delhi Infra Grant"],
+                    "West Delhi": ["West Delhi Skill Center"],
+                    "East Delhi": ["East Delhi Adarsh Gram"],
+                }
+            };
+            
+            // Populate State dropdown
+            Object.keys(projectData).sort().forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+
+            // Handle State selection change
+            stateSelect.addEventListener('change', () => {
+                const selectedState = stateSelect.value;
+                
+                // Reset and disable district/project selects
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                districtSelect.disabled = true;
+                projectSelect.disabled = true;
+
+                if (selectedState) {
+                    districtSelect.disabled = false;
+                    const districts = Object.keys(projectData[selectedState]);
+                    districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                }
+                applyFilters();
+            });
+
+            // Handle District selection change
+            districtSelect.addEventListener('change', () => {
+                 const selectedState = stateSelect.value;
+                 const selectedDistrict = districtSelect.value;
+
+                 projectSelect.innerHTML = '<option value="">Select Project</option>';
+                 projectSelect.disabled = true;
+
+                 if (selectedDistrict) {
+                     projectSelect.disabled = false;
+                     const projects = projectData[selectedState][selectedDistrict];
+                     projects.forEach(project => {
+                         const option = document.createElement('option');
+                         option.value = project;
+                         option.textContent = project;
+                         projectSelect.appendChild(option);
+                     });
+                 }
+                 applyFilters();
+            });
+
+            // Handle Project selection change
+            projectSelect.addEventListener('change', applyFilters);
+
+            function applyFilters() {
+                const selectedState = stateSelect.value;
+                const selectedDistrict = districtSelect.value;
+                const selectedProject = projectSelect.value;
+
+                allProjectCards.forEach(card => {
+                    const cardState = card.dataset.state;
+                    const cardDistrict = card.dataset.district;
+                    const cardProject = card.dataset.project;
+
+                    const stateMatch = !selectedState || cardState === selectedState;
+                    const districtMatch = !selectedDistrict || cardDistrict === selectedDistrict;
+                    const projectMatch = !selectedProject || cardProject === selectedProject;
+
+                    if (stateMatch && districtMatch && projectMatch) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            resetFiltersBtn.addEventListener('click', () => {
+                stateSelect.value = "";
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                districtSelect.disabled = true;
+                projectSelect.disabled = true;
+                applyFilters();
+            });
+
+
+            // --- FEEDBACK MODAL ---
+            const feedbackModal = document.getElementById('feedback-modal');
+            const closeFeedbackModalBtn = document.getElementById('close-feedback-modal-btn');
+            const viewFeedbackBtns = document.querySelectorAll('.view-feedback-btn');
+            const feedbackModalTitle = document.getElementById('feedback-modal-title');
+            const feedbackModalSubtitle = document.getElementById('feedback-modal-subtitle');
+
+            const openFeedbackModal = (e) => {
+                const card = e.currentTarget.closest('.project-card');
+                const projectName = card.dataset.project;
+                feedbackModalSubtitle.textContent = `Project: ${projectName}`;
+                feedbackModal.classList.remove('hidden');
+                lucide.createIcons();
+            };
+
+            const closeFeedbackModal = () => {
+                feedbackModal.classList.add('hidden');
+            };
+
+            viewFeedbackBtns.forEach(btn => btn.addEventListener('click', openFeedbackModal));
+            closeFeedbackModalBtn.addEventListener('click', closeFeedbackModal);
+            feedbackModal.addEventListener('click', (event) => {
+                if (event.target === feedbackModal) closeFeedbackModal();
+            });
+        });
+    </script>
+</body>
+</html>
+
