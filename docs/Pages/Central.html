@@ -57,6 +57,7 @@
         </div>
         <nav class="flex-1 px-4 py-2">
             <a href="#" id="nav-dashboard" class="flex items-center px-4 py-2.5 text-slate-700 bg-indigo-50 dark:bg-white dark:text-slate-900 rounded-lg font-semibold"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-indigo-600"></i>Dashboard</a>
+            <a href="#" id="nav-projects" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="briefcase" class="w-5 h-5 mr-3"></i>Projects</a>
             <a href="#" id="nav-state-performance" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i>State Performance</a>
             <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="landmark" class="w-5 h-5 mr-3"></i>Fund Management</a>
             <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="brain-circuit" class="w-5 h-5 mr-3"></i>Policy Analytics</a>
@@ -177,6 +178,94 @@
             </div>
         </div>
 
+        <div id="projects-view" class="hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Project Monitoring</h2>
+                    <p class="text-slate-500 dark:text-gray-400 mt-1">Track progress and agency performance for all projects</p>
+                </div>
+                <button class="mt-4 sm:mt-0 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700">
+                    <i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add Project
+                </button>
+            </div>
+
+            <div class="card p-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
+                        <option>All States</option><option>Delhi</option><option>Maharashtra</option>
+                    </select>
+                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
+                        <option>All Districts</option><option>North Delhi</option><option>Mumbai</option>
+                    </select>
+                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
+                        <option>All Agencies</option><option>State PWD</option><option>Pratham NGO</option>
+                    </select>
+                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
+                        <option>All Status</option><option>In Progress</option><option>Completed</option><option>Delayed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">North Delhi Infra Grant</h4>
+                            <span class="text-xs font-semibold text-amber-700 bg-amber-100 dark:text-amber-200 dark:bg-amber-500/20 px-2 py-1 rounded-full">In Progress</span>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: State PWD</p>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                                <span class="text-slate-500 dark:text-gray-400">75%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-amber-500 h-2.5 rounded-full" style="width: 75%"></div></div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹60L</span> / ₹80L Utilized</p>
+                    </div>
+                    <button class="mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg">View Details</button>
+                </div>
+
+                <div class="card p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">West Delhi Skill Center</h4>
+                            <span class="text-xs font-semibold text-green-700 bg-green-100 dark:text-green-200 dark:bg-green-500/20 px-2 py-1 rounded-full">Completed</span>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: Pratham NGO</p>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                                <span class="text-slate-500 dark:text-gray-400">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div></div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹25L</span> / ₹25L Utilized</p>
+                    </div>
+                    <button class="mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg">View Details</button>
+                </div>
+
+                <div class="card p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">East Delhi Adarsh Gram</h4>
+                            <span class="text-xs font-semibold text-red-700 bg-red-100 dark:text-red-200 dark:bg-red-500/20 px-2 py-1 rounded-full">Delayed</span>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: Block Panchayat</p>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                                <span class="text-slate-500 dark:text-gray-400">35%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-red-600 h-2.5 rounded-full" style="width: 35%"></div></div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹40L</span> / ₹1.2Cr Utilized</p>
+                    </div>
+                    <button class="mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg">View Details</button>
+                </div>
+            </div>
+        </div>
+
         <div id="state-performance-view" class="hidden">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                 <div>
@@ -276,25 +365,41 @@
             lucide.createIcons();
             const nationalView = document.getElementById('national-dashboard-view');
             const stateView = document.getElementById('state-performance-view');
+            const projectsView = document.getElementById('projects-view');
             const navDashboard = document.getElementById('nav-dashboard');
+            const navProjects = document.getElementById('nav-projects');
             const navStatePerformance = document.getElementById('nav-state-performance');
             const backToNationalBtn = document.getElementById('back-to-national');
             
             const showView = (viewToShow) => {
                 nationalView.classList.add('hidden');
                 stateView.classList.add('hidden');
-                document.querySelectorAll('nav a').forEach(el => el.classList.remove('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold'));
+                projectsView.classList.add('hidden');
+                document.querySelectorAll('nav a').forEach(el => {
+                    el.classList.remove('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
+                    el.classList.add('text-slate-600', 'dark:text-gray-400', 'font-medium');
+                });
                 
+                let activeLink;
                 if (viewToShow === 'national') {
                     nationalView.classList.remove('hidden');
-                    navDashboard.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
-                } else {
+                    activeLink = navDashboard;
+                } else if (viewToShow === 'projects') {
+                    projectsView.classList.remove('hidden');
+                    activeLink = navProjects;
+                } else if (viewToShow === 'state') {
                     stateView.classList.remove('hidden');
-                    navStatePerformance.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
+                    activeLink = navStatePerformance;
+                }
+
+                if (activeLink) {
+                    activeLink.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
+                    activeLink.classList.remove('text-slate-600', 'dark:text-gray-400', 'font-medium');
                 }
             };
             
             navDashboard.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
+            navProjects.addEventListener('click', (e) => { e.preventDefault(); showView('projects'); });
             navStatePerformance.addEventListener('click', (e) => { e.preventDefault(); showView('state'); updateStateView('Maharashtra'); });
             backToNationalBtn.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
 
@@ -338,12 +443,10 @@
             states.forEach(state => {
                 state.addEventListener('click', function() {
                     const stateName = state.dataset.name;
-                    // Check if we have data for this state before switching
                     if(mockStateData[stateName]) {
                         updateStateView(stateName);
                         showView('state');
                     } else {
-                        // Optional: show a message for states without data
                         alert(`No detailed data available for ${stateName} in this demo.`);
                     }
                 });
@@ -380,7 +483,6 @@
                 }
             });
             
-            // --- NEW: STATE DATA AND UPDATE LOGIC ---
             const stateSelector = document.getElementById('state-selector-dropdown');
             stateSelector.addEventListener('change', function() {
                 updateStateView(this.value);
@@ -445,11 +547,9 @@
                 const data = mockStateData[stateName];
                 if (!data) return;
 
-                // Update dropdown and title
                 document.getElementById('state-name-title').textContent = stateName;
                 stateSelector.value = stateName;
 
-                // Treasury Tracker
                 const treasuryReceived = document.querySelector('#treasury-received p:nth-child(2)');
                 const treasuryReceivedDate = document.querySelector('#treasury-received p:nth-child(3)');
                 const treasuryPending = document.getElementById('treasury-pending');
@@ -465,7 +565,7 @@
                 treasuryPendingTime.textContent = `${data.treasury.time} Days`;
                 treasuryPendingSLA.textContent = `SLA: ${data.treasury.sla} Days`;
 
-                treasuryPending.className = 'p-4 rounded-lg'; // reset classes
+                treasuryPending.className = 'p-4 rounded-lg text-center';
                 if (data.treasury.time > data.treasury.sla) {
                     treasuryPending.classList.add('bg-red-50', 'dark:bg-red-900/20', 'border', 'border-red-500/50');
                     document.querySelector('#treasury-pending p:nth-child(1)').className = 'text-sm font-medium text-red-600 dark:text-red-400';
@@ -478,11 +578,9 @@
                     treasuryPendingSLA.className = 'text-xs text-slate-400 dark:text-gray-500';
                 }
 
-                // UC Funnel Chart
                 ucFunnelChart.data.datasets[0].data = data.ucFunnel;
                 ucFunnelChart.update();
 
-                // Verification Health
                 document.getElementById('verify-official-perc').textContent = `${data.verification.official}%`;
                 document.getElementById('verify-official-bar').style.width = `${data.verification.official}%`;
                 document.getElementById('verify-beneficiary-perc').textContent = `${data.verification.beneficiary}%`;
@@ -490,17 +588,16 @@
                 document.getElementById('verify-community-perc').textContent = `${data.verification.community}%`;
                 document.getElementById('verify-community-bar').style.width = `${data.verification.community}%`;
                 
-                // AI Cards
                 const riskCard = document.getElementById('risk-alert-card');
                 const convergenceCard = document.getElementById('convergence-card');
                 riskCard.innerHTML = data.riskAlert.text;
                 convergenceCard.innerHTML = data.convergence.text;
-                riskCard.className = 'text-sm p-2 rounded'; // reset classes
+                riskCard.className = 'text-sm p-2 rounded';
                 if (data.riskAlert.type === 'high') riskCard.classList.add('text-red-600', 'dark:text-red-400', 'bg-red-50', 'dark:bg-red-900/20');
                 else riskCard.classList.add('text-green-700', 'dark:text-green-300', 'bg-green-50', 'dark:bg-green-900/20');
+                convergenceCard.className = 'text-sm p-2 rounded';
                 convergenceCard.classList.add('bg-green-50', 'dark:bg-green-900/20', 'text-green-700', 'dark:text-green-300');
                 
-                // Districts Table
                 const tableBody = document.getElementById('districts-table-body');
                 tableBody.innerHTML = '';
                 const colorClass = (value, highGood = true) => {
@@ -508,7 +605,7 @@
                         if (value > 90) return 'text-green-600 dark:text-green-400';
                         if (value > 75) return 'text-amber-600 dark:text-amber-400';
                         return 'text-red-600 dark:text-red-400';
-                    } else { // Lower is better (e.g., velocity)
+                    } else {
                         if (value < 15) return 'text-green-600 dark:text-green-400';
                         if (value < 30) return 'text-amber-600 dark:text-amber-400';
                         return 'text-red-600 dark:text-red-400';
@@ -528,7 +625,6 @@
                 });
             }
             
-            // Initialize with default state
             updateStateView('Maharashtra');
         });
     </script>
