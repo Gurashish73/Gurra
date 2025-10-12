@@ -995,18 +995,19 @@
 
       // --- API CONFIGURATION ---
       // IMPORTANT: Replace with your actual data.gov.in API key.
-      const DATA_GOV_API_KEY = 'YOUR_API_KEY_HERE'; 
+      const DATA_GOV_API_KEY = '579b464db66ec23bdd00000133fb7135101845b740c2380f4cccd1d5'; 
 
       // Replace with actual Resource IDs from data.gov.in for PM-AJAY scheme
       const RESOURCE_IDS = {
         funnel: 'c2f5a623-a212-4e73-b328-1be789431ab7', // Example ID for fund utilization
-        donut: 'e4b0942b-ea99-4f71-a8f2-8178263e7228',  // Example ID for component allocation
+        donut: 'a915f63d-bc99-47d0-8471-018f6c5c39c2',  // Example ID for component allocation
         line: '9f23c6a4-7a5d-4a1b-853f-3a830957b44b',   // Example ID for completion trend
         bar: '3b0f5b6d-3a4a-4e9a-9b87-5a67c5e5e3a3'     // Example ID for project types
       };
 
       // --- DATA FETCHING FUNCTIONS ---
       const fetchFromDataGov = async (resourceId, mockData, processor) => {
+        
         if (!DATA_GOV_API_KEY || DATA_GOV_API_KEY === 'YOUR_API_KEY_HERE') {
             console.warn('data.gov.in API key is missing. Using mock data.');
             return mockData;
@@ -1025,6 +1026,8 @@
             console.error(`Error fetching from data.gov.in for resource ${resourceId}:`, error);
             return mockData;
         }
+        console.log("Fetched records from Data.gov.in:", apiResult.records[0]);
+
       };
 
       const fetchNationalStats = async () => MOCK_DATA.nationalStats;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDO Dashboard | PM-AJAY</title>
+    <title>STATE Dashboard | PM-AJAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Configure Tailwind to use the 'dark' class for dark mode
@@ -43,12 +43,11 @@
     </style>
 </head>
 <body class="flex min-h-screen bg-[#fdfaf6] dark:bg-black">
-    <!-- Sidebar Navigation -->
     <aside class="sidebar w-64 flex-shrink-0 border-r border-slate-200 dark:border-gray-700 flex flex-col dark:bg-[#1c1b1a]">
         <div class="p-6">
             <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.874 6 7.5 6h5c.626 0 .988-.27 1.256-.579A6.012 6.012 0 0115.668 8.027c.21.34.332.732.332 1.155a3.999 3.999 0 01-4 4c-1.933 0-3.5-1.567-3.5-3.5a3.999 3.999 0 011.006-2.622c.23-.352.484-.65.744-.897C10.5 6.27 10.246 6 10 6h-.5a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5h-2a.5.5 0 00-.5.5v1.5a.5.5 0 00.5.5H8a.5.5 0 00.5-.5V9.5a3.5 3.5 0 00-3.5-3.5c-.538 0-1.03.123-1.468.342z" clip-rule="evenodd" />
                 </svg>
                 PM-AJAY
             </h1>
@@ -58,7 +57,7 @@
                 <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-indigo-600 dark:text-indigo-600"></i>
                 Dashboard
             </a>
-            <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
+            <a href="projects.html" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium">
                 <i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i>
                 Projects
             </a>
@@ -88,12 +87,10 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 p-6 lg:p-8">
-        <!-- Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Block Level Dashboard</h2>
+                <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">State Level Dashboard</h2>
                 <p class="text-slate-500 dark:text-gray-400 mt-1">Real-time overview of PM-AJAY components</p>
             </div>
             <div class="flex items-center mt-4 sm:mt-0">
@@ -116,9 +113,7 @@
             </div>
         </div>
 
-        <!-- KPI Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Total Projects -->
             <div class="card p-5">
                 <div class="flex justify-between items-start">
                     <h3 class="text-slate-500 dark:text-gray-400 font-medium">Total Projects</h3>
@@ -132,7 +127,6 @@
                     <span>8.2%</span> <span class="text-slate-500 dark:text-gray-400 ml-1">vs last month</span>
                 </p>
             </div>
-            <!-- Approved Projects -->
             <div class="card p-5">
                  <div class="flex justify-between items-start">
                     <h3 class="text-slate-500 dark:text-gray-400 font-medium">Approved Projects</h3>
@@ -146,8 +140,7 @@
                     <span>10.5%</span> <span class="text-slate-500 dark:text-gray-400 ml-1">vs last month</span>
                 </p>
             </div>
-             <!-- Executing Agencies -->
-            <div class="card p-5">
+             <div class="card p-5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-slate-500 dark:text-gray-400 font-medium">Executing Agencies</h3>
@@ -158,8 +151,7 @@
                     </div>
                 </div>
             </div>
-             <!-- Villages Covered -->
-            <div class="card p-5">
+             <div class="card p-5">
                  <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-slate-500 dark:text-gray-400 font-medium">Villages Covered</h3>
@@ -171,10 +163,105 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Charts and Financials -->
+
+        <div class="mt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">District Project Progress</h3>
+                <button class="flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
+                    View All Projects <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card p-5 flex flex-col">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 dark:text-gray-100">North Delhi Infra Grant</h4>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">District: North Delhi</p>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                            <span class="text-sm font-bold text-yellow-600 dark:text-yellow-400">75%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                         <span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">In Progress</span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                         <button class="view-details-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">View Details</button>
+                    </div>
+                </div>
+
+                <div class="card p-5 flex flex-col">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 dark:text-gray-100">West Delhi Skill Center</h4>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">District: West Delhi</p>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                            <span class="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                         <span class="bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Completed</span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                         <button class="view-details-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">View Details</button>
+                    </div>
+                </div>
+
+                <div class="card p-5 flex flex-col">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 dark:text-gray-100">South Delhi Hostels</h4>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">District: South Delhi</p>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400">10%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                            <div class="bg-blue-500 h-2.5 rounded-full" style="width: 10%;"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                         <span class="bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Initiated</span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                         <button class="view-details-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">View Details</button>
+                    </div>
+                </div>
+
+                <div class="card p-5 flex flex-col">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 dark:text-gray-100">East Delhi Adarsh Gram</h4>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">District: East Delhi</p>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                            <span class="text-sm font-bold text-red-600 dark:text-red-400">35%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                            <div class="bg-red-500 h-2.5 rounded-full" style="width: 35%;"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                         <span class="bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-400 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Delayed</span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                         <button class="view-details-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-            <!-- Project Status Dynamics -->
             <div class="card lg:col-span-2 p-5">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Project Status Dynamics</h3>
@@ -187,44 +274,42 @@
                     <canvas id="projectStatusChart"></canvas>
                 </div>
             </div>
-            <!-- Financial Overview -->
             <div class="flex flex-col gap-6">
                  <div class="card p-5">
-                     <div class="flex items-start justify-between">
-                         <div>
-                            <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Allocated</h3>
-                            <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹4.52 Cr</p>
-                            <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
-                         </div>
-                         <div class="relative w-16 h-16">
-                             <svg class="w-full h-full" viewBox="0 0 36 36">
-                                <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                                <path class="text-indigo-600" stroke-width="3" stroke-dasharray="85, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                             </svg>
-                             <div class="absolute inset-0 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">85%</div>
-                         </div>
-                     </div>
+                      <div class="flex items-start justify-between">
+                           <div>
+                                <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Allocated</h3>
+                                <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹4.52 Cr</p>
+                                <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
+                           </div>
+                           <div class="relative w-16 h-16">
+                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                    <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                    <path class="text-indigo-600" stroke-width="3" stroke-dasharray="85, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                 </svg>
+                                 <div class="absolute inset-0 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">85%</div>
+                           </div>
+                      </div>
                  </div>
                  <div class="card p-5">
                       <div class="flex items-start justify-between">
-                         <div>
-                            <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Utilized</h3>
-                            <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹3.84 Cr</p>
-                             <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
-                         </div>
-                         <div class="relative w-16 h-16">
-                             <svg class="w-full h-full" viewBox="0 0 36 36">
-                                <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                                <path class="text-green-600" stroke-width="3" stroke-dasharray="75, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                             </svg>
-                              <div class="absolute inset-0 flex items-center justify-center text-green-600 dark:text-green-400 font-bold">75%</div>
-                         </div>
-                     </div>
+                           <div>
+                                <h3 class="text-slate-500 dark:text-gray-400 font-medium">Funds Utilized</h3>
+                                <p class="text-3xl font-bold text-slate-800 dark:text-gray-100 mt-2">₹3.84 Cr</p>
+                                 <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Current Financial Year</p>
+                           </div>
+                           <div class="relative w-16 h-16">
+                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                    <path class="text-slate-200 dark:text-gray-700" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                    <path class="text-green-600" stroke-width="3" stroke-dasharray="75, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                 </svg>
+                                  <div class="absolute inset-0 flex items-center justify-center text-green-600 dark:text-green-400 font-bold">75%</div>
+                           </div>
+                      </div>
                  </div>
             </div>
         </div>
 
-        <!-- Recent Activity Table -->
         <div class="card mt-6 p-5">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Agency Work Allocation</h3>
@@ -276,7 +361,65 @@
                 </table>
             </div>
         </div>
-    </main>
+
+        <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+            <div class="card w-full max-w-2xl max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-5 border-b border-slate-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100">Project Details: North Delhi Infra Grant</h3>
+                    <button id="close-modal-btn" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                        <i data-lucide="x" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                    </button>
+                </div>
+
+                <div class="p-6 overflow-y-auto">
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-700 dark:text-gray-200 mb-2">Supervisor Information</h4>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/48x48/E2E8F0/475569?text=AS" alt="Supervisor" class="w-12 h-12 rounded-full">
+                            <div class="ml-4">
+                                <p class="font-bold text-slate-800 dark:text-gray-100">Anjali Sharma</p>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">Junior Engineer, PWD</p>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">Contact: +91 987XXXXX21</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-slate-700 dark:text-gray-200 mb-2">Financials</h4>
+                        <div class="flex justify-between items-center mb-1 text-sm">
+                            <span class="text-slate-600 dark:text-gray-300">Funds Utilized</span>
+                            <span class="font-bold text-slate-800 dark:text-gray-100">₹60 Lakh / ₹80 Lakh</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-3">
+                            <div class="bg-yellow-500 h-3 rounded-full" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <h4 class="font-semibold text-slate-700 dark:text-gray-200">Workers Hired</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">45</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-700 dark:text-gray-200">Days Remaining</h4>
+                            <p class="text-2xl font-bold text-slate-800 dark:text-gray-100">22</p>
+                            <p class="text-xs text-slate-500 dark:text-gray-400">End Date: 03 Nov, 2025</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-slate-700 dark:text-gray-200 mb-2">Uploaded Proof (Photos)</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <img src="https://placehold.co/200x150/cccccc/666666?text=Site+Photo+1" alt="Proof 1" class="rounded-lg object-cover w-full h-28">
+                            <img src="https://placehold.co/200x150/cccccc/666666?text=Site+Photo+2" alt="Proof 2" class="rounded-lg object-cover w-full h-28">
+                            <img src="https://placehold.co/200x150/cccccc/666666?text=Invoice+Scan" alt="Proof 3" class="rounded-lg object-cover w-full h-28">
+                            <img src="https://placehold.co/200x150/cccccc/666666?text=Material+Delivery" alt="Proof 4" class="rounded-lg object-cover w-full h-28">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -292,7 +435,7 @@
                 const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : '#e2e8f0';
                 const textColor = isDark ? '#9ca3af' : '#64748b'; /* gray-400 : slate-500 */
                 return {
-                     doughnut: {
+                    doughnut: {
                         responsive: true,
                         maintainAspectRatio: false,
                         cutout: '70%',
@@ -407,7 +550,6 @@
                     darkIcon.classList.add('hidden');
                     localStorage.setItem('theme', 'light');
                 }
-                // No need to re-create icons, just update charts
                 updateAllChartsTheme(isDark);
             };
 
@@ -422,11 +564,36 @@
                 const isDark = document.documentElement.classList.contains('dark');
                 setTheme(!isDark);
             });
+
+            // START: Modal Functionality
+            const detailsModal = document.getElementById('details-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const viewDetailsBtns = document.querySelectorAll('.view-details-btn');
+
+            const openModal = () => {
+                detailsModal.classList.remove('hidden');
+                // Ensure icons inside the modal are rendered
+                lucide.createIcons();
+            };
+
+            const closeModal = () => {
+                detailsModal.classList.add('hidden');
+            };
+
+            viewDetailsBtns.forEach(btn => {
+                btn.addEventListener('click', openModal);
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+
+            // Close modal if user clicks on the background overlay
+            detailsModal.addEventListener('click', (event) => {
+                if (event.target === detailsModal) {
+                    closeModal();
+                }
+            });
+            // END: Modal Functionality
         });
     </script>
 </body>
 </html>
-
-
-
-
