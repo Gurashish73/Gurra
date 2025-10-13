@@ -137,15 +137,15 @@
             
             <form id="login-form" class="space-y-5">
                 <div class="relative">
-                    <input type="text" id="email" name="email" class="w-full pl-4 pr-4 py-3 form-input rounded-md focus:outline-none" placeholder="Email or Username">
+                    <input type="email" id="email" name="email" class="w-full pl-4 pr-4 py-3 form-input rounded-md focus:outline-none" placeholder="Email or Username" required>
                 </div>
                 
                 <div class="relative">
-                    <input type="password" id="password" name="password" class="w-full pl-4 pr-4 py-3 form-input rounded-md focus:outline-none" placeholder="Password">
+                    <input type="password" id="password" name="password" class="w-full pl-4 pr-4 py-3 form-input rounded-md focus:outline-none" placeholder="Password" required>
                 </div>
 
                 <div class="relative">
-                    <select id="role-select" name="role" class="w-full pl-4 pr-10 py-3 form-input rounded-md appearance-none focus:outline-none">
+                    <select id="role-select" name="role" required class="w-full pl-4 pr-10 py-3 form-input rounded-md appearance-none focus:outline-none">
                         <option value="" disabled selected class="text-gray-500">Select Access Level</option>
                         <option value="national">National Administrator</option>
                         <option value="state">State Coordinator</option>
@@ -233,8 +233,6 @@
                         redirectUrl = 'bdo.html';
                         break;
                     default:
-                        // If no role is selected, you might want to show an error or do nothing.
-                        // For now, it just won't redirect.
                         return; 
                 }
                 
@@ -247,4 +245,7 @@
     </script>
 </body>
 </html>
+
+
+
 
