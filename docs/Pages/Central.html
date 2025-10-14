@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +19,19 @@
             background-color: #ffffff;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
         }
         .dark .sidebar, .dark .card {
             background-color: #1c1b1a;
             border: 1px solid #374151;
             box-shadow: none;
+        }
+        .dark .card:hover {
+            background-color: #2c2b2a;
         }
         #map-container { position: relative; }
         .state {
@@ -44,6 +53,14 @@
             font-size: 0.875rem; pointer-events: none; white-space: nowrap;
             z-index: 10; transition: opacity 0.2s;
         }
+        .modal-body::-webkit-scrollbar { width: 8px; }
+        .modal-body::-webkit-scrollbar-track { background: #f1f5f9; }
+        .dark .modal-body::-webkit-scrollbar-track { background: #374151; }
+        .modal-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .modal-body::-webkit-scrollbar-thumb { background: #4b5563; }
+        .modal-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark .modal-body::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        select:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="flex min-h-screen bg-[#fdfaf6] dark:bg-black">
@@ -56,11 +73,10 @@
         </div>
         <nav class="flex-1 px-4 py-2">
             <a href="#" id="nav-dashboard" class="flex items-center px-4 py-2.5 text-slate-700 bg-indigo-50 dark:bg-white dark:text-slate-900 rounded-lg font-semibold"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-indigo-600"></i>Dashboard</a>
-            <a href="#" id="nav-projects" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="briefcase" class="w-5 h-5 mr-3"></i>Projects</a>
+            <a href="#" id="nav-projects" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i>Projects</a>
             <a href="#" id="nav-state-performance" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i>State Performance</a>
             <a href="#" id="nav-fund-management" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="landmark" class="w-5 h-5 mr-3"></i>Fund Management</a>
-            <!-- Add the link to your fund_flow.html file in the href attribute below -->
-            <a href="./fund_flow.html" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="arrow-right-left" class="w-5 h-5 mr-3"></i>Fund Flow</a>
+            <a href="./fundflow.html" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="arrow-right-left" class="w-5 h-5 mr-3"></i>Fund Flow</a>
             <a href="#" id="nav-policy-analytics" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="brain-circuit" class="w-5 h-5 mr-3"></i>Policy Analytics</a>
             <a href="#" id="nav-approvals" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="check-square" class="w-5 h-5 mr-3"></i>Approvals</a>
             <a href="#" class="flex items-center px-4 py-2.5 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg mt-1 font-medium"><i data-lucide="settings" class="w-5 h-5 mr-3"></i>Settings</a>
@@ -180,90 +196,7 @@
         </div>
 
         <div id="projects-view" class="hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Project Monitoring</h2>
-                    <p class="text-slate-500 dark:text-gray-400 mt-1">Track progress and agency performance for all projects</p>
-                </div>
-                <button class="mt-4 sm:mt-0 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700">
-                    <i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add Project
-                </button>
             </div>
-
-            <div class="card p-4 mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
-                        <option>All States</option><option>Delhi</option><option>Maharashtra</option>
-                    </select>
-                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
-                        <option>All Districts</option><option>North Delhi</option><option>Mumbai</option>
-                    </select>
-                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
-                        <option>All Agencies</option><option>State PWD</option><option>Pratham NGO</option>
-                    </select>
-                    <select class="w-full bg-white dark:bg-gray-800 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm p-2 text-sm text-slate-700 dark:text-gray-300">
-                        <option>All Status</option><option>In Progress</option><option>Completed</option><option>Delayed</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="card p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">North Delhi Infra Grant</h4>
-                            <span class="text-xs font-semibold text-amber-700 bg-amber-100 dark:text-amber-200 dark:bg-amber-500/20 px-2 py-1 rounded-full">In Progress</span>
-                        </div>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: State PWD</p>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
-                                <span class="text-slate-500 dark:text-gray-400">75%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-amber-500 h-2.5 rounded-full" style="width: 75%"></div></div>
-                        </div>
-                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹60L</span> / ₹80L Utilized</p>
-                    </div>
-                    <button class="view-details-btn mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg" data-project-id="proj-1">View Details</button>
-                </div>
-                <div class="card p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">West Delhi Skill Center</h4>
-                            <span class="text-xs font-semibold text-green-700 bg-green-100 dark:text-green-200 dark:bg-green-500/20 px-2 py-1 rounded-full">Completed</span>
-                        </div>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: Pratham NGO</p>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
-                                <span class="text-slate-500 dark:text-gray-400">100%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div></div>
-                        </div>
-                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹25L</span> / ₹25L Utilized</p>
-                    </div>
-                    <button class="view-details-btn mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg" data-project-id="proj-2">View Details</button>
-                </div>
-                <div class="card p-5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-gray-100">East Delhi Adarsh Gram</h4>
-                            <span class="text-xs font-semibold text-red-700 bg-red-100 dark:text-red-200 dark:bg-red-500/20 px-2 py-1 rounded-full">Delayed</span>
-                        </div>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mb-4">Agency: Block Panchayat</p>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium text-slate-600 dark:text-gray-300">Progress</span>
-                                <span class="text-slate-500 dark:text-gray-400">35%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div class="bg-red-600 h-2.5 rounded-full" style="width: 35%"></div></div>
-                        </div>
-                        <p class="text-sm text-slate-600 dark:text-gray-300 mt-3">Budget: <span class="font-semibold">₹40L</span> / ₹1.2Cr Utilized</p>
-                    </div>
-                    <button class="view-details-btn mt-4 w-full text-center bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-200 font-semibold py-2 rounded-lg" data-project-id="proj-3">View Details</button>
-                </div>
-            </div>
-        </div>
 
         <div id="state-performance-view" class="hidden">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
@@ -353,77 +286,6 @@
                         <tbody id="districts-table-body" class="dark:text-gray-300 divide-y dark:divide-gray-700">
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="project-details-view" class="hidden">
-            <div class="mb-6">
-                <button id="back-to-projects-btn" class="flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-gray-200 mb-2">
-                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                    Back to Project List
-                </button>
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 id="project-detail-title" class="text-3xl font-bold text-slate-800 dark:text-gray-100"></h2>
-                        <p id="project-detail-location" class="text-slate-500 dark:text-gray-400 mt-1"></p>
-                    </div>
-                    <span id="project-detail-status-badge" class="text-sm font-semibold px-3 py-1.5 rounded-full mt-1"></span>
-                </div>
-            </div>
-        
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-1 flex flex-col gap-6">
-                    <div class="card p-5">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Key Details</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">Agency:</span><span id="project-detail-agency" class="font-semibold text-slate-700 dark:text-gray-200 text-right"></span></div>
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">Component:</span><span id="project-detail-component" class="font-semibold text-slate-700 dark:text-gray-200 text-right"></span></div>
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">Start Date:</span><span id="project-detail-start-date" class="font-semibold text-slate-700 dark:text-gray-200 text-right"></span></div>
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">End Date:</span><span id="project-detail-end-date" class="font-semibold text-slate-700 dark:text-gray-200 text-right"></span></div>
-                        </div>
-                    </div>
-                    <div class="card p-5">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Financial Summary</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">Total Budget:</span><span id="project-detail-budget" class="font-semibold text-slate-700 dark:text-gray-200"></span></div>
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">Funds Utilized:</span><span id="project-detail-utilized" class="font-semibold text-slate-700 dark:text-gray-200"></span></div>
-                            <div class="flex justify-between"><span class="text-slate-500 dark:text-gray-400">UC Status:</span><span id="project-detail-uc-status" class="font-semibold"></span></div>
-                        </div>
-                    </div>
-                    <div class="card p-5">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Triangulation of Verification</h3>
-                        <div class="space-y-4 pt-2">
-                            <div>
-                                <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Official (Photos)</span><span id="project-verify-official-perc" class="text-slate-500 dark:text-gray-400"></span></div>
-                                <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="project-verify-official-bar" class="bg-blue-600 h-2.5 rounded-full"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Beneficiary (IVR)</span><span id="project-verify-beneficiary-perc" class="text-slate-500 dark:text-gray-400"></span></div>
-                                <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="project-verify-beneficiary-bar" class="bg-green-600 h-2.5 rounded-full"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-1"><span class="font-medium text-slate-600 dark:text-gray-300">Community (Social Audit)</span><span id="project-verify-community-perc" class="text-slate-500 dark:text-gray-400"></span></div>
-                                <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5"><div id="project-verify-community-bar" class="bg-amber-500 h-2.5 rounded-full"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="lg:col-span-2 flex flex-col gap-6">
-                    <div class="card p-5">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Live Visual Proof</h3>
-                        <div id="project-detail-photos" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            </div>
-                    </div>
-                    <div class="card p-5">
-                        <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-100 mb-4">Feedback & Issues</h3>
-                        <div class="bg-slate-50 dark:bg-gray-800/50 p-4 rounded-lg">
-                            <p class="text-sm text-slate-600 dark:text-gray-300 mb-3">Report an issue or provide feedback on this project.</p>
-                            <textarea class="w-full bg-white dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-md p-2 text-sm" rows="3" placeholder="Type your message here..."></textarea>
-                            <button class="mt-2 w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700">Submit Feedback</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -615,7 +477,6 @@
             </div>
         </div>
 
-        <!-- NEW APPROVALS VIEW -->
         <div id="approvals-view" class="hidden">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
                 <div>
@@ -651,7 +512,62 @@
             </div>
             
             <div class="space-y-4" id="approvals-list-container">
-                <!-- Approval items will be dynamically inserted here -->
+                </div>
+        </div>
+
+        <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+            <div class="card w-full max-w-2xl max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-5 border-b border-slate-200 dark:border-gray-700 flex-shrink-0">
+                    <div>
+                        <h3 id="feedback-modal-title" class="text-lg font-semibold text-slate-800 dark:text-gray-100">Public Feedback</h3>
+                        <p id="feedback-modal-subtitle" class="text-sm text-slate-500 dark:text-gray-400">Project: North Delhi Infra Grant</p>
+                    </div>
+                    <button id="close-feedback-modal-btn" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700">
+                        <i data-lucide="x" class="w-5 h-5 text-slate-600 dark:text-gray-400"></i>
+                    </button>
+                </div>
+    
+                <div class="p-6 overflow-y-auto modal-body space-y-5">
+                    <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <p class="font-semibold text-slate-800 dark:text-gray-100">Ravi Kumar</p>
+                                <p class="text-xs text-slate-500 dark:text-gray-400">10 Oct, 2025</p>
+                            </div>
+                            <div class="flex items-center text-yellow-500">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i>
+                                <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(4/5)</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300">The construction work is progressing well, but the material storage is causing some traffic issues in the evening.</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <p class="font-semibold text-slate-800 dark:text-gray-100">Sunita Devi</p>
+                                <p class="text-xs text-slate-500 dark:text-gray-400">08 Oct, 2025</p>
+                            </div>
+                            <div class="flex items-center text-yellow-500">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(5/5)</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300">Very happy with the quality of the road being built. The engineers are professional and listen to our concerns.</p>
+                    </div>
+                     <div class="p-4 rounded-lg bg-slate-50 dark:bg-gray-800/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <p class="font-semibold text-slate-800 dark:text-gray-100">Anonymous</p>
+                                <p class="text-xs text-slate-500 dark:text-gray-400">05 Oct, 2025</p>
+                            </div>
+                            <div class="flex items-center text-yellow-500">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i><i data-lucide="star" class="w-4 h-4"></i><i data-lucide="star" class="w-4 h-4"></i>
+                                <span class="text-xs ml-2 text-slate-600 dark:text-gray-300">(2/5)</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-300">Work is very slow and often stops for days. We were told it would be faster.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -666,10 +582,9 @@
                 national: document.getElementById('national-dashboard-view'),
                 state: document.getElementById('state-performance-view'),
                 projects: document.getElementById('projects-view'),
-                projectDetails: document.getElementById('project-details-view'),
                 fundManagement: document.getElementById('fund-management-view'),
                 policyAnalytics: document.getElementById('policy-analytics-view'),
-                approvals: document.getElementById('approvals-view') // New view
+                approvals: document.getElementById('approvals-view')
             };
 
             const navLinks = {
@@ -678,12 +593,11 @@
                 statePerformance: document.getElementById('nav-state-performance'),
                 fundManagement: document.getElementById('nav-fund-management'),
                 policyAnalytics: document.getElementById('nav-policy-analytics'),
-                approvals: document.getElementById('nav-approvals') // New nav link
+                approvals: document.getElementById('nav-approvals')
             };
 
             const backToNationalBtn = document.getElementById('back-to-national');
-            const backToProjectsBtn = document.getElementById('back-to-projects-btn');
-
+            
             const showView = (viewToShow) => {
                 Object.values(views).forEach(view => view.classList.add('hidden'));
                 Object.values(navLinks).forEach(link => {
@@ -692,29 +606,10 @@
                 });
                 
                 let activeLink;
-                if (viewToShow === 'national') {
-                    views.national.classList.remove('hidden');
-                    activeLink = navLinks.dashboard;
-                } else if (viewToShow === 'projects') {
-                    views.projects.classList.remove('hidden');
-                    activeLink = navLinks.projects;
-                } else if (viewToShow === 'state') {
-                    views.state.classList.remove('hidden');
-                    activeLink = navLinks.statePerformance;
-                } else if (viewToShow === 'project-details') {
-                    views.projectDetails.classList.remove('hidden');
-                    activeLink = navLinks.projects;
-                } else if (viewToShow === 'fund-management') {
-                    views.fundManagement.classList.remove('hidden');
-                    activeLink = navLinks.fundManagement;
-                } else if (viewToShow === 'policy-analytics') {
-                    views.policyAnalytics.classList.remove('hidden');
-                    activeLink = navLinks.policyAnalytics;
-                } else if (viewToShow === 'approvals') { // New view handler
-                    views.approvals.classList.remove('hidden');
-                    activeLink = navLinks.approvals;
+                if (views[viewToShow]) {
+                    views[viewToShow].classList.remove('hidden');
+                    activeLink = navLinks[viewToShow === 'national' ? 'dashboard' : viewToShow];
                 }
-
 
                 if (activeLink) {
                     activeLink.classList.add('bg-indigo-50', 'dark:bg-white', 'dark:text-slate-900', 'font-semibold');
@@ -725,12 +620,10 @@
             navLinks.dashboard.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
             navLinks.projects.addEventListener('click', (e) => { e.preventDefault(); showView('projects'); });
             navLinks.statePerformance.addEventListener('click', (e) => { e.preventDefault(); updateStateView('Maharashtra'); showView('state'); });
-            navLinks.fundManagement.addEventListener('click', (e) => { e.preventDefault(); updateFundManagementView(); showView('fund-management'); });
-            navLinks.policyAnalytics.addEventListener('click', (e) => { e.preventDefault(); showView('policy-analytics'); });
-            navLinks.approvals.addEventListener('click', (e) => { e.preventDefault(); showView('approvals'); }); // New event listener
+            navLinks.fundManagement.addEventListener('click', (e) => { e.preventDefault(); updateFundManagementView(); showView('fundManagement'); });
+            navLinks.policyAnalytics.addEventListener('click', (e) => { e.preventDefault(); showView('policyAnalytics'); });
+            navLinks.approvals.addEventListener('click', (e) => { e.preventDefault(); showView('approvals'); });
             backToNationalBtn.addEventListener('click', (e) => { e.preventDefault(); showView('national'); });
-            backToProjectsBtn.addEventListener('click', (e) => { e.preventDefault(); showView('projects'); });
-
             
             // --- Theme Toggling Logic ---
             const themeToggleBtn = document.getElementById('theme-toggle');
@@ -776,7 +669,6 @@
                         updateStateView(stateName);
                         showView('state');
                     } else {
-                        // Using a custom modal instead of alert
                         console.warn(`No detailed data available for ${stateName} in this demo.`);
                     }
                 });
@@ -808,7 +700,6 @@
             
             // --- MOCK DATA ---
             const mockStateData = { 'Maharashtra': { treasury: { received: '₹12,500 Cr', receivedDate: 'on 01 Oct 2025', time: 22, sla: 15, released: '₹11,800 Cr', releasedDate: 'on 23 Oct 2025'}, ucFunnel: [1200, 1150, 1100, 1050], verification: { official: 95, beneficiary: 88, community: 75 }, riskAlert: { type: 'high', text: '<strong>High Risk:</strong> Hostel, Nagpur. Procurement delay predicted.' }, convergence: { text: '<strong>15 projects</strong> in Yavatmal overlap with PMGSY. Est. saving: <strong>₹12 Cr</strong>.' }, districts: [ { name: 'Pune', velocity: 12, uc: 99, completion: 92, quality: 98 }, { name: 'Nagpur', velocity: 20, uc: 85, completion: 81, quality: 95 }, { name: 'Nashik', velocity: 14, uc: 96, completion: 89, quality: 88 }, { name: 'Yavatmal', velocity: 35, uc: 65, completion: 70, quality: 75 } ] }, 'Gujarat': { treasury: { received: '₹15,000 Cr', receivedDate: 'on 28 Sep 2025', time: 10, sla: 15, released: '₹15,000 Cr', releasedDate: 'on 08 Oct 2025'}, ucFunnel: [1800, 1790, 1785, 1780], verification: { official: 99, beneficiary: 96, community: 92 }, riskAlert: { type: 'low', text: '<strong>Low Risk:</strong> All projects on track.' }, convergence: { text: '<strong>8 projects</strong> in Ahmedabad overlap with NREGA. Est. saving: <strong>₹8 Cr</strong>.' }, districts: [ { name: 'Ahmedabad', velocity: 8, uc: 99, completion: 98, quality: 99 }, { name: 'Surat', velocity: 10, uc: 98, completion: 97, quality: 98 } ] }, 'Uttar Pradesh': { treasury: { received: '₹18,200 Cr', receivedDate: 'on 01 Oct 2025', time: 28, sla: 15, released: '₹15,000 Cr', releasedDate: 'on 29 Oct 2025'}, ucFunnel: [2500, 2300, 2000, 1850], verification: { official: 85, beneficiary: 78, community: 65 }, riskAlert: { type: 'high', text: '<strong>High Risk:</strong> Adarsh Gram, Lucknow. Land acquisition issues predicted.' }, convergence: { text: '<strong>45 projects</strong> across 5 districts overlap with PMAY. Est. saving: <strong>₹35 Cr</strong>.' }, districts: [ { name: 'Lucknow', velocity: 25, uc: 75, completion: 72, quality: 80 }, { name: 'Kanpur', velocity: 28, uc: 70, completion: 68, quality: 75 } ] }, 'Bihar': { treasury: { received: '₹9,800 Cr', receivedDate: 'on 05 Oct 2025', time: 45, sla: 15, released: '₹7,000 Cr', releasedDate: 'on 19 Nov 2025'}, ucFunnel: [900, 750, 500, 410], verification: { official: 70, beneficiary: 62, community: 55 }, riskAlert: { type: 'high', text: '<strong>Critical Risk:</strong> Multiple projects show signs of fund diversion.' }, convergence: { text: '<strong>Low convergence</strong> identified. Opportunity to train officials.' }, districts: [ { name: 'Patna', velocity: 40, uc: 60, completion: 55, quality: 65 }, { name: 'Gaya', velocity: 48, uc: 55, completion: 50, quality: 60 } ] } };
-            const mockProjectData = { 'proj-1': { title: 'North Delhi Infra Grant', location: 'Rohini Sector 22, North Delhi, Delhi', status: 'In Progress', agency: 'State PWD', component: 'Grant-in-Aid', startDate: '15 Jul 2025', endDate: '30 Nov 2025', budget: '₹80,00,000', utilized: '₹60,00,000', ucStatus: 'Pending Photo Proof', verification: { official: 100, beneficiary: 85, community: 70 }, photos: [ { url: 'https://placehold.co/600x400/cccccc/666666?text=Foundation+Work', caption: 'Foundation (Geo-tagged: 28.73°N, 77.11°E)' }, { url: 'https://placehold.co/600x400/cccccc/666666?text=Brickwork+50%25', caption: 'Brickwork 50% (Timestamp: 10/10/2025)' }, ] }, 'proj-2': { title: 'West Delhi Skill Center', location: 'Janakpuri, West Delhi, Delhi', status: 'Completed', agency: 'Pratham NGO', component: 'Skill Development', startDate: '01 May 2025', endDate: '25 Sep 2025', budget: '₹25,00,000', utilized: '₹25,00,000', ucStatus: 'Approved', verification: { official: 100, beneficiary: 98, community: 95 }, photos: [ { url: 'https://placehold.co/600x400/cccccc/666666?text=Building+Complete', caption: 'Building Complete (Geo-tagged: 28.62°N, 77.08°E)' }, { url: 'https://placehold.co/600x400/cccccc/666666?text=Equipment+Installed', caption: 'Equipment Installed (Timestamp: 20/09/2025)' }, { url: 'https://placehold.co/600x400/cccccc/666666?text=Inauguration', caption: 'Inauguration Ceremony (Timestamp: 25/09/2025)' }, ] }, 'proj-3': { title: 'East Delhi Adarsh Gram', location: 'Ghazipur Village, East Delhi, Delhi', status: 'Delayed', agency: 'Block Panchayat', component: 'Adarsh Gram', startDate: '10 Jun 2025', endDate: '15 Dec 2025', budget: '₹1,20,00,000', utilized: '₹40,00,000', ucStatus: 'Not Applicable', verification: { official: 60, beneficiary: 45, community: 30 }, photos: [ { url: 'https://placehold.co/600x400/cccccc/666666?text=Site+Clearing', caption: 'Site Clearing (Geo-tagged: 28.63°N, 77.31°E)' }, ] } };
             const mockApprovalsData = [
                 { id: 'APP-MH-001', title: 'Maharashtra AAP FY26', submittedBy: 'Govt. of Maharashtra', type: 'Annual Action Plan', value: '₹12,500 Cr', date: '2025-10-10', status: 'Pending', risk: { score: 'Low', text: 'Low Risk | 92% Success Probability' } },
                 { id: 'APP-UP-001', title: 'Uttar Pradesh AAP FY26', submittedBy: 'Govt. of Uttar Pradesh', type: 'Annual Action Plan', value: '₹18,200 Cr', date: '2025-10-08', status: 'Pending', risk: { score: 'Medium', text: 'Medium Risk | 75% Success Probability' } },
@@ -851,24 +742,6 @@
                 data.districts.forEach(district => { const row = `<tr><td class="px-4 py-3 font-medium">${district.name}</td><td class="px-4 py-3 text-center ${colorClass(district.velocity, false)}">${district.velocity}</td><td class="px-4 py-3 text-center ${colorClass(district.uc)}">${district.uc}%</td><td class="px-4 py-3 text-center ${colorClass(district.completion)}">${district.completion}%</td><td class="px-4 py-3 text-center ${colorClass(district.quality)}">${district.quality}%</td></tr>`; tableBody.innerHTML += row; });
             }
             
-            // --- PROJECT DETAILS LOGIC ---
-            function updateProjectDetailsView(projectId) {
-                const data = mockProjectData[projectId]; if (!data) return;
-                document.getElementById('project-detail-title').textContent = data.title; document.getElementById('project-detail-location').textContent = data.location; document.getElementById('project-detail-agency').textContent = data.agency; document.getElementById('project-detail-component').textContent = data.component; document.getElementById('project-detail-start-date').textContent = data.startDate; document.getElementById('project-detail-end-date').textContent = data.endDate; document.getElementById('project-detail-budget').textContent = data.budget; document.getElementById('project-detail-utilized').textContent = data.utilized; document.getElementById('project-detail-uc-status').textContent = data.ucStatus;
-                const statusBadge = document.getElementById('project-detail-status-badge');
-                statusBadge.textContent = data.status; statusBadge.className = 'text-sm font-semibold px-3 py-1.5 rounded-full mt-1';
-                if (data.status === 'Completed') statusBadge.classList.add('text-green-700', 'bg-green-100', 'dark:text-green-200', 'dark:bg-green-500/20');
-                else if (data.status === 'In Progress') statusBadge.classList.add('text-amber-700', 'bg-amber-100', 'dark:text-amber-200', 'dark:bg-amber-500/20');
-                else if (data.status === 'Delayed') statusBadge.classList.add('text-red-700', 'bg-red-100', 'dark:text-red-200', 'dark:bg-red-500/20');
-                const ucStatusEl = document.getElementById('project-detail-uc-status');
-                ucStatusEl.className = 'font-semibold';
-                if (data.ucStatus === 'Approved') ucStatusEl.classList.add('text-green-600', 'dark:text-green-400');
-                else ucStatusEl.classList.add('text-amber-600', 'dark:text-amber-400');
-                document.getElementById('project-verify-official-perc').textContent = `${data.verification.official}%`; document.getElementById('project-verify-official-bar').style.width = `${data.verification.official}%`; document.getElementById('project-verify-beneficiary-perc').textContent = `${data.verification.beneficiary}%`; document.getElementById('project-verify-beneficiary-bar').style.width = `${data.verification.beneficiary}%`; document.getElementById('project-verify-community-perc').textContent = `${data.verification.community}%`; document.getElementById('project-verify-community-bar').style.width = `${data.verification.community}%`;
-                const photoContainer = document.getElementById('project-detail-photos'); photoContainer.innerHTML = '';
-                data.photos.forEach(photo => { const photoEl = `<div class="relative group"><img src="${photo.url}" alt="${photo.caption}" class="rounded-lg object-cover w-full h-32"><div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">${photo.caption}</div></div>`; photoContainer.innerHTML += photoEl; });
-            }
-
             // --- Fund Management View Logic ---
             let disbursementTrendChart, componentAllocationChart;
             function updateFundManagementView() {
@@ -962,21 +835,277 @@
                 });
             }
 
+            // --- NEW PROJECTS VIEW LOGIC ---
+            const projectsViewContainer = document.getElementById('projects-view');
+            projectsViewContainer.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-800 dark:text-gray-100">Project Monitoring</h2>
+                        <p class="text-slate-500 dark:text-gray-400 mt-1">Track, filter, and review all ongoing and completed projects.</p>
+                    </div>
+                    <div class="flex items-center mt-4 sm:mt-0">
+                        <div class="flex items-center ml-6">
+                            <img src="https://placehold.co/40x40/E2E8F0/475569?text=BDO" alt="BDO" class="w-10 h-10 rounded-full">
+                            <div class="ml-3">
+                                <p class="font-semibold text-slate-800 dark:text-gray-100">Mr. Alok Verma</p>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">BDO, Pusa Block</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-6 p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex flex-wrap gap-4 flex-grow">
+                            <select id="state-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">Select State</option>
+                            </select>
+                            <select id="district-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+                                <option value="">Select District</option>
+                            </select>
+                            <select id="project-select" class="flex-grow border border-slate-300 rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+                                <option value="">Select Project</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            <button id="reset-filters-btn" class="bg-slate-200 text-slate-800 dark:bg-gray-600 dark:text-gray-200 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 dark:hover:bg-gray-500 flex items-center">
+                                <i data-lucide="rotate-cw" class="w-5 h-5 mr-2"></i>Reset
+                            </button>
+                            <button class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-indigo-700 flex items-center">
+                                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>Add Project
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+            `;
+            
+            const stateSelect = document.getElementById('state-select');
+            const districtSelect = document.getElementById('district-select');
+            const projectSelect = document.getElementById('project-select');
+            const projectGrid = document.getElementById('project-grid');
+            const resetFiltersBtn = document.getElementById('reset-filters-btn');
+            let allProjectCards = [];
 
-            // --- Final Event Listeners and Initial Load ---
-            document.querySelectorAll('.view-details-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const projectId = this.dataset.projectId;
-                    updateProjectDetailsView(projectId);
-                    showView('project-details');
-                });
+            const projectData = {
+                "Andhra Pradesh": { "Visakhapatnam": ["Vizag Port Expansion", "Bheemili Beach Corridor"], "Guntur": ["Guntur Chili Market Modernization", "Amaravati Road Widening"], "Tirupati": ["Tirupati Temple Infrastructure Upgrade", "Garuda Varadhi Flyover"], "Amaravati": ["Amaravati Capital City Roads", "Government Complex Construction"] },
+                "Arunachal Pradesh": { "Tawang": ["Tawang Monastery Beautification", "Sela Tunnel Connectivity"], "Itanagar": ["Itanagar Smart City Initiative", "Hollongi Airport Development"], "Ziro": ["Ziro Valley Agri-Link Roads", "Tale Valley Wildlife Sanctuary Eco-Tourism"], "Pasighat": ["Pasighat Smart City Project", "Siang Riverfront Development"] },
+                "Assam": { "Guwahati": ["Guwahati Riverfront Development", "AIIMS Guwahati"], "Dibrugarh": ["Dibrugarh Tea Park", "Bogibeel Bridge Connectivity"], "Jorhat": ["Jorhat Knowledge City", "Majuli Island Protection"], "Silchar": ["Silchar Multi-Modal Logistics Park", "Barak River Dredging"] },
+                "Bihar": { "Patna": ["Patna Metro Project", "Patna Ring Road"], "Gaya": ["Gaya beautification Project", "Falgu River Development"], "Muzaffarpur": ["Muzaffarpur Smart City", "Bagmati River Embankment"], "Nalanda": ["Nalanda University Campus Extension", "Rajgir International Cricket Stadium"] },
+                "Chhattisgarh": { "Raipur": ["Naya Raipur Green City Project", "Raipur Smart City"], "Bastar": ["Bastar Handicrafts Hub", "Jagdalpur Airport Upgrade"], "Bilaspur": ["Bilaspur Railway Connectivity", "Arpa Riverfront Development"], "Durg": ["Durg-Bhilai Industrial Corridor", "IIT Bhilai Campus"] },
+                "Goa": { "North Goa": ["North Goa Coastal Road", "Mopa Airport Connectivity"], "South Goa": ["South Goa Eco-Tourism Project", "Margao City Development"] },
+                "Gujarat": { "Ahmedabad": ["Ahmedabad Smart City Phase 2", "Sabarmati Riverfront Phase 2"], "Surat": ["Surat Diamond Bourse Connectivity", "Tapi Riverfront"], "Vadodara": ["Vadodara High-Speed Rail Terminal", "Statue of Unity Connectivity"], "Rajkot": ["Rajkot AIIMS Development", "Rajkot International Airport"] },
+                "Haryana": { "Gurugram": ["Gurugram Water Supply Upgrade", "Dwarka Expressway"], "Faridabad": ["Faridabad Industrial Area Revamp", "FNG Expressway"], "Panipat": ["Panipat Industrial Township", "Elevated Corridor Project"], "Ambala": ["Ambala Science City", "Ring Road Project"] },
+                "Himachal Pradesh": { "Shimla": ["Shimla Ropeway Project", "Circular Road Tunnel"], "Kullu": ["Kullu Valley Wellness Centers", "Bhuntar Airport Expansion"], "Dharamshala": ["Dharamshala Smart City", "Chamunda Ropeway"], "Manali": ["Atal Tunnel Connectivity Roads", "Rohtang Tunnel Beautification"] },
+                "Jharkhand": { "Ranchi": ["Ranchi Ring Road Completion", "Ranchi Smart City"], "Jamshedpur": ["Jamshedpur Steel Plant Modernization", "Domuhani Riverfront"], "Dhanbad": ["Dhanbad Coal Corridor", "IIT (ISM) Dhanbad Expansion"], "Bokaro Steel City": ["Bokaro Industrial Park", "Garga Dam Modernization"] },
+                "Karnataka": { "Bengaluru": ["Bengaluru Suburban Rail Project", "Peripheral Ring Road"], "Mysuru": ["Mysuru Palace Restoration", "Mysuru-Bengaluru Expressway"], "Mangaluru": ["Mangaluru Port Expansion", "Coastal Berth Project"], "Hubballi": ["Hubballi-Dharwad Smart City", "IIT Dharwad Campus"] },
+                "Kerala": { "Kochi": ["Kochi Water Metro Expansion", "Infopark Phase 2"], "Thiruvananthapuram": ["Technopark Phase IV Development", "Vizhinjam Port Project"], "Kozhikode": ["Kozhikode Beachfront Project", "Cyberpark Expansion"], "Thrissur": ["Thrissur Pooram Infrastructure", "Kochi-Thrissur Highway Widening"] },
+                "Madhya Pradesh": { "Bhopal": ["Bhopal Lake Conservation", "Bhopal Metro Project"], "Indore": ["Indore Waste Management Plant", "Indore Smart City"], "Gwalior": ["Gwalior Heritage Restoration", "Elevated Road Project"], "Jabalpur": ["Jabalpur Smart City", "Narmada Riverfront"] },
+                "Maharashtra": { "Mumbai": ["Mumbai Coastal Road Project", "Navi Mumbai International Airport"], "Pune": ["Pune Metro Line 3", "Pune Ring Road"], "Nagpur": ["Nagpur Samruddhi Mahamarg Connectivity", "MIHAN Cargo Hub"], "Nashik": ["Nashik Wine Tourism Circuit", "Neo Metro Project"] },
+                "Manipur": { "Imphal": ["Imphal Smart City Mission", "Loktak Lake Rejuvenation"], "Churachandpur": ["Churachandpur Medical College", "Tipaimukh Dam Project"], "Ukhrul": ["Ukhrul Eco-Tourism Project", "Hill Roads Improvement"], "Thoubal": ["Thoubal Dam Project", "Thoubal Sports Complex"] },
+                "Meghalaya": { "Shillong": ["Shillong IT Park", "Shillong Smart City"], "Cherrapunji": ["Cherrapunji Eco-Resort Development", "Mawmluh Cave Tourism"], "Tura": ["Tura Medical College", "Nongstoin-Tura Highway"], "Jowai": ["Jowai Glass Bridge Project", "Myntdu River Development"] },
+                "Mizoram": { "Aizawl": ["Aizawl Sports Complex", "Aizawl Smart City"], "Lunglei": ["Lunglei Border Haat", "Kaladan Multi-Modal Project"], "Champhai": ["Champhai Grape Winery", "Zokhawthar Border Trade Centre"], "Kolasib": ["Kolasib Rail Connectivity", "Tuirial Dam"] },
+                "Nagaland": { "Kohima": ["Kohima Smart City Plan", "Chiethu Airport"], "Dimapur": ["Dimapur Airport Upgrade", "4-Lane Highway Project"], "Mokokchung": ["Mokokchung Cultural Hub", "Dikhu River Project"], "Wokha": ["Doyang River Project", "Wokha-Bhandari Road"] },
+                "Odisha": { "Bhubaneswar": ["Bhubaneswar Temple City Heritage Project", "Smart City Phase 2"], "Puri": ["Puri Beachfront Development", "Jagannath Temple Corridor"], "Cuttack": ["Cuttack Riverfront Development", "SCB Medical College Expansion"], "Rourkela": ["Rourkela Steel Plant Modernization", "Biju Patnaik University Campus"] },
+                "Punjab": { "Amritsar": ["Amritsar Heritage Village Project", "Golden Temple Corridor"], "Ludhiana": ["Ludhiana Industrial Hub", "Budha Nullah Rejuvenation"], "Jalandhar": ["Jalandhar Sports Hub", "Smart City Mission"], "Patiala": ["Patiala Heritage Restoration", "Canal Front Development"] },
+                "Rajasthan": { "Jaipur": ["Jaipur Walled City Restoration", "Dravyavati River Project"], "Jodhpur": ["Jodhpur Water Canal Project", "Elevated Road"], "Udaipur": ["Udaipur Lake Conservation", "Smart City Project"], "Kota": ["Kota Coaching Hub Infrastructure", "Chambal Riverfront"] },
+                "Sikkim": { "Gangtok": ["Gangtok Cable Car Network", "Smart City Development"], "Namchi": ["Namchi Cultural Centre", "Siddheshwar Dham Complex"], "Gyalshing": ["Pelling Skywalk Project", "Singshore Bridge Expansion"], "Mangan": ["Mangan Eco-Tourism", "Teesta River Hydropower"] },
+                "Tamil Nadu": { "Chennai": ["Chennai Metro Phase II", "Koyambedu Grade Separator"], "Coimbatore": ["Coimbatore Defence Corridor", "Smart City Mission"], "Madurai": ["Madurai AIIMS Project", "Vaigai Riverfront"], "Tiruchirappalli": ["Trichy Airport Expansion", "Cauvery Bridge Widening"] },
+                "Telangana": { "Hyderabad": ["Hyderabad Pharma City", "Regional Ring Road"], "Warangal": ["Warangal Textile Park", "Kakatiya Mega Textile Park"], "Nizamabad": ["Nizamabad IT Hub", "Sri Ram Sagar Project"], "Karimnagar": ["Karimnagar Cable Bridge", "Manair Riverfront"] },
+                "Tripura": { "Agartala": ["Agartala-Akhaura Rail Link", "Smart City Mission"], "Udaipur": ["Udaipur Tourism Circuit", "Matabari Temple Complex"], "Dharmanagar": ["Dharmanagar Industrial Park", "Juri River Project"], "Belonia": ["Belonia Border Infrastructure", "Feni Bridge"] },
+                "Uttar Pradesh": { "Lucknow": ["Lucknow Smart City", "Gomti Riverfront Phase 2"], "Agra": ["Taj Corridor Project", "Agra Metro"], "Varanasi": ["Kashi Vishwanath Corridor Expansion", "Ring Road Phase 2"], "Kanpur": ["Kanpur Metro Project", "Leather Park Development"], "Prayagraj": ["Prayagraj Kumbh Mela Infrastructure", "Civil Airport Expansion"] },
+                "Uttarakhand": { "Dehradun": ["Dehradun-Mussoorie Ropeway", "Smart City Project"], "Haridwar": ["Har-ki-Pauri Redevelopment", "Delhi-Haridwar Expressway"], "Nainital": ["Nainital Lake Rejuvenation", "Bypass Road Project"], "Rishikesh": ["Rishikesh Yoga Capital Infrastructure", "Janki Setu Bridge"] },
+                "West Bengal": { "Kolkata": ["Kolkata East-West Metro", "New Town Financial Hub"], "Darjeeling": ["Darjeeling Himalayan Railway Upgrade", "Hill Town Beautification"], "Siliguri": ["Siliguri Smart City", "Mahananda Riverfront"], "Howrah": ["Howrah Industrial Park", "Ganga Riverfront"] },
+                "Delhi": { "North Delhi": ["North Delhi Infra Grant", "Chandni Chowk Redevelopment"], "West Delhi": ["West Delhi Skill Center", "Bharat Vandana Park"], "East Delhi": ["East Delhi Adarsh Gram", "Anand Vihar Transport Hub"] }
+            };
+
+            function createProjectCardHTML(state, district, project) {
+                const statuses = ['Completed', 'In Progress', 'Delayed', 'Initiated'];
+                const statusColors = {'Completed': 'green', 'In Progress': 'yellow', 'Delayed': 'red', 'Initiated': 'blue'};
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                const randomProgress = randomStatus === 'Completed' ? 100 : Math.floor(Math.random() * 90) + 10;
+                const totalBudget = (Math.random() * 500 + 50).toFixed(0);
+                const utilizedBudget = ((totalBudget * randomProgress) / 100).toFixed(0);
+                const feedbackCount = Math.floor(Math.random() * 200);
+                const agencies = ['State PWD', 'Central Govt.', 'Local Panchayat', 'Contractor Co.', 'Infra Corp.'];
+                const randomAgency = agencies[Math.floor(Math.random() * agencies.length)];
+                const color = statusColors[randomStatus];
+
+                return `
+                <div class="card p-5 flex flex-col project-card" data-state="${state}" data-district="${district}" data-project="${project}">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-semibold text-slate-800 dark:text-gray-100">${project}</h4>
+                            <span class="bg-${color}-100 text-${color}-800 dark:bg-${color}-500/10 dark:text-${color}-400 text-xs font-medium px-2.5 py-0.5 rounded-full">${randomStatus}</span>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Agency: ${randomAgency}</p>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-medium text-slate-600 dark:text-gray-300">Progress</span>
+                            <span class="text-sm font-bold text-${color}-600 dark:text-${color}-400">${randomProgress}%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2.5">
+                            <div class="bg-${color}-500 h-2.5 rounded-full" style="width: ${randomProgress}%;"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-t border-slate-200 dark:border-gray-700 pt-4">
+                        <p class="text-sm text-slate-600 dark:text-gray-300">Budget: <span class="font-bold text-slate-800 dark:text-gray-100">₹${utilizedBudget}Cr</span> / ₹${totalBudget}Cr Utilized</p>
+                    </div>
+                    <div class="mt-auto pt-4">
+                        <button class="view-feedback-btn w-full text-center py-2 px-4 bg-indigo-50 dark:bg-gray-700 text-indigo-700 dark:text-gray-200 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-gray-600">
+                            View Public Feedback (${feedbackCount})
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            function populateProjectCards() {
+                let allCardsHTML = '';
+                for (const state in projectData) {
+                    for (const district in projectData[state]) {
+                        projectData[state][district].forEach(project => {
+                            allCardsHTML += createProjectCardHTML(state, district, project);
+                        });
+                    }
+                }
+                projectGrid.innerHTML = allCardsHTML;
+                allProjectCards = document.querySelectorAll('.project-card');
+                rebindFeedbackButtons();
+            }
+            
+            Object.keys(projectData).sort().forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
             });
 
+            stateSelect.addEventListener('change', () => {
+                const selectedState = stateSelect.value;
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                districtSelect.disabled = true; projectSelect.disabled = true;
+                if (selectedState) {
+                    districtSelect.disabled = false;
+                    Object.keys(projectData[selectedState]).sort().forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                }
+                applyFilters();
+            });
+
+            districtSelect.addEventListener('change', () => {
+                const selectedState = stateSelect.value;
+                const selectedDistrict = districtSelect.value;
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                projectSelect.disabled = true;
+                if (selectedDistrict) {
+                    projectSelect.disabled = false;
+                    projectData[selectedState][selectedDistrict].sort().forEach(project => {
+                        const option = document.createElement('option');
+                        option.value = project;
+                        option.textContent = project;
+                        projectSelect.appendChild(option);
+                    });
+                }
+                applyFilters();
+            });
+
+            projectSelect.addEventListener('change', applyFilters);
+
+            function applyFilters() {
+                const selectedState = stateSelect.value;
+                const selectedDistrict = districtSelect.value;
+                const selectedProject = projectSelect.value;
+                allProjectCards.forEach(card => {
+                    const stateMatch = !selectedState || card.dataset.state === selectedState;
+                    const districtMatch = !selectedDistrict || card.dataset.district === selectedDistrict;
+                    const projectMatch = !selectedProject || card.dataset.project === selectedProject;
+                    card.style.display = (stateMatch && districtMatch && projectMatch) ? 'flex' : 'none';
+                });
+            }
+
+            resetFiltersBtn.addEventListener('click', () => {
+                stateSelect.value = "";
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                districtSelect.disabled = true; projectSelect.disabled = true;
+                applyFilters();
+            });
+
+            const feedbackModal = document.getElementById('feedback-modal');
+            const closeFeedbackModalBtn = document.getElementById('close-feedback-modal-btn');
+            const feedbackModalSubtitle = document.getElementById('feedback-modal-subtitle');
+
+            const openFeedbackModal = (e) => {
+                const card = e.currentTarget.closest('.project-card');
+                const projectName = card.dataset.project;
+                feedbackModalSubtitle.textContent = `Project: ${projectName}`;
+                feedbackModal.classList.remove('hidden');
+                lucide.createIcons();
+            };
+
+            const closeFeedbackModal = () => {
+                feedbackModal.classList.add('hidden');
+            };
+
+            function rebindFeedbackButtons() {
+                const viewFeedbackBtns = document.querySelectorAll('.view-feedback-btn');
+                viewFeedbackBtns.forEach(btn => btn.addEventListener('click', openFeedbackModal));
+            }
+
+            closeFeedbackModalBtn.addEventListener('click', closeFeedbackModal);
+            feedbackModal.addEventListener('click', (event) => {
+                if (event.target === feedbackModal) closeFeedbackModal();
+            });
+
+            // --- FINAL INITIALIZATION ---
+            populateProjectCards(); // Populate the new project grid
             updateStateView('Maharashtra');
-            updateApprovalsView(); // Populate approvals tab on load
+            updateApprovalsView();
             showView('national');
         });
     </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
-
